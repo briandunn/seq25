@@ -5,6 +5,12 @@ table {
 thead th {
   width: 5%;
 }
+th.playing, td.playing {
+  border-left: solid blue;
+}
+tr.sharp td {
+  background-color: #CCC;
+}
 td {
   border-top: solid black 1px;
   border-right: solid black 1px;

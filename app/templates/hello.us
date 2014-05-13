@@ -9,7 +9,7 @@
 	</thead>
 	<tbody>
 	<% for(var i=0; i < notes.length; i++) { %>
-	<tr>
+	<tr class="<%= notes[i].name.indexOf('#') > 0 ? 'sharp' : 'natural' %>">
 		<th><%= notes[i].name %></th>
 		<% for(var beat = 1; beat <= beats; beat++) { %>
 		<td><a href="#toggle/<%= notes[i].number + '/' + beat %>">&nbsp;</a></td>
