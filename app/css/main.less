@@ -1,0 +1,55 @@
+// Main less file for your application.
+// Use `@import` to use other less files
+// relative to 'app/css' or 'vendor/css'.
+
+table {
+  width: 100%;
+  border-spacing: 0px;
+
+  thead th {
+    width: 5%;
+  }
+
+  tbody {
+    th:first-child {
+      border-right: solid black 2px;
+      border-bottom: solid black 2px;
+    }
+
+    tr.sharp th:first-child {
+      color: white;
+      background-color: black;
+    }
+  }
+}
+
+table.edit {
+  cursor: crosshair;
+}
+
+table.resize {
+  cursor: ew-resize;
+}
+
+th.playing, td.playing {
+  border-left: solid blue;
+}
+
+tr.sharp td {
+  background-color: #CCC;
+}
+
+td {
+  border-top: solid black 1px;
+  border-right: solid black 1px;
+}
+
+td a {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+}
+
+td a.on {
+  background-color: blue;
+}
