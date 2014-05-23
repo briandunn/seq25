@@ -3,18 +3,19 @@
     <tr>
       <th></th>
       {{#each beat in beats}}
-      <th>{{beat}}</th>
+        <th>{{beat}}</th>
       {{/each}}
     </tr>
   </thead>
   <tbody>
     {{#each}}
-    <tr {{bind-attr class=isSharp:sharp}}>
+      <tr {{bind-attr class=isSharp:sharp}}>
         {{#piano-key}}
-        {{name}}
+          {{name}}
         {{/piano-key}}
         {{#each beat in beats}}
-        <td></td>
+          <td {{bind-attr class=isOn:on }} {{action 'toggleNote'}} >
+          </td>
         {{/each}}
       </tr>
     {{/each}}

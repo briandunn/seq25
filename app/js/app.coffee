@@ -1,18 +1,49 @@
+class Song
+  tempo: 60
+  play: ->
+    for beat in _.select(Seq25.Beat.all, (b)-> b.get('isOn'))
+      beat.schedule()
+
+  stop: ->
+    for beat in Seq25.Beat.all
+      beat.stop()
+
+song = new Song
+
+window.onkeydown = (e)->
+  if e.keyCode == 32
+    song.play()
+  else
+    song.stop()
+
 window.Seq25 = Ember.Application.create()
+
 Seq25.Router.map ->
 
 Seq25.IndexRoute = Ember.Route.extend
-  beats: [1..8]
   model: ->
     Seq25.Pitch.all
 
-Seq25.PitchController = Ember.ObjectController.extend
-  beats: [1..8]
+Seq25.ApplicationView = Ember.View.extend
+  keyUp: -> alert 'boom!'
+  didInsertElement: -> @$().focus()
+
+Seq25.BeatController = Ember.ObjectController.extend
+  updateCollection: Ember.computed 'isOn', ->
+
   actions:
-    play: ->
-      @get('model').play()
+    toggleNote: ->
+      @get('model').toggle()
+
+Seq25.PitchController = Ember.ObjectController.extend
+  beats: null
+  init: ->
+    beats = _.map [1..8], (beat)=>
+      Seq25.BeatController.create content: new Seq25.Beat(beat, @get('model'))
+    @set('beats', beats)
 
 Seq25.IndexController = Ember.ArrayController.extend
+  beats: [1..8]
   itemController: 'pitch'
 
 Seq25.PianoKeyView = Ember.View.extend
@@ -24,6 +55,23 @@ Seq25.PianoKeyView = Ember.View.extend
   mouseDown:  -> @model().play()
 
 Ember.Handlebars.helper 'piano-key', Seq25.PianoKeyView
+
+Seq25.Beat = Ember.Object.extend
+  isOn: false
+  init: (@num, @pitch)->
+    @constructor.all ?= []
+    @constructor.all.push this
+
+  schedule: ->
+    console.log(@num - 1, @num, @pitch.name)
+    @pitch.play(@num - 1)
+    @pitch.stop(@num)
+
+  stop: ->
+    @pitch.stop()
+
+  toggle: ->
+    @set 'isOn', !@get('isOn')
 
 class Seq25.Pitch
   noteNames = ['A','A#','B','C','C#','D','D#','E','F','F#','G','G#']
@@ -44,16 +92,16 @@ class Seq25.Pitch
   isPlaying: ->
     @oscilator.playbackState == @oscilator.PLAYING_STATE
 
-  play: ->
+  play: (secondsFromNow=0)->
     return if @isPlaying()
-    @oscilator.start 0
+    @oscilator.start context.currentTime + secondsFromNow
 
-  stop: ->
+  stop: (secondsFromNow=0)->
     return unless @isPlaying()
-    @oscilator.stop 0
+    @oscilator.stop context.currentTime + secondsFromNow
     @oscilator = getOscilator(@freq)
 
   do ->
-    pitches = for number in [21..108]
+    pitches = for number in [45..69] #[21..108]
       new Pitch(number)
     Pitch.all = pitches.reverse()
