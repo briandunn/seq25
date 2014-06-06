@@ -1,4 +1,13 @@
-{{view Seq25.TempoView min=0 max=480 value=tempo}}
+<header>
+  <dl>
+    <dt><label for='tempo'>Tempo</label></dt>
+    <dd>{{view Seq25.TempoView min=0 max=480 value=tempo id='tempo'}}</dd>
+  </dl>
+  <section id='transport'>
+    <button id='rewind'></button>
+    <button id='play'></button>
+  </section>
+</header
 <section id='piano-roll'>
   <section id='grid'>
     <div id='play-bar'></div>

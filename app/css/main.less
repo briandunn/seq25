@@ -2,6 +2,34 @@
 // Use `@import` to use other less files
 // relative to 'app/css' or 'vendor/css'.
 
+header {
+  padding: 10px 0;
+  &:after {
+    content: " ";
+    display: table;
+    clear: both;
+  }
+  dl {
+    float: left;
+    width: 20%;
+    margin: 0;
+    dd {
+      margin: 0;
+    }
+    dt {
+      margin-right: 10px;
+      float:left;
+    }
+  }
+}
+
+#transport {
+  float: left;
+  button {
+    font-family: 'webdings';
+  }
+}
+
 #grid {
   float: right;
   width: 90%;
