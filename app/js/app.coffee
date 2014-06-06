@@ -1,30 +1,40 @@
+beats = 16
 Song = Ember.Object.extend
-  tempo: 120
+  tempo: 480
 
-  beats: [1..16]
+  beats: [1..beats]
 
   notes: []
+
+  startedAt: -1
 
   toggle: ->
     if @playing then @stop() else @play()
 
+  elapsed: ->
+    @currentTime() - @get('startedAt')
+
+  progress: ->
+    @elapsed() / @get('screenDuration')
+
+  screenDuration: (-> beats * 60 / +@get('tempo')).property('tempo')
+
+  currentTime: -> Seq25.Pitch.context.currentTime
+
+  loopHasEnded: -> @progress() >= 1
+
   play: ->
-    scheduleNotes = =>
-      for note in @get('notes')
-        note.schedule()
-    scheduleNotes()
+    for note in @get('notes')
+      note.schedule()
     @playing = true
-    startTime = Seq25.Pitch.context.currentTime
+    @set('startedAt', @currentTime())
     movePlayBar = =>
-      screenDuration = 960 / +@get('tempo')
-      elapsed = Seq25.Pitch.context.currentTime - startTime
-      progress = elapsed / screenDuration
-      $('#play').css(left: "#{progress * 100}%")
+      $('#play-bar').css(left: "#{@progress() * 100}%")
       return unless @playing
-      if progress >= 1
-        scheduleNotes()
-        startTime += elapsed
-      requestAnimationFrame movePlayBar
+      if @loopHasEnded()
+        @play()
+      else
+        requestAnimationFrame movePlayBar
 
     requestAnimationFrame movePlayBar
 
