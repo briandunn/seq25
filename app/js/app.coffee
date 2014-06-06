@@ -92,12 +92,19 @@ class Seq25.Pitch
   isPlaying: ->
     @oscilator.playbackState == @oscilator.PLAYING_STATE
 
-  play: (secondsFromNow=0)->
-    return if @isPlaying()
+  isScheduled: ->
+    @oscilator.playbackState == @oscilator.SCHEDULED_STATE
+
+  isActive: ->
+    @isScheduled() or @isPlaying()
+
+  play: (secondsFromNow=0, duration=null)->
+    return if @isActive()
     @oscilator.start context.currentTime + secondsFromNow
+    @stop(secondsFromNow + duration) if duration
 
   stop: (secondsFromNow=0)->
-    return unless @isPlaying()
+    return unless @isActive()
     @oscilator.stop context.currentTime + secondsFromNow
     @oscilator = getOscilator(@freq)
 
