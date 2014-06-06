@@ -76,6 +76,8 @@ Seq25.PitchController = Ember.ObjectController.extend
   ).property('song.notes.@each')
   song: song
   actions:
+    play: -> @get('model').play()
+    stop: -> @get('model').stop()
     addNote: (time)->
       @get('song').addNoteAtPoint(time, @get('model'))
     removeNote: (note)->
@@ -98,16 +100,15 @@ Seq25.TempoView = Ember.TextField.extend
       actionContext: +@get('value')
 
 Seq25.PianoKeyView = Ember.View.extend
-  model: -> @get('controller').get('model')
   attributeBindings: ['class']
   classNames: ['row']
   classNameBindings: ['isSharp']
-  isSharp: (-> 'sharp' if @model().isSharp).property()
+  isSharp: (-> 'sharp' if @get('controller').get('isSharp')).property()
   tagName: 'li'
 
-  mouseLeave: -> @model().stop()
-  mouseUp:    -> @model().stop()
-  mouseDown:  -> @model().play()
+  mouseLeave: -> @get('controller').send 'stop'
+  mouseUp:    -> @get('controller').send 'stop'
+  mouseDown:  -> @get('controller').send 'play'
 
 Seq25.NoteListView = Ember.CollectionView.extend
   itemView: 'note'
