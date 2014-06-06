@@ -9,10 +9,9 @@ Song = Ember.Object.extend
   startedAt: 0
 
   toggle: ->
-    if @isPlaying() then @stop() else @play()
+    if @get('isPlaying') then @stop() else @play()
 
   elapsed: ->
-    return 0 unless @isPlaying()
     @currentTime() - @get('startedAt')
 
   progress: ->
@@ -24,15 +23,14 @@ Song = Ember.Object.extend
 
   loopHasEnded: -> @progress() >= 1
 
-  isPlaying: -> @get('startedAt') > 0
-
   play: ->
     @set('startedAt', @currentTime())
+    @set('isPlaying', true)
     for note in @get('notes')
       note.schedule()
     movePlayBar = =>
       $('#play-bar').css(left: "#{@progress() * 100}%")
-      return unless @isPlaying()
+      return unless @get('isPlaying')
       if @loopHasEnded()
         @play()
       else
@@ -44,13 +42,15 @@ Song = Ember.Object.extend
     for note in @get('notes')
       note.stop()
     @set('startedAt', 0)
+    @set('isPlaying', false)
 
   addNoteAtPoint: (progress, pitch)->
     note = new Note progress, pitch
-    note.schedule() if @isPlaying()
+    note.schedule() if @get('isPlaying')
     @get('notes').addObject note
 
   removeNote:(note)->
+    note.stop()
     @get('notes').removeObject(note)
 
 window.song = Song.create()
@@ -60,13 +60,6 @@ window.Seq25 = Ember.Application.create()
 Seq25.Router.map ->
 
 Seq25.IndexRoute = Ember.Route.extend
-  init: ->
-    song = @model()
-    addEventListener 'keydown', (e)->
-      if e.keyCode == 32
-        e.preventDefault()
-        song.toggle()
-
   model: -> song
 
 Seq25.PitchController = Ember.ObjectController.extend
@@ -83,6 +76,16 @@ Seq25.PitchController = Ember.ObjectController.extend
     removeNote: (note)->
       @get('song').removeNote(note)
 
+Seq25.TransportController = Ember.ObjectController.extend
+  needs: ['index']
+  song: (-> @get('controllers.index').get 'model').property()
+  isPlaying: (-> @get('song').get('isPlaying')).property('song.isPlaying')
+  empty: (-> @get('song').get('notes').length == 0).property('song.notes.@each')
+  actions:
+    play: ->
+      return if @get('empty')
+      @get('song').toggle()
+
 Seq25.IndexController = Ember.ObjectController.extend
   pitches: (->
     Seq25.Pitch.all.map (pitch)-> Seq25.PitchController.create content: pitch
@@ -90,6 +93,17 @@ Seq25.IndexController = Ember.ObjectController.extend
   actions:
     setTempo: (val)->
       @get('model').set 'tempo', val
+
+Seq25.TransportView = Ember.View.extend
+  init: ->
+    addEventListener 'keydown', (e)=>
+      if e.keyCode == 32
+        e.preventDefault()
+        @get('controller').send 'play'
+
+  controller: Seq25.buildContainer().lookup 'controller:transport'
+  tagName: 'section'
+  attributeBindings: ['id']
 
 Seq25.TempoView = Ember.TextField.extend
   type: 'number'
@@ -139,7 +153,6 @@ Note = Ember.Object.extend
 
   schedule: ->
     ratio = 960.0 / song.get('tempo')
-    console.log @start, song.progress()
     @pitch.play((@start - song.progress()) * ratio, (1/16) * ratio)
 
   stop: ->

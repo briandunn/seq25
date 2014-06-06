@@ -3,10 +3,11 @@
     <dt><label for='tempo'>Tempo</label></dt>
     <dd>{{view Seq25.TempoView min=0 max=480 value=tempo id='tempo'}}</dd>
   </dl>
-  <section id='transport'>
-    <button id='rewind'></button>
-    <button id='play'></button>
-  </section>
+  {{#view Seq25.TransportView id='transport' }}
+    <button {{action "play"}} {{bind-attr disabled=empty}}>
+      {{#if isPlaying }} {{else}} {{/if}}
+    </button>
+  {{/view}}
 </header
 <section id='piano-roll'>
   <section id='grid'>
