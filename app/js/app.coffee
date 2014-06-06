@@ -25,6 +25,9 @@ Song = Ember.Object.extend
     start = time #* loopDuration
     @get('notes').addObject new Note start, pitch
 
+  removeNote:(note)->
+    @get('notes').removeObject(note)
+
 window.song = Song.create()
 
 window.Seq25 = Ember.Application.create()
@@ -36,12 +39,12 @@ Seq25.IndexRoute = Ember.Route.extend
     song = @model()
     addEventListener 'keydown', (e)->
       if e.keyCode == 32
+        e.preventDefault()
         song.toggle()
 
   model: -> new Song
 
 Seq25.PitchController = Ember.ObjectController.extend
-
   notes: (->
     @get('song').get('notes').filter (note)=>
       note.isPitch @get('model')
@@ -49,7 +52,9 @@ Seq25.PitchController = Ember.ObjectController.extend
   song: song
   actions:
     addNote: (time)->
-      song.addNoteAtPoint(time, @get('model'))
+      @get('song').addNoteAtPoint(time, @get('model'))
+    removeNote: (note)->
+      @get('song').removeNote(note)
 
 Seq25.IndexController = Ember.ObjectController.extend
   pitches: (->
@@ -82,6 +87,10 @@ Seq25.NoteListView = Ember.CollectionView.extend
   tagName: 'ul'
   classNames: ['notes']
   itemViewClass: Ember.View.extend
+    click: ->
+      @get('controller').send 'removeNote', @get('content')
+      false
+
     didInsertElement: ->
       time = @get('content').get('start')
       @$().css(left: "#{time * 100}%")
@@ -143,6 +152,6 @@ class Seq25.Pitch
       @oscilator = getOscilator(@freq)
 
   do ->
-    pitches = for number in [45..69] #[21..108]
+    pitches = for number in [45..95] #[21..108]
       new Pitch(number)
     Pitch.all = pitches.reverse()
