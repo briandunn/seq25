@@ -1,12 +1,13 @@
-beats = 16
 Song = Ember.Object.extend
-  tempo: 480
+  tempo: 120
 
-  beats: [1..beats]
+  beats: 16
 
   notes: []
 
   startedAt: 0
+
+  isPlaying: false
 
   toggle: ->
     if @get('isPlaying') then @stop() else @play()
@@ -17,7 +18,7 @@ Song = Ember.Object.extend
   progress: ->
     @elapsed() / @get('screenDuration')
 
-  screenDuration: (-> beats * 60 / +@get('tempo')).property('tempo')
+  screenDuration: (-> @get('beats') * 60 / +@get('tempo')).property('tempo', 'beats')
 
   currentTime: -> Seq25.Pitch.context.currentTime
 
@@ -90,6 +91,9 @@ Seq25.IndexController = Ember.ObjectController.extend
   pitches: (->
     Seq25.Pitch.all.map (pitch)-> Seq25.PitchController.create content: pitch
   ).property()
+
+  beats: (-> [1..@get('model').get('beats')] ).property('model.beats')
+
   actions:
     setTempo: (val)->
       @get('model').set 'tempo', val
@@ -124,6 +128,14 @@ Seq25.PianoKeyView = Ember.View.extend
   mouseUp:    -> @get('controller').send 'stop'
   mouseDown:  -> @get('controller').send 'play'
 
+Seq25.BeatListView = Ember.CollectionView.extend
+  classNames: ['measures']
+  itemViewClass: Ember.View.extend
+    classNames: ['measure']
+    didInsertElement: ->
+      beats = @get('controller').get('beats').length
+      @$().css(width: "#{100 / beats }%")
+
 Seq25.NoteListView = Ember.CollectionView.extend
   itemView: 'note'
   tagName: 'ul'
@@ -142,6 +154,7 @@ Seq25.NoteListView = Ember.CollectionView.extend
     rowWidth = @$().width()
     @get('controller').send 'addNote', (offsetX / rowWidth)
 
+Ember.Handlebars.helper 'beat-list', Seq25.BeatListView
 Ember.Handlebars.helper 'piano-key', Seq25.PianoKeyView
 Ember.Handlebars.helper 'note-list', Seq25.NoteListView
 
@@ -152,8 +165,9 @@ Note = Ember.Object.extend
     @pitch.name == pitch.name
 
   schedule: ->
-    ratio = 960.0 / song.get('tempo')
-    @pitch.play((@start - song.progress()) * ratio, (1/16) * ratio)
+    beats = song.get('beats')
+    ratio = 60 * beats / song.get('tempo')
+    @pitch.play((@start - song.progress()) * ratio, (ratio/beats))
 
   stop: ->
     @pitch.stop()

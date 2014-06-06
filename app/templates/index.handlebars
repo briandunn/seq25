@@ -12,11 +12,7 @@
 <section id='piano-roll'>
   <section id='grid'>
     <div id='play-bar'></div>
-    <div class='measures'>
-      {{#each beat in beats}}
-        <div class='measure'></div>
-      {{/each}}
-    </div>
+    {{beat-list content=beats}}
     <ul>
       {{#each pitch in pitches}}
       <li {{bind-attr class="isSharp:sharp :row"}}>
