@@ -10,7 +10,7 @@
     position: absolute;
     height: 100%;
     width: 100%;
-    z-index: -1;
+    z-index: 1;
     .measure {
       width: 6.25%;
       height: 100%;
@@ -29,6 +29,7 @@
     position: relative;
     width: 100%;
     height: 100%;
+    z-index: 2;
     li {
       position: absolute;
       left: 0%;
@@ -42,7 +43,6 @@
 #keyboard {
   width: 10%;
   li {
-    opacity: 1;
     &.sharp {
       color: white;
       background-color: black;
@@ -63,5 +63,4 @@ ul {
 
 .sharp {
   background-color: #CCC;
-  opacity: 0.5;
 }
