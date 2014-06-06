@@ -145,35 +145,33 @@ class Seq25.Pitch
   context = new window.AudioContext
   @context = context
   getOscilator = (freq)->
-    oscilator = context.createOscillator()
-    oscilator.connect context.destination
-    oscilator.frequency.value = freq
-    oscilator
+    oscillator = context.createOscillator()
+    oscillator.connect context.destination
+    oscillator.frequency.value = freq
+    oscillator
 
   constructor: (@number)->
     @name = noteNames[(number - 21) % 12] + Math.round((number - 17) / 12)
     @freq = a0Pitch * Math.pow(2, (@number - 21)/12)
     @isSharp = @name.indexOf('#') > 0
-    @oscilator = getOscilator(@freq)
 
   isPlaying: ->
-    @oscilator.playbackState == @oscilator.PLAYING_STATE
+    @oscillator?.playbackState == OscillatorNode.PLAYING_STATE
 
   isScheduled: ->
-    @oscilator.playbackState == @oscilator.SCHEDULED_STATE
+    @oscillator?.playbackState == OscillatorNode.SCHEDULED_STATE
 
   isActive: ->
     @isScheduled() or @isPlaying()
 
   play: (secondsFromNow=0, duration=null)->
-    return if @isActive()
-    @oscilator.start context.currentTime + secondsFromNow
+    @oscillator = getOscilator(@freq)
+    @oscillator.start context.currentTime + secondsFromNow
     @stop(secondsFromNow + duration) if duration
 
   stop: (secondsFromNow=0)->
     if @isActive()
-      @oscilator.stop context.currentTime + secondsFromNow
-      @oscilator = getOscilator(@freq)
+      @oscillator.stop context.currentTime + secondsFromNow
 
   do ->
     pitches = for number in [45..95] #[21..108]
