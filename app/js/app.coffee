@@ -63,6 +63,10 @@ Seq25.Router.map ->
 Seq25.IndexRoute = Ember.Route.extend
   model: -> song
 
+  setupController: (controller, model)->
+    @controllerFor('transport').set('model', model)
+    controller.set('model', model)
+
 Seq25.PitchController = Ember.ObjectController.extend
   notes: (->
     @get('song').get('notes').filter (note)=>
@@ -78,10 +82,13 @@ Seq25.PitchController = Ember.ObjectController.extend
       @get('song').removeNote(note)
 
 Seq25.TransportController = Ember.ObjectController.extend
-  needs: ['index']
-  song: (-> @get('controllers.index').get 'model').property()
+
+  song: Ember.computed.alias 'model'
+
   isPlaying: (-> @get('song').get('isPlaying')).property('song.isPlaying')
+
   empty: (-> @get('song').get('notes').length == 0).property('song.notes.@each')
+
   actions:
     play: ->
       return if @get('empty')
@@ -99,15 +106,13 @@ Seq25.IndexController = Ember.ObjectController.extend
       @get('model').set 'tempo', val
 
 Seq25.TransportView = Ember.View.extend
-  init: ->
+  didInsertElement: ->
     addEventListener 'keydown', (e)=>
       if e.keyCode == 32
         e.preventDefault()
         @get('controller').send 'play'
 
-  controller: Seq25.buildContainer().lookup 'controller:transport'
   tagName: 'section'
-  attributeBindings: ['id']
 
 Seq25.TempoView = Ember.TextField.extend
   type: 'number'
@@ -173,7 +178,7 @@ Note = Ember.Object.extend
     @pitch.stop()
 
 class Seq25.Pitch
-  noteNames = "A A# B C C# D D# E F F# G G#".split ' '
+  noteNames = "A A# B C C# D D# E F F# G G#".w()
   a0Pitch = 27.5
   context = new window.AudioContext
   @context = context
