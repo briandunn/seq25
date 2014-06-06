@@ -16,10 +16,12 @@ Song = Ember.Object.extend
     @playing = true
     startTime = Seq25.Pitch.context.currentTime
     movePlayBar = =>
+      screenDuration = 960 / +@get('tempo')
       elapsed = Seq25.Pitch.context.currentTime - startTime
-      $('#play').css(left: "#{elapsed * 100}%")
+      progress = elapsed / screenDuration
+      $('#play').css(left: "#{progress * 100}%")
       return unless @playing
-      if elapsed > 1
+      if progress >= 1
         scheduleNotes()
         startTime += elapsed
       requestAnimationFrame movePlayBar
@@ -31,12 +33,10 @@ Song = Ember.Object.extend
       note.stop()
     @playing = false
 
-  addNoteAtPoint: (time, pitch)->
-    # translate from fraction of loop to seconds from start
-    # beatsPerSecond = @get('tempo') / 60
-    # loopDuration = @get('beats').length * beatsPerSecond
-    start = time #* loopDuration
-    @get('notes').addObject new Note start, pitch
+  addNoteAtPoint: (progress, pitch)->
+    note = new Note progress, pitch
+    note.schedule() if @playing
+    @get('notes').addObject note
 
   removeNote:(note)->
     @get('notes').removeObject(note)
@@ -55,7 +55,7 @@ Seq25.IndexRoute = Ember.Route.extend
         e.preventDefault()
         song.toggle()
 
-  model: -> new Song
+  model: -> song
 
 Seq25.PitchController = Ember.ObjectController.extend
   notes: (->
@@ -124,7 +124,8 @@ Note = Ember.Object.extend
     @pitch.name == pitch.name
 
   schedule: ->
-    @pitch.play(@start, 0.25)
+    ratio = 960.0 / song.get('tempo')
+    @pitch.play(@start * ratio, (1/16) * ratio)
 
   stop: ->
     @pitch.stop()
