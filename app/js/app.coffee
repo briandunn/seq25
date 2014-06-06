@@ -6,12 +6,13 @@ Song = Ember.Object.extend
 
   notes: []
 
-  startedAt: -1
+  startedAt: 0
 
   toggle: ->
-    if @playing then @stop() else @play()
+    if @isPlaying() then @stop() else @play()
 
   elapsed: ->
+    return 0 unless @isPlaying()
     @currentTime() - @get('startedAt')
 
   progress: ->
@@ -23,14 +24,15 @@ Song = Ember.Object.extend
 
   loopHasEnded: -> @progress() >= 1
 
+  isPlaying: -> @get('startedAt') > 0
+
   play: ->
+    @set('startedAt', @currentTime())
     for note in @get('notes')
       note.schedule()
-    @playing = true
-    @set('startedAt', @currentTime())
     movePlayBar = =>
       $('#play-bar').css(left: "#{@progress() * 100}%")
-      return unless @playing
+      return unless @isPlaying()
       if @loopHasEnded()
         @play()
       else
@@ -41,11 +43,11 @@ Song = Ember.Object.extend
   stop: ->
     for note in @get('notes')
       note.stop()
-    @playing = false
+    @set('startedAt', 0)
 
   addNoteAtPoint: (progress, pitch)->
     note = new Note progress, pitch
-    note.schedule() if @playing
+    note.schedule() if @isPlaying()
     @get('notes').addObject note
 
   removeNote:(note)->
@@ -134,7 +136,8 @@ Note = Ember.Object.extend
 
   schedule: ->
     ratio = 960.0 / song.get('tempo')
-    @pitch.play(@start * ratio, (1/16) * ratio)
+    console.log @start, song.progress()
+    @pitch.play((@start - song.progress()) * ratio, (1/16) * ratio)
 
   stop: ->
     @pitch.stop()
