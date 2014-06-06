@@ -1,21 +1,31 @@
 Song = Ember.Object.extend
-  tempo: (->
-    console.log arguments
-    20
-  ).property()
+  tempo: 120
+
+  beats: [1..16]
+
+  notes: []
 
   toggle: ->
     if @playing then @stop() else @play()
 
   play: ->
-    for beat in _.select(Seq25.Beat.all, (b)-> b.get('isOn'))
-      beat.schedule()
+    for note in @get('notes')
+      note.schedule()
     @playing = true
 
   stop: ->
-    for beat in Seq25.Beat.all
-      beat.stop()
+    for note in @get('notes')
+      note.stop()
     @playing = false
+
+  addNoteAtPoint: (time, pitch)->
+    # translate from fraction of loop to seconds from start
+    # beatsPerSecond = @get('tempo') / 60
+    # loopDuration = @get('beats').length * beatsPerSecond
+    start = time #* loopDuration
+    @get('notes').addObject new Note start, pitch
+
+window.song = Song.create()
 
 window.Seq25 = Ember.Application.create()
 
@@ -30,32 +40,32 @@ Seq25.IndexRoute = Ember.Route.extend
 
   model: -> new Song
 
-Seq25.BeatController = Ember.ObjectController.extend
-  actions:
-    toggleNote: ->
-      @get('model').toggle()
-
 Seq25.PitchController = Ember.ObjectController.extend
-  beats: (->
-    [1..16].map (beat)=>
-      Seq25.BeatController.create content: new Seq25.Beat(beat, @get('model'))
-  ).property()
+
+  notes: (->
+    @get('song').get('notes').filter (note)=>
+      note.isPitch @get('model')
+  ).property('song.notes.@each')
+  song: song
+  actions:
+    addNote: (time)->
+      song.addNoteAtPoint(time, @get('model'))
 
 Seq25.IndexController = Ember.ObjectController.extend
-  beats: [1..16]
   pitches: (->
     Seq25.Pitch.all.map (pitch)-> Seq25.PitchController.create content: pitch
   ).property()
   actions:
     setTempo: (val)->
-      console.log 'hai'
-      @model.set 'tempo', val
+      @get('model').set 'tempo', val
 
 Seq25.TempoView = Ember.TextField.extend
   type: 'number'
   attributeBindings: ['min', 'max']
   change: ->
-    @get('controller').send 'setTempo', +@get('value')
+    @triggerAction
+      action: 'setTempo',
+      actionContext: +@get('value')
 
 Seq25.PianoKeyView = Ember.View.extend
   model: -> @get('controller').get('model')
@@ -67,23 +77,35 @@ Seq25.PianoKeyView = Ember.View.extend
   mouseUp:    -> @model().stop()
   mouseDown:  -> @model().play()
 
-Ember.Handlebars.helper 'piano-key', Seq25.PianoKeyView
+Seq25.NoteListView = Ember.CollectionView.extend
+  itemView: 'note'
+  tagName: 'ul'
+  classNames: ['notes']
+  itemViewClass: Ember.View.extend
+    didInsertElement: ->
+      time = @get('content').get('start')
+      @$().css(left: "#{time * 100}%")
 
-Seq25.Beat = Ember.Object.extend
-  isOn: false
-  init: (@num, @pitch)->
+  click: (e)->
+    time = e.offsetX / @get('element').offsetWidth
+    @get('controller').send 'addNote', time
+
+Ember.Handlebars.helper 'piano-key', Seq25.PianoKeyView
+Ember.Handlebars.helper 'note-list', Seq25.NoteListView
+
+Note = Ember.Object.extend
+  init: (@start, @pitch)->
     @constructor.all ?= []
     @constructor.all.push this
 
+  isPitch: (pitch)->
+    @pitch.name == pitch.name
+
   schedule: ->
-    beatDuration = 0.25
-    @pitch.play((@num - beatDuration) * beatDuration, beatDuration)
+    @pitch.play(@start, 0.25)
 
   stop: ->
     @pitch.stop()
-
-  toggle: ->
-    @set 'isOn', !@get('isOn')
 
 class Seq25.Pitch
   noteNames = "A A# B C C# D D# E F F# G G#".split ' '
