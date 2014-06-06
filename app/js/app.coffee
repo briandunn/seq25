@@ -9,9 +9,22 @@ Song = Ember.Object.extend
     if @playing then @stop() else @play()
 
   play: ->
-    for note in @get('notes')
-      note.schedule()
+    scheduleNotes = =>
+      for note in @get('notes')
+        note.schedule()
+    scheduleNotes()
     @playing = true
+    startTime = Seq25.Pitch.context.currentTime
+    movePlayBar = =>
+      elapsed = Seq25.Pitch.context.currentTime - startTime
+      $('#play').css(left: "#{elapsed * 100}%")
+      return unless @playing
+      if elapsed > 1
+        scheduleNotes()
+        startTime += elapsed
+      requestAnimationFrame movePlayBar
+
+    requestAnimationFrame movePlayBar
 
   stop: ->
     for note in @get('notes')
@@ -120,6 +133,7 @@ class Seq25.Pitch
   noteNames = "A A# B C C# D D# E F F# G G#".split ' '
   a0Pitch = 27.5
   context = new window.AudioContext
+  @context = context
   getOscilator = (freq)->
     oscilator = context.createOscillator()
     oscilator.connect context.destination
