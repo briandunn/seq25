@@ -101,6 +101,8 @@ Seq25.PianoKeyView = Ember.View.extend
   model: -> @get('controller').get('model')
   attributeBindings: ['class']
   classNames: ['row']
+  classNameBindings: ['isSharp']
+  isSharp: (-> 'sharp' if @model().isSharp).property()
   tagName: 'li'
 
   mouseLeave: -> @model().stop()
