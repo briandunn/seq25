@@ -1,50 +1,61 @@
-class Song
-  tempo: 60
+Song = Ember.Object.extend
+  tempo: (->
+    console.log arguments
+    20
+  ).property()
+
+  toggle: ->
+    if @playing then @stop() else @play()
+
   play: ->
     for beat in _.select(Seq25.Beat.all, (b)-> b.get('isOn'))
       beat.schedule()
+    @playing = true
 
   stop: ->
     for beat in Seq25.Beat.all
       beat.stop()
-
-song = new Song
-
-window.onkeydown = (e)->
-  if e.keyCode == 32
-    song.play()
-  else
-    song.stop()
+    @playing = false
 
 window.Seq25 = Ember.Application.create()
 
 Seq25.Router.map ->
 
 Seq25.IndexRoute = Ember.Route.extend
-  model: ->
-    Seq25.Pitch.all
+  init: ->
+    song = @model()
+    addEventListener 'keydown', (e)->
+      if e.keyCode == 32
+        song.toggle()
 
-Seq25.ApplicationView = Ember.View.extend
-  keyUp: -> alert 'boom!'
-  didInsertElement: -> @$().focus()
+  model: -> new Song
 
 Seq25.BeatController = Ember.ObjectController.extend
-  updateCollection: Ember.computed 'isOn', ->
-
   actions:
     toggleNote: ->
       @get('model').toggle()
 
 Seq25.PitchController = Ember.ObjectController.extend
-  beats: null
-  init: ->
-    beats = _.map [1..8], (beat)=>
+  beats: (->
+    [1..8].map (beat)=>
       Seq25.BeatController.create content: new Seq25.Beat(beat, @get('model'))
-    @set('beats', beats)
+  ).property()
 
-Seq25.IndexController = Ember.ArrayController.extend
+Seq25.IndexController = Ember.ObjectController.extend
   beats: [1..8]
-  itemController: 'pitch'
+  pitches: (->
+    Seq25.Pitch.all.map (pitch)-> Seq25.PitchController.create content: pitch
+  ).property()
+  actions:
+    setTempo: (val)->
+      console.log 'hai'
+      @model.set 'tempo', val
+
+Seq25.TempoView = Ember.TextField.extend
+  type: 'number'
+  attributeBindings: ['min', 'max']
+  change: ->
+    @get('controller').send 'setTempo', +@get('value')
 
 Seq25.PianoKeyView = Ember.View.extend
   tagName: 'th'
@@ -64,8 +75,7 @@ Seq25.Beat = Ember.Object.extend
 
   schedule: ->
     console.log(@num - 1, @num, @pitch.name)
-    @pitch.play(@num - 1)
-    @pitch.stop(@num)
+    @pitch.play(@num - 1, 1)
 
   stop: ->
     @pitch.stop()
@@ -74,7 +84,7 @@ Seq25.Beat = Ember.Object.extend
     @set 'isOn', !@get('isOn')
 
 class Seq25.Pitch
-  noteNames = ['A','A#','B','C','C#','D','D#','E','F','F#','G','G#']
+  noteNames = "A A# B C C# D D# E F F# G G#".split ' '
   a0Pitch = 27.5
   context = new window.AudioContext
   getOscilator = (freq)->
@@ -104,9 +114,9 @@ class Seq25.Pitch
     @stop(secondsFromNow + duration) if duration
 
   stop: (secondsFromNow=0)->
-    return unless @isActive()
-    @oscilator.stop context.currentTime + secondsFromNow
-    @oscilator = getOscilator(@freq)
+    if @isActive()
+      @oscilator.stop context.currentTime + secondsFromNow
+      @oscilator = getOscilator(@freq)
 
   do ->
     pitches = for number in [45..69] #[21..108]

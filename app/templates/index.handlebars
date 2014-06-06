@@ -1,14 +1,16 @@
 <table>
   <thead>
     <tr>
-      <th></th>
+      <th>
+        {{view Seq25.TempoView min=0 max=200 value=tempo}}
+      </th>
       {{#each beat in beats}}
         <th>{{beat}}</th>
       {{/each}}
     </tr>
   </thead>
   <tbody>
-    {{#each}}
+    {{#each pitch in pitches}}
       <tr {{bind-attr class=isSharp:sharp}}>
         {{#piano-key}}
           {{name}}
