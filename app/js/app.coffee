@@ -117,8 +117,6 @@ Ember.Handlebars.helper 'note-list', Seq25.NoteListView
 
 Note = Ember.Object.extend
   init: (@start, @pitch)->
-    @constructor.all ?= []
-    @constructor.all.push this
 
   isPitch: (pitch)->
     @pitch.name == pitch.name
