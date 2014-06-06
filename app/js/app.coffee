@@ -109,8 +109,9 @@ Seq25.NoteListView = Ember.CollectionView.extend
       @$().css(left: "#{time * 100}%")
 
   click: (e)->
-    time = e.offsetX / @get('element').offsetWidth
-    @get('controller').send 'addNote', time
+    offsetX = e.pageX - @$().offset().left
+    rowWidth = @$().width()
+    @get('controller').send 'addNote', (offsetX / rowWidth)
 
 Ember.Handlebars.helper 'piano-key', Seq25.PianoKeyView
 Ember.Handlebars.helper 'note-list', Seq25.NoteListView
