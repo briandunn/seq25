@@ -37,12 +37,12 @@ Seq25.BeatController = Ember.ObjectController.extend
 
 Seq25.PitchController = Ember.ObjectController.extend
   beats: (->
-    [1..8].map (beat)=>
+    [1..16].map (beat)=>
       Seq25.BeatController.create content: new Seq25.Beat(beat, @get('model'))
   ).property()
 
 Seq25.IndexController = Ember.ObjectController.extend
-  beats: [1..8]
+  beats: [1..16]
   pitches: (->
     Seq25.Pitch.all.map (pitch)-> Seq25.PitchController.create content: pitch
   ).property()
@@ -58,8 +58,9 @@ Seq25.TempoView = Ember.TextField.extend
     @get('controller').send 'setTempo', +@get('value')
 
 Seq25.PianoKeyView = Ember.View.extend
-  tagName: 'th'
   model: -> @get('controller').get('model')
+  attributeBindings: ['class']
+  tagName: 'li'
 
   mouseLeave: -> @model().stop()
   mouseUp:    -> @model().stop()
@@ -74,8 +75,8 @@ Seq25.Beat = Ember.Object.extend
     @constructor.all.push this
 
   schedule: ->
-    console.log(@num - 1, @num, @pitch.name)
-    @pitch.play(@num - 1, 1)
+    beatDuration = 0.25
+    @pitch.play((@num - beatDuration) * beatDuration, beatDuration)
 
   stop: ->
     @pitch.stop()

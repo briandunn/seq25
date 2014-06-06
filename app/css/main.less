@@ -2,41 +2,45 @@
 // Use `@import` to use other less files
 // relative to 'app/css' or 'vendor/css'.
 
-table {
-  width: 100%;
-  border-spacing: 0px;
-
-  thead th {
-    width: 5%;
-  }
-
-  tbody {
-    th:first-child {
-      border-right: solid black 2px;
-      border-bottom: solid black 2px;
+#grid {
+  float: right;
+  width: 90%;
+  position: relative;
+  .measures {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    .measure {
+      width: 6.25%;
+      height: 100%;
+      float: right;
+      border-right: 1px dashed grey;
+      margin-right: -1px;
     }
-
-    tr.sharp th:first-child {
+  }
+}
+#keyboard {
+  width: 10%;
+  li {
+    opacity: 1;
+    &.sharp {
       color: white;
       background-color: black;
     }
-
-    td.on {
-      background-color: blue;
+  }
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  li {
+    border-top: 1px solid;
+    border-left: 1px solid;
+    height: 25px;
+    &.sharp {
+      background-color: #CCC;
+      opacity: 0.5;
     }
   }
 }
-
-th.playing, td.playing {
-  border-left: solid blue;
-}
-
-tr.sharp td {
-  background-color: #CCC;
-}
-
-td {
-  border-top: solid black 1px;
-  border-right: solid black 1px;
-}
-

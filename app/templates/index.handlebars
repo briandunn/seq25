@@ -1,25 +1,21 @@
-<table>
-  <thead>
-    <tr>
-      <th>
-        {{view Seq25.TempoView min=0 max=200 value=tempo}}
-      </th>
+<section id='piano-roll'>
+  <section id='grid'>
+    <div class='measures'>
       {{#each beat in beats}}
-        <th>{{beat}}</th>
+        <div class='measure'></div>
       {{/each}}
-    </tr>
-  </thead>
-  <tbody>
+    </div>
+    <ul>
+      {{#each pitch in pitches}}
+      <li {{bind-attr class=isSharp:sharp}} ></li>
+      {{/each}}
+    </ul>
+  </section>
+  <ul id='keyboard'>
     {{#each pitch in pitches}}
-      <tr {{bind-attr class=isSharp:sharp}}>
-        {{#piano-key}}
-          {{name}}
-        {{/piano-key}}
-        {{#each beat in beats}}
-          <td {{bind-attr class=isOn:on }} {{action 'toggleNote'}} >
-          </td>
-        {{/each}}
-      </tr>
+      {{#piano-key class=isSharp:sharp}}
+        {{name}}
+      {{/piano-key}}
     {{/each}}
-  </tbody>
-</table>
+  </ul>
+</section>
