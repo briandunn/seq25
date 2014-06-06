@@ -60,6 +60,7 @@ Seq25.TempoView = Ember.TextField.extend
 Seq25.PianoKeyView = Ember.View.extend
   model: -> @get('controller').get('model')
   attributeBindings: ['class']
+  classNames: ['row']
   tagName: 'li'
 
   mouseLeave: -> @model().stop()

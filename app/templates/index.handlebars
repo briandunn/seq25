@@ -7,7 +7,11 @@
     </div>
     <ul>
       {{#each pitch in pitches}}
-      <li {{bind-attr class=isSharp:sharp}} ></li>
+      <li {{bind-attr class="isSharp:sharp :row"}}>
+        <ul class='notes'>
+          <li class='note'>&nbsp;</li>
+        </ul>
+      </li>
       {{/each}}
     </ul>
   </section>
