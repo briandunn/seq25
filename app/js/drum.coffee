@@ -1,4 +1,4 @@
-context = Seq25.Pitch.context
+context = Seq25.audioContext
 bufferSize = 256
 window.script = context.createJavaScriptNode bufferSize, 0, 1
 gain = context.createGain()
