@@ -1,7 +1,7 @@
 Song = Ember.Object.extend
   tempo: 120
 
-  beats: 16
+  beat_count: 16
 
   notes: []
 
@@ -18,7 +18,7 @@ Song = Ember.Object.extend
   progress: ->
     @elapsed() / @get('screenDuration')
 
-  screenDuration: (-> @get('beats') * 60 / +@get('tempo')).property('tempo', 'beats')
+  screenDuration: (-> @get('beat_count') * 60 / +@get('tempo')).property('tempo', 'beat_count')
 
   currentTime: -> Seq25.Pitch.context.currentTime
 
@@ -85,9 +85,7 @@ Seq25.TransportController = Ember.ObjectController.extend
 
   song: Ember.computed.alias 'model'
 
-  isPlaying: (-> @get('song').get('isPlaying')).property('song.isPlaying')
-
-  empty: (-> @get('song').get('notes').length == 0).property('song.notes.@each')
+  empty: (-> @get('notes').length == 0).property('notes.@each')
 
   actions:
     play: ->
@@ -99,11 +97,14 @@ Seq25.IndexController = Ember.ObjectController.extend
     Seq25.Pitch.all.map (pitch)-> Seq25.PitchController.create content: pitch
   ).property()
 
-  beats: (-> [1..@get('model').get('beats')] ).property('model.beats')
+  beats: (-> [1..@get('beat_count')] ).property('beat_count')
 
   actions:
     setTempo: (val)->
       @get('model').set 'tempo', val
+
+    setBeatCount: (val)->
+      @get('model').set 'beatCount', val
 
 Seq25.TransportView = Ember.View.extend
   didInsertElement: ->
@@ -114,12 +115,12 @@ Seq25.TransportView = Ember.View.extend
 
   tagName: 'section'
 
-Seq25.TempoView = Ember.TextField.extend
+Seq25.NumberView = Ember.TextField.extend
   type: 'number'
-  attributeBindings: ['min', 'max']
+  attributeBindings: ['min', 'max', 'action']
   change: ->
     @triggerAction
-      action: 'setTempo',
+      action: @get('action'),
       actionContext: +@get('value')
 
 Seq25.PianoKeyView = Ember.View.extend
@@ -138,7 +139,7 @@ Seq25.BeatListView = Ember.CollectionView.extend
   itemViewClass: Ember.View.extend
     classNames: ['measure']
     didInsertElement: ->
-      beats = @get('controller').get('beats').length
+      beats = @get('controller').get('beat_count')
       @$().css(width: "#{100 / beats }%")
 
 Seq25.NoteListView = Ember.CollectionView.extend
@@ -159,9 +160,10 @@ Seq25.NoteListView = Ember.CollectionView.extend
     rowWidth = @$().width()
     @get('controller').send 'addNote', (offsetX / rowWidth)
 
-Ember.Handlebars.helper 'beat-list', Seq25.BeatListView
-Ember.Handlebars.helper 'piano-key', Seq25.PianoKeyView
-Ember.Handlebars.helper 'note-list', Seq25.NoteListView
+Ember.Handlebars.helper 'beat-list',   Seq25.BeatListView
+Ember.Handlebars.helper 'piano-key',   Seq25.PianoKeyView
+Ember.Handlebars.helper 'note-list',   Seq25.NoteListView
+Ember.Handlebars.helper 'number-input',Seq25.NumberView
 
 Note = Ember.Object.extend
   init: (@start, @pitch)->
@@ -170,7 +172,7 @@ Note = Ember.Object.extend
     @pitch.name == pitch.name
 
   schedule: ->
-    beats = song.get('beats')
+    beats = song.get('beat_count')
     ratio = 60 * beats / song.get('tempo')
     @pitch.play((@start - song.progress()) * ratio, (ratio/beats))
 
