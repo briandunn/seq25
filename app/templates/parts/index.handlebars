@@ -1,0 +1,17 @@
+<section id='parts'>
+  <ul>
+    {{#each row in rows}}
+      <li>
+        <ul class='part-row'>
+          {{#each part in row}}
+          <li>
+            {{#link-to 'part' part }}
+              {{part.name}}
+            {{/link-to}}
+          </li>
+          {{/each}}
+        </ul>
+      </li>
+    {{/each}}
+  </ul>
+</section>
