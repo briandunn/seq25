@@ -44,7 +44,10 @@ Seq25.Part = Ember.Object.extend
 
 window.song = Song.create()
 
-Seq25.audioContext = new AudioContext
+Seq25.audioContext = do ->
+  contextClass = 'AudioContext webkitAudioContext'.w().find (klass)->
+    window[klass]
+  new window[contextClass]
 
 Seq25.Router.map ->
   @resource 'song', path: '/', ->
