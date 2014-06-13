@@ -17,6 +17,8 @@ class Seq25.Osc
 
   stop: (secondsFromNow)->
     @gain.setValueAtTime(0, (context.currentTime + secondsFromNow))
+    if secondsFromNow == 0
+      @gain.cancelScheduledValues(0)
 
   @oscillators = {}
 
