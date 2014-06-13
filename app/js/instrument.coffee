@@ -16,9 +16,9 @@ class Seq25.Osc
     @stop(secondsFromNow + duration) if duration
 
   stop: (secondsFromNow)->
-    @gain.setValueAtTime(0, (context.currentTime + secondsFromNow))
     if secondsFromNow == 0
-      @gain.cancelScheduledValues(0)
+      @gain.cancelScheduledValues(context.currentTime)
+    @gain.setValueAtTime(0, (context.currentTime + secondsFromNow))
 
   @oscillators = {}
 
