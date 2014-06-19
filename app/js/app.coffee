@@ -127,31 +127,35 @@ Seq25.BeatListView = Ember.CollectionView.extend
       beats = @get('controller').get('beat_count')
       @$().css(width: "#{100 / beats }%")
 
-Seq25.NoteListView = Ember.CollectionView.extend
-  itemView: 'note'
+Seq25.NoteView = Ember.View.extend
+  percentageOfScreen: ->
+    beat_count = @get('controller').get('beat_count')
+    {beat, tick} = @get('content').getProperties('beat', 'tick')
+    ((beat + (tick / 96)) / beat_count) * 100
+
+  didInsertElement: ->
+    @$().css(left: "#{@percentageOfScreen()}%")
+
+Seq25.NotesView = Ember.CollectionView.extend
+  itemViewClass: Seq25.NoteView
   tagName: 'ul'
   classNames: ['notes']
-  itemViewClass: Ember.View.extend
-    click: ->
-      @get('controller').send 'removeNote', @get('content')
-      false
 
-    percentageOfScreen: ->
-      beat_count = @get('controller').get('beat_count')
-      {beat, tick} = @get('content').getProperties('beat', 'tick')
-      ((beat + (tick / 96)) / beat_count) * 100
-
-    didInsertElement: ->
-      @$().css(left: "#{@percentageOfScreen()}%")
-
+Seq25.NotesEditView = Seq25.NotesView.extend
   click: (e)->
     offsetX = e.pageX - @$().offset().left
     rowWidth = @$().width()
     @get('controller').send 'addNote', (offsetX / rowWidth)
 
+  itemViewClass: Seq25.NoteView.extend
+    click: ->
+      @get('controller').send 'removeNote', @get('content')
+      false
+
 Ember.Handlebars.helper 'beat-list',   Seq25.BeatListView
 Ember.Handlebars.helper 'piano-key',   Seq25.PianoKeyView
-Ember.Handlebars.helper 'note-list',   Seq25.NoteListView
+Ember.Handlebars.helper 'note-list',   Seq25.NotesView
+Ember.Handlebars.helper 'notes-edit',  Seq25.NotesEditView
 Ember.Handlebars.helper 'number-input',Seq25.NumberView
 
 Note = Ember.Object.extend
@@ -162,7 +166,9 @@ Note = Ember.Object.extend
     @tick = Math.floor((beatFraction - @beat) * 96)
 
   isPitch: (pitch)->
-    @pitch.name == pitch.name
+    @get('pitchNumber') == pitch.number
+
+  pitchNumber: (-> @get('pitch').number ).property('pitch')
 
   schedule: (tempo)->
     beatDuration = 60 / tempo

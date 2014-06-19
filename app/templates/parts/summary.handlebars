@@ -1,0 +1,9 @@
+{{#link-to 'part' . }}
+  <ul>
+    {{#each notes in pitches}}
+      <li>
+        {{note-list content=notes}}
+      </li>
+    {{/each}}
+  </ul>
+{{/link-to}}

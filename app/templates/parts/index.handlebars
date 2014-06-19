@@ -4,11 +4,9 @@
       <li>
         <ul class='part-row'>
           {{#each part in row}}
-          <li>
-            {{#link-to 'part' part }}
-              {{part.name}}
-            {{/link-to}}
-          </li>
+            <li class='part'>
+              {{render 'parts/summary' part}}
+            </li>
           {{/each}}
         </ul>
       </li>
