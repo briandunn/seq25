@@ -27,7 +27,7 @@ Seq25.TransportController = Ember.ObjectController.extend
     @set('isPlaying', true)
     @get('song').schedule()
     movePlayBar = =>
-      $('#play-bar').css left: "#{@progress() * 100}%"
+      $('.play-bar').css left: "#{@progress() * 100}%"
       return unless @get('isPlaying')
       if @loopHasEnded()
         @play()
