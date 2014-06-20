@@ -25,6 +25,10 @@ Seq25.Part = Ember.Object.extend
   name: ''
   notes: null
   beat_count: 16
+  isMuted: false
+
+  toggle: ->
+    @set('isMuted', !@get('isMuted'))
 
   schedule: (tempo)->
     for note in @get('notes')
@@ -81,15 +85,17 @@ Seq25.PartRoute = Ember.Route.extend
 
 Seq25.PartsIndexRoute = Ember.Route.extend
   model: ->
-    'Q W E R A S D F'.w().map (name)->
-      Seq25.Part.create name: name
+    'Q W E R A S D F'.w().map (name)=>
+      @modelFor('song').get('parts').findBy('name', name) || Seq25.Part.create(name: name)
 
-Seq25.PartsIndexView = Ember.View.extend
+Seq25.PartsSummaryView = Ember.View.extend
   didInsertElement: ->
     addEventListener 'keydown', (e)=>
       return unless @get('state') == 'inDOM'
-      e.preventDefault()
-      @get('controller').send('hotKey', String.fromCharCode(e.keyCode))
+      key = String.fromCharCode(e.keyCode)
+      if @get('controller').get('name') == key
+        @get('controller').send('hotKey')
+        e.preventDefault()
 
 Seq25.TransportView = Ember.View.extend
   didInsertElement: ->

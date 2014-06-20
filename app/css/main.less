@@ -2,6 +2,10 @@
 // Use `@import` to use other less files
 // relative to 'app/css' or 'vendor/css'.
 
+body {
+  background-color: grey;
+}
+
 header {
   &:after {
     content: " ";
@@ -35,7 +39,8 @@ header {
   height: 100%;
   .part-row {
     li.part {
-      border: 1px solid grey;
+      border: 1px solid black;
+      background-color: white;
       margin: -1px;
       text-align: center;
       display: block;
@@ -43,6 +48,7 @@ header {
       width: 20%;
       margin: 1%;
       height: 50%;
+      &.mute { background-color: black;}
       a {
         height: 100px;
         position: relative;
@@ -73,6 +79,7 @@ header {
 
 #grid {
   float: right;
+  background-color: white;
   width: 90%;
   position: relative;
   .measures {
@@ -114,6 +121,7 @@ header {
 }
 
 #keyboard {
+  background-color: white;
   width: 10%;
   li {
     &.sharp {

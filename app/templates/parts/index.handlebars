@@ -3,9 +3,9 @@
     {{#each row in rows}}
       <li>
         <ul class='part-row'>
-          {{#each part in row}}
-            <li class='part'>
-              {{render 'parts/summary' part}}
+          {{#each row}}
+            <li {{bind-attr class="isMuted:mute :part"}}>
+              {{render 'parts/summary' . }}
             </li>
           {{/each}}
         </ul>
