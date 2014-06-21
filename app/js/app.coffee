@@ -67,6 +67,9 @@ Seq25.SongRoute = Ember.Route.extend
     @controllerFor('transport').set('model', model)
     controller.set('model', model)
 
+  redirect: ->
+    @transitionTo 'parts'
+
 Seq25.PartRoute = Ember.Route.extend
   parts: (-> @modelFor('song').get('parts')).property()
 
