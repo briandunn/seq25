@@ -6,7 +6,7 @@ Seq25.PartsSummaryController = Ember.ObjectController.extend
     range = max - min + 1
     scale = @get('bucketCount') / range
     buckets = ([] for _ in [1..@get('bucketCount')])
-    for note in @get('notes')
+    @get('notes').forEach (note)->
       bucketNumber = Math.floor((note.get('pitchNumber') - min) * scale)
       buckets[bucketNumber].push note
     buckets.reverse()
