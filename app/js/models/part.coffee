@@ -2,9 +2,17 @@ Seq25.Part = DS.Model.extend
   notes: DS.hasMany 'note'
   song: DS.belongsTo 'song'
   name: DS.attr 'string'
+  volume:    DS.attr 'number', default: 0
+  attack:    DS.attr 'number', default: 0
+  sustain:   DS.attr 'number', default: 0
+  decay:     DS.attr 'number', default: 0
+  resonance: DS.attr 'number', default: 0
+
   beat_count: DS.attr 'number', defaultValue: 16
   isMuted: DS.attr 'boolean', defaultValue: false
-  instrument: Seq25.Osc
+  instrument: (->
+    Seq25.Instrument.create(part: this)
+  ).property('volume', 'attack', 'sustain', 'decay', 'resonance')
 
   toggle: ->
     @set('isMuted', !@get('isMuted'))

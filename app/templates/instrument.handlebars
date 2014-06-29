@@ -1,0 +1,15 @@
+<dl id='instrument'>
+  <dt><label for='sound'>sound</label></dt>
+  <dd>
+    <select id='sound'>
+      <option>sine</option>
+      <option>saw</option>
+      <option>square</option>
+      <option>noise</option>
+    </select>
+  </dd>
+  <dt><label for='volume'>volume</label></dt>
+  <dd>
+    {{view Seq25.RangeView id='volume' min='0' max='1' step='0.01' value=volume action='updateParameter'}}
+  </dd>
+</dl>
