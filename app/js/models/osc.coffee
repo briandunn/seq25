@@ -19,11 +19,3 @@ class Seq25.Osc
     if secondsFromNow == 0
       @gain.cancelScheduledValues(context.currentTime)
     @gain.setValueAtTime(0, (context.currentTime + secondsFromNow))
-
-  @oscillators = {}
-
-  @play = (pitch, secondsFromNow=0, duration=null)->
-    (@oscillators[pitch.number] ||= new @(pitch)).play(secondsFromNow, duration)
-
-  @stop = (pitch, secondsFromNow=0)->
-    @oscillators[pitch.number]?.stop(secondsFromNow)

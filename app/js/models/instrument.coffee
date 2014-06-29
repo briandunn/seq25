@@ -6,5 +6,11 @@ Seq25.Instrument = Ember.Object.extend
   resonance: Ember.computed.alias('part.resonance')
   save: -> @get('part').save()
 
-  play: -> Seq25.Osc.play.apply(Seq25.Osc, arguments)
-  stop: -> Seq25.Osc.stop.apply(Seq25.Osc, arguments)
+  oscillators: {}
+
+  play: (pitch, secondsFromNow=0, duration=null)->
+    (@oscillators[pitch.number] ||= new Seq25.Osc(pitch))
+      .play(secondsFromNow, duration)
+
+  stop: (pitch, secondsFromNow=0)->
+    @oscillators[pitch.number]?.stop(secondsFromNow)
