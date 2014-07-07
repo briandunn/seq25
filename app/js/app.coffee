@@ -12,14 +12,7 @@ Seq25.Router.map ->
 
 Seq25.ApplicationRoute = Ember.Route.extend
   model: ->
-    new Ember.RSVP.Promise (resolve, reject) =>
-      @store.find('song').then (songs)=>
-        song = songs.get('firstObject') || @store.createRecord('song')
-        @store.find('part', song: song.get('id')).then (parts)=>
-          promises = parts.map (part)=>
-            @store.find 'note', part: part.get('id')
-          Ember.RSVP.Promise.all(promises).then =>
-            resolve(song)
+    Seq25.Song.loadDefault(@store)
 
   setupController: (controller, model)->
     model.save()
