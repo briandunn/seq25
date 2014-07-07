@@ -10,9 +10,9 @@ Seq25.Song = DS.Model.extend
     parts = @get('parts')
     parts.findBy('name', name) || parts.createRecord(name: name).save()
 
-  schedule: ->
+  schedule: (progress)->
     @get('parts').forEach (part)=>
-      part.schedule @get 'tempo'
+      part.schedule progress
 
   stop: ->
     @get('parts').forEach (part)->

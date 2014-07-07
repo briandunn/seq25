@@ -1,8 +1,9 @@
 Seq25.Note = DS.Model.extend
   pitchNumber: DS.attr 'number'
-  beat_count: DS.attr 'number'
-  position: DS.attr 'number'
-  part: DS.belongsTo 'part'
+  beat_count:  DS.attr 'number'
+  position:    DS.attr 'number'
+  part:        DS.belongsTo 'part'
+  tempo: Ember.computed.alias 'part.tempo'
 
   instrument: Ember.computed.alias 'part.instrument'
   pitch: (-> Seq25.Pitch.all.findBy('number', @get('pitchNumber'))).property('pitchNumber')
@@ -13,9 +14,9 @@ Seq25.Note = DS.Model.extend
   isPitch: (pitch)->
     @get('pitchNumber') == pitch.number
 
-  schedule: (tempo)->
-    beatDuration = 60 / tempo
-    start = (@get('beat') * beatDuration) + ((@get('tick') / 96) * beatDuration)
+  schedule: (offset)->
+    beatDuration = 60 / @get('tempo')
+    start = (@get('beat') * beatDuration) + ((@get('tick') / 96) * beatDuration) + offset
     @get('instrument').play(@get('pitch'), start, 0.1)
 
   stop: ->
