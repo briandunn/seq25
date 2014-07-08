@@ -1,12 +1,7 @@
 <dl id='instrument'>
-  <dt><label for='sound'>sound</label></dt>
+  <dt><label for='shape'>shape</label></dt>
   <dd>
-    <select id='sound'>
-      <option>sine</option>
-      <option>saw</option>
-      <option>square</option>
-      <option>noise</option>
-    </select>
+    {{view Ember.Select id='shape' content=shapes value=shape}}
   </dd>
   <dt><label for='volume'>volume</label></dt>
   <dd>
