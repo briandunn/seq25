@@ -19,11 +19,11 @@ Seq25.Song = DS.Model.extend
       part.stop()
 
 Seq25.Song.loadDefault = (store)->
-  new Promise (resolve, reject) =>
+  new Ember.RSVP.Promise (resolve, reject) =>
     store.find('song').then (songs)=>
       song = songs.get('firstObject') || store.createRecord('song')
       store.find('part', song: song.get('id')).then (parts)=>
         promises = parts.map (part)=>
           store.find 'note', part: part.get('id')
-        Promise.all(promises).then =>
+        Ember.RSVP.Promise.all(promises).then =>
           resolve(song)
