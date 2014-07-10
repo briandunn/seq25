@@ -12,14 +12,15 @@ Seq25.Instrument = Ember.Object.extend
     @set 'oscillators', {}
     @_super.apply(this, arguments)
 
-  applySound: (->
+  applyShape: (->
     _.values(@get('oscillators')).forEach (oscillator)=>
       oscillator.set('shape', @get('shape'))
   ).observes 'shape'
 
   play: (pitch, secondsFromNow=0, duration=null)->
     unless @get 'isMuted'
-      (@get('oscillators')[pitch.number] ||= Seq25.Osc.create(pitch: pitch))
+      console.log @get 'shape'
+      (@get('oscillators')[pitch.number] ||= Seq25.Osc.create(pitch: pitch, shape: @get('shape')))
         .play(secondsFromNow, duration)
 
   stop: (pitch, secondsFromNow=0)->
