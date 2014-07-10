@@ -18,6 +18,10 @@ Seq25.Song = DS.Model.extend
     @get('parts').forEach (part)->
       part.stop()
 
+  save: ->
+    @_super()
+    @get('parts').invoke 'save'
+
 Seq25.Song.loadDefault = (store)->
   new Ember.RSVP.Promise (resolve, reject) =>
     store.find('song').then (songs)=>

@@ -19,7 +19,6 @@ Seq25.Instrument = Ember.Object.extend
 
   play: (pitch, secondsFromNow=0, duration=null)->
     unless @get 'isMuted'
-      console.log @get 'shape'
       (@get('oscillators')[pitch.number] ||= Seq25.Osc.create(pitch: pitch, shape: @get('shape')))
         .play(secondsFromNow, duration)
 
