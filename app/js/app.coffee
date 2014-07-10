@@ -14,9 +14,10 @@ Seq25.ApplicationRoute = Ember.Route.extend
   model: ->
     Seq25.Song.loadDefault(@store)
 
-  setupController: (controller, song)->
-    song.save()
-    [@controllerFor('transport'), controller].invoke 'set', 'model', song
+  setupController: (controller, model)->
+    model.save()
+    @controllerFor('transport').set('model', model)
+    controller.set('model', model)
 
 Seq25.PartRoute = Ember.Route.extend
   model: (params)->
@@ -111,16 +112,3 @@ Ember.Handlebars.helper 'piano-key',   Seq25.PianoKeyView
 Ember.Handlebars.helper 'note-list',   Seq25.NotesView
 Ember.Handlebars.helper 'notes-edit',  Seq25.NotesEditView
 Ember.Handlebars.helper 'number-input',Seq25.NumberView
-
-class Seq25.Pitch
-  noteNames = "A A# B C C# D D# E F F# G G#".w()
-  a0Pitch = 27.5
-  constructor: (@number)->
-    @name = noteNames[(number - 21) % 12] + Math.round((number - 17) / 12)
-    @freq = a0Pitch * Math.pow(2, (@number - 21)/12)
-    @isSharp = @name.indexOf('#') > 0
-
-  do ->
-    pitches = for number in [45..95] #[21..108]
-      new Pitch(number)
-    Pitch.all = pitches.reverse()
