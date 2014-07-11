@@ -14,7 +14,7 @@ Seq25.Part = DS.Model.extend
   isMuted: DS.attr 'boolean', defaultValue: false
   instrument: (->
     Seq25.Instrument.create(part: this)
-  ).property('volume', 'attack', 'sustain', 'decay', 'resonance')
+  ).property()
 
   duration: (-> @get('beat_count') * 60 / @get('tempo')).property('beat_count', 'tempo')
 
