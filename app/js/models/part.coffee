@@ -18,6 +18,8 @@ Seq25.Part = DS.Model.extend
 
   duration: (-> @get('beat_count') * 60 / @get('tempo')).property('beat_count', 'tempo')
 
+  offset: (progress)-> progress * @get('duration') * -1
+
   toggle: (progress)->
     @set('isMuted', !@get('isMuted'))
     if @get('isMuted')
@@ -26,19 +28,20 @@ Seq25.Part = DS.Model.extend
       @schedule(progress)
 
   schedule: (progress)->
-    offset = progress * @get('duration') * -1
-    @get('notes').forEach (note)->
-      note.schedule(offset)
+    @get('notes').forEach (note)=>
+      note.schedule @offset progress
 
   stop: ->
     @get('notes').forEach (note)->
       note.stop()
 
-  addNoteAtPoint: (position, pitch)->
+  addNoteAtPoint: (position, pitch, progress)->
     note = @get('notes').createRecord
       pitchNumber: pitch.number
       position:    position
       beat_count:  @get('beat_count')
+
+    note.schedule @offset progress
 
     @save()
     note.save()
