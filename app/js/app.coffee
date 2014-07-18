@@ -105,4 +105,3 @@ Ember.Handlebars.helper 'beat-list',   Seq25.BeatListView
 Ember.Handlebars.helper 'piano-key',   Seq25.PianoKeyView
 Ember.Handlebars.helper 'note-list',   Seq25.NotesView
 Ember.Handlebars.helper 'notes-edit',  Seq25.NotesEditView
-Ember.Handlebars.helper 'number-input',Seq25.NumberView

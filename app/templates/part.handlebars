@@ -2,7 +2,7 @@
   <dl>
     <dt><label for='beats'>Beats</label></dt>
     <dd>
-      {{number-input min=1 max=32 value=beat_count}}
+      {{view 'number' min=1 max=32 value=beat_count}}
     </dd>
   </dl>
   {{ render 'instrument' instrument }}
