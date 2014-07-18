@@ -97,16 +97,34 @@ Seq25.NotesView = Ember.CollectionView.extend
   classNames: ['notes']
 
 Seq25.NotesEditView = Seq25.NotesView.extend
-  click: (e)->
+  click: (e) ->
     offsetX = e.pageX - @$().offset().left
     rowWidth = @$().width()
     @get('controller').send 'addNote', (offsetX / rowWidth)
 
-  itemViewClass: Seq25.NoteView.extend
-    click: ->
-      @get('controller').send 'removeNote', @get('content')
-      false
+  itemViewClass: 'noteEdit'
 
-Ember.Handlebars.helper 'beat-list',   Seq25.BeatListView
-Ember.Handlebars.helper 'piano-key',   Seq25.PianoKeyView
-Ember.Handlebars.helper 'note-list',   Seq25.NotesView
+Seq25.NoteEditView = Seq25.NoteView.extend
+  classNameBindings: ['isSelected:selected']
+  selectedNotes: Em.computed.alias('controller.controllers.part.selectedNotes')
+
+  isSelected: ( ->
+    !!@get('selectedNotes').find (item) =>
+      item is @get('content')
+  ).property('selectedNotes.@each')
+
+  click: (event) ->
+    if event.shiftKey
+      @toggleSelected()
+    else
+      @selectMeOnly()
+    false
+
+  selectMeOnly: ->
+    @set 'selectedNotes', [@get('content')]
+
+  toggleSelected: ->
+    @get('selectedNotes').pushObject(@get('content'))
+
+Ember.Handlebars.helper 'beat-list', Seq25.BeatListView
+Ember.Handlebars.helper 'piano-key', Seq25.PianoKeyView
