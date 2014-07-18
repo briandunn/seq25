@@ -3,6 +3,7 @@ Seq25.PitchController = Ember.ObjectController.extend
   part: Ember.computed.alias('controllers.part.model')
   beat_count: Ember.computed.alias('part.beat_count')
   instrument: Ember.computed.alias('part.instrument')
+  totalTicks: (-> Seq25.Note.TICKS_PER_BEAT * @get('beat_count') ).property('beat_count')
 
   notes: (->
     @get('part.notes').filter (note)=> note.isPitch @get('model')

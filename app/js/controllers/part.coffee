@@ -13,3 +13,7 @@ Seq25.PartController = Ember.ObjectController.extend
     removeNotes: ->
       @get('selectedNotes').forEach (note) =>
         @get('model').removeNote(note)
+
+    extendNotes: ->
+      @get('selectedNotes').forEach (note) =>
+        note.set('duration', note.get('duration') + 5)
