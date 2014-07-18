@@ -3,6 +3,6 @@ Seq25.PartController = Ember.ObjectController.extend
 
   beats: (-> [1..@get('beat_count')] ).property('beat_count')
 
-  actions:
-    setBeatCount: (val)->
-      @get('model').set 'beatCount', val
+  beatCountSaver: ( ->
+    @get('model').save()
+  ).observes('beat_count')
