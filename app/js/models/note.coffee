@@ -1,8 +1,10 @@
+TICKS_PER_BEAT = 96
 Seq25.Note = DS.Model.extend
   pitchNumber: DS.attr 'number'
   beat:        DS.attr 'number'
   tick:        DS.attr 'number'
   part:        DS.belongsTo 'part'
+  duration:    DS.attr 'number', defaultValue: TICKS_PER_BEAT
   tempo: Ember.computed.alias 'part.tempo'
 
   instrument: Ember.computed.alias 'part.instrument'
@@ -11,7 +13,7 @@ Seq25.Note = DS.Model.extend
   setBeatAndTick: (->
     beatFraction = @get('beat_count') * @get('position')
     beat = Math.floor beatFraction
-    tick = Math.floor (beatFraction - beat) * 96
+    tick = Math.floor (beatFraction - beat) * TICKS_PER_BEAT
 
     @set('beat', beat)
     @set('tick', tick)
@@ -22,8 +24,11 @@ Seq25.Note = DS.Model.extend
 
   schedule: (offset)->
     beatDuration = 60 / @get('tempo')
-    start = (@get('beat') * beatDuration) + ((@get('tick') / 96) * beatDuration) + offset
-    @get('instrument').play(@get('pitch'), start, 0.1)
+    start = (@get('beat') * beatDuration) + ((@get('tick') / TICKS_PER_BEAT) * beatDuration) + offset
+    end   = ((@get('duration') / TICKS_PER_BEAT) * beatDuration) + offset
+    @get('instrument').play(@get('pitch'), start, end)
 
   stop: ->
     @get('instrument').stop @get 'pitch'
+
+Seq25.Note.TICKS_PER_BEAT = TICKS_PER_BEAT

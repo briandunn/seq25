@@ -83,13 +83,18 @@ Seq25.BeatListView = Ember.CollectionView.extend
       @$().css(width: "#{100 / beats }%")
 
 Seq25.NoteView = Ember.View.extend
-  percentageOfScreen: ->
+  attributeBindings: ['style']
+  startPercentage: ->
     beat_count = @get('controller').get('beat_count')
     {beat, tick} = @get('content').getProperties('beat', 'tick')
     ((beat + (tick / 96)) / beat_count) * 100
 
-  didInsertElement: ->
-    @$().css(left: "#{@percentageOfScreen()}%")
+  style: (->
+   "left: #{@startPercentage()}%; width: #{@durationPercentage()}%"
+  ).property('content.duration', 'content.beat', 'content.tick', 'controller.totalTicks')
+
+  durationPercentage: ->
+    (@get('content.duration') / @get('controller.totalTicks')) * 100
 
 Seq25.NotesView = Ember.CollectionView.extend
   itemViewClass: Seq25.NoteView
