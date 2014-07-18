@@ -48,11 +48,7 @@ Seq25.TransportView = Ember.View.extend
 
 Seq25.NumberView = Ember.TextField.extend
   type: 'number'
-  attributeBindings: ['min', 'max', 'action']
-  change: ->
-    @triggerAction
-      action: @get('action'),
-      actionContext: +@get('value')
+  attributeBindings: ['min', 'max']
 
 Seq25.RangeView = Ember.Component.extend
   type: 'range'
