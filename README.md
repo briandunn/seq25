@@ -1,1 +1,1 @@
-# SEQ25A sequencer inspired by SEQ24TODO:* quantization control* note length adjustment* note velocity adjustment* instrument envelopes* part volume control* shape persistence* tempo persistence* independent loop repeat points* clear part* clear song
+# SEQ25A sequencer inspired by SEQ24TODO:* quantization control* note length adjustment* note velocity adjustment* instrument envelopes* shape persistence* tempo persistence* independent loop repeat points* clear part* clear song

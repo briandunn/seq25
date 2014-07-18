@@ -50,7 +50,7 @@ Seq25.NumberView = Ember.TextField.extend
   type: 'number'
   attributeBindings: ['min', 'max']
 
-Seq25.RangeView = Ember.Component.extend
+Seq25.RangeView = Ember.View.extend
   type: 'range'
   tagName: 'input'
   attributeBindings: ['type', 'min', 'max', 'step', 'value']
