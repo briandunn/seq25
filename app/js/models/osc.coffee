@@ -9,12 +9,11 @@ Seq25.Osc = Ember.Object.extend
     @oscillator.frequency.value = @get('pitch').freq
     @oscillator.start 0
     @gain = gain.gain
-    @_super(this, arguments)
-    @setShape()
+    @_super(arguments)
 
   setShape: (->
     @oscillator.type = @get('shape')
-  ).observes('shape')
+  ).observes('shape').on('init')
 
   play: (secondsFromNow, duration=null)->
     @gain.setValueAtTime(1, @get('context').currentTime + secondsFromNow)

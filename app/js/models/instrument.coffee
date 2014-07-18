@@ -19,7 +19,7 @@ Seq25.Instrument = Ember.Object.extend
 
   adjustVolume: (->
     @get('output').gain.value = @get('volume')
-  ).observes 'volume'
+  ).observes('volume').on('init')
 
   applyShape: (->
     _.values(@get('oscillators')).forEach (oscillator)=>
