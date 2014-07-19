@@ -1,7 +1,7 @@
 Seq25.NoteView = Ember.View.extend
   attributeBindings: ['style']
   startPercentage: ->
-    beat_count = @get('controller').get('beat_count')
+    beat_count = @get('controller.beat_count')
     {beat, tick} = @get('content').getProperties('beat', 'tick')
     ((beat + (tick / 96)) / beat_count) * 100
 
@@ -10,7 +10,8 @@ Seq25.NoteView = Ember.View.extend
   ).property('content.duration', 'content.beat', 'content.tick', 'controller.totalTicks')
 
   durationPercentage: ->
-    (@get('content.duration') / @get('controller.totalTicks')) * 100
+    totalTicks = Seq25.Note.TICKS_PER_BEAT * @get('controller.beat_count')
+    (@get('content.duration') / totalTicks) * 100
 
 Seq25.NotesView = Ember.CollectionView.extend
   itemViewClass: Seq25.NoteView
