@@ -15,17 +15,20 @@ Seq25.Note = DS.Model.extend
     beat = Math.floor beatFraction
     tick = Math.floor (beatFraction - beat) * TICKS_PER_BEAT
 
-    @set('beat', beat)
-    @set('tick', tick)
+    @setProperties beat: beat, tick: tick
   ).observes('beat_count', 'position')
 
   isPitch: (pitch)->
     @get('pitchNumber') == pitch.number
 
+  ticksToTime: (ticks)->
+    (ticks / TICKS_PER_BEAT) * @get('secondsPerBeat')
+
+  secondsPerBeat: (-> 60 / @get('tempo') ).property('tempo')
+
   schedule: (offset)->
-    beatDuration = 60 / @get('tempo')
-    start = (@get('beat') * beatDuration) + ((@get('tick') / TICKS_PER_BEAT) * beatDuration) + offset
-    end   = ((@get('duration') / TICKS_PER_BEAT) * beatDuration) + offset
+    start = (@get('beat') * @get('secondsPerBeat') + @ticksToTime(@get('tick'))) + offset
+    end   = @ticksToTime(@get('duration')) + offset
     @get('instrument').play(@get('pitch'), start, end)
 
   stop: ->
