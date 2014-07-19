@@ -17,6 +17,7 @@ Seq25.TransportController = Ember.ObjectController.extend
   isPlaying: false
 
   elapsed: ->
+    return 0 unless @get('isPlaying')
     @currentTime() - @get('startedAt')
 
   progress: ->
