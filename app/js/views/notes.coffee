@@ -30,8 +30,7 @@ Seq25.NoteEditView = Seq25.NoteView.extend
   selectedNotes: Em.computed.alias('controller.controllers.part.selectedNotes')
 
   isSelected: ( ->
-    !!@get('selectedNotes').find (item) =>
-      item is @get('content')
+    !!@get('selectedNotes').contains(@get('content'))
   ).property('selectedNotes.@each')
 
   click: (event) ->
@@ -42,8 +41,16 @@ Seq25.NoteEditView = Seq25.NoteView.extend
     false
 
   selectMeOnly: ->
-    @set 'selectedNotes', [@get('content')]
+    if @get('isSelected') && @get('selectedNotes.length') == 1
+      @set 'selectedNotes', []
+    else
+      @set 'selectedNotes', [@get('content')]
 
   toggleSelected: ->
-    @get('selectedNotes').pushObject(@get('content'))
+    note = @get('content')
+    selectedNotes = @get('selectedNotes')
+    if @get('isSelected')
+      selectedNotes.removeObject(note)
+    else
+      selectedNotes.pushObject(note)
 
