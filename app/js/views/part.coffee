@@ -8,5 +8,8 @@ Seq25.PartView = Ember.View.extend
     Mousetrap.bind 'right', =>
       @get('controller').send('extendNotes')
 
+    Mousetrap.bind 'left', =>
+      @get('controller').send('shortenNotes')
+
   willDestroyElement: ->
-    Mousetrap.unbind 'backspace left'
+    Mousetrap.unbind 'backspace left right'
