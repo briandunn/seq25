@@ -4,7 +4,10 @@ class Seq25.Midi
     @scheduled = {"A2": []}
 
   connect: ->
-    navigator.requestMIDIAccess().then(@connectSuccess, @connectFailure)
+    if navigator.requestMIDIAccess
+      navigator.requestMIDIAccess().then(@connectSuccess, @connectFailure)
+    else
+      @connected = false
 
   connectSuccess: (access)=>
     @output = access.outputs()[0]
