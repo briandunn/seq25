@@ -1,5 +1,5 @@
 {{#link-to 'part' . }}
-  <div class='play-bar'></div>
+  <div {{bind-attr style=playBarStyle}} class='play-bar'></div>
   <ul>
     {{#each notes in pitches}}
       <li>

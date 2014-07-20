@@ -10,9 +10,10 @@ Seq25.TransportController = Ember.ObjectController.extend
 
   currentTime: -> Seq25.audioContext.currentTime
 
-  loopHasEnded: -> @progress() >= 1
+  loopHasEnded: -> @get('progress') >= 1
 
   startedAt: 0
+  progress: 0
 
   isPlaying: false
 
@@ -20,17 +21,15 @@ Seq25.TransportController = Ember.ObjectController.extend
     return 0 unless @get('isPlaying')
     @currentTime() - @get('startedAt')
 
-  progress: ->
-    @elapsed() / @get('loopDuration')
-
   play: ->
     @set('startedAt', @currentTime())
     @set('isPlaying', true)
-    @get('song').schedule(@progress())
+    @get('song').schedule(@get('progress'))
     movePlayBar = =>
-      $('.play-bar').css left: "#{@progress() * 100}%"
+      @set('progress', @elapsed() / @get('loopDuration'))
       return unless @get('isPlaying')
       if @loopHasEnded()
+        @set('progress', 0)
         @play()
       else
         requestAnimationFrame movePlayBar

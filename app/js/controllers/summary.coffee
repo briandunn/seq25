@@ -1,5 +1,11 @@
 Seq25.PartsSummaryController = Ember.ObjectController.extend
   needs: 'transport'
+  progress: Em.computed.alias('controllers.transport.progress')
+
+  playBarStyle: (->
+    "left: #{@get('progress') * 100}%"
+  ).property('progress')
+
   bucketCount: 10
   pitches: (->
     pitchNumbers = @get('notes').mapBy('pitchNumber').sort()
@@ -15,4 +21,4 @@ Seq25.PartsSummaryController = Ember.ObjectController.extend
 
   actions:
     hotKey: ->
-      @get('model').toggle @get('controllers.transport').progress()
+      @get('model').toggle @get('progress')
