@@ -30,6 +30,10 @@ Seq25.Instrument = Ember.Object.extend
     unless @get 'isMuted'
       (@get('oscillators')[pitch.number] ||= Seq25.Osc.create(Ember.merge(pitch: pitch, @getProperties('context', 'output', 'shape'))))
         .play(secondsFromNow, duration)
+    Seq25.midi.sendOnAt(pitch.name, secondsFromNow)
 
   stop: (pitch, secondsFromNow=0)->
     @get('oscillators')[pitch.number]?.stop(secondsFromNow)
+    if secondsFromNow == 0
+      Seq25.midi.clearAllScheduled(pitch.name)
+    Seq25.midi.sendOffAt(pitch.name, secondsFromNow)
