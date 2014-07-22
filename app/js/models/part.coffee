@@ -41,7 +41,9 @@ Seq25.Part = DS.Model.extend
       position:    position
       beat_count:  @get('beat_count')
 
-    note.schedule @offset progress
+    offset = @offset progress
+    if offset != 0
+      note.schedule offset
 
   removeNote:(note)->
     note.stop()
