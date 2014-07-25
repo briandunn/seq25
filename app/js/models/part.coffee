@@ -35,15 +35,11 @@ Seq25.Part = DS.Model.extend
     @get('notes').forEach (note)->
       note.stop()
 
-  addNoteAtPoint: (position, pitch, progress)->
-    note = @get('notes').createRecord
+  addNoteAtPoint: (position, pitch)->
+    @get('notes').createRecord
       pitchNumber: pitch.number
       position:    position
       beat_count:  @get('beat_count')
-
-    offset = @offset progress
-    if offset != 0
-      note.schedule offset
 
   removeNote:(note)->
     note.stop()
