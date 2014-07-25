@@ -11,5 +11,11 @@ Seq25.PartView = Ember.View.extend
     Mousetrap.bind 'left', =>
       @get('controller').send('shortenNotes')
 
+    Mousetrap.bind 'shift+left', =>
+      @get('controller').send('nudgeLeft')
+
+    Mousetrap.bind 'shift+right', =>
+      @get('controller').send('nudgeRight')
+
   willDestroyElement: ->
     'backspace left right'.w().forEach(Mousetrap.unbind)
