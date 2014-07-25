@@ -18,6 +18,10 @@ Seq25.Note = DS.Model.extend
     @setProperties beat: beat, tick: tick
   ).observes('beat_count', 'position')
 
+  absoluteTicks: (->
+    @get('beat') * TICKS_PER_BEAT + @get('tick')
+  ).property('beat', 'tick')
+
   isPitch: (pitch)->
     @get('pitchNumber') == pitch.number
 
