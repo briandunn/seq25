@@ -35,3 +35,11 @@ Seq25.PartController = Ember.ObjectController.extend
     shortenNotes: ->
       @get('selectedNotes').forEach (note) ->
         note.set('duration', note.get('duration') - 5)
+
+    nudgeLeft: ->
+      @get('selectedNotes').forEach (note) ->
+        note.set('tick', note.get('tick') - 5)
+
+    nudgeRight: ->
+      @get('selectedNotes').forEach (note) ->
+        note.set('tick', note.get('tick') + 5)
