@@ -2,6 +2,7 @@ Seq25.PartController = Ember.ObjectController.extend
   pitches: (-> Seq25.Pitch.all).property('model')
   needs: 'transport'
   progress: Em.computed.alias('controllers.transport.progress')
+  quant: 1
 
   playBarStyle: (->
       "left: #{@get('progress') * 100}%"
@@ -23,18 +24,20 @@ Seq25.PartController = Ember.ObjectController.extend
     @get('selectedNotes').invoke 'save'
   ).observes('selectedNotes.@each.duration')
 
+  editResolution: (-> @get('quant') * Seq25.Note.TICKS_PER_BEAT ).property('quant')
+
   actions:
     removeNotes: ->
       @get('selectedNotes').forEach (note) =>
         @get('model').removeNote(note)
 
     extendNotes: ->
-      @get('selectedNotes').forEach (note) ->
-        note.set('duration', note.get('duration') + 5)
+      @get('selectedNotes').forEach (note) =>
+        note.set('duration', note.get('duration') + @get('editResolution'))
 
     shortenNotes: ->
-      @get('selectedNotes').forEach (note) ->
-        note.set('duration', note.get('duration') - 5)
+      @get('selectedNotes').forEach (note) =>
+        note.set('duration', note.get('duration') - @get('editResolution'))
 
     nudgeLeft: ->
       @get('selectedNotes').forEach (note) ->
