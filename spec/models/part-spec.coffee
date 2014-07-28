@@ -1,0 +1,2 @@
+moduleForModel 'part'
+test
