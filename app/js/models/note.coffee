@@ -35,14 +35,20 @@ Seq25.Note = DS.Model.extend
 
   secondsPerBeat: (-> 60 / @get('tempo') ).property('tempo')
 
-  nudgeLeft: (quant)->
+  nudge: (quant, round, direction)->
     ticksPerGrid = quant * TICKS_PER_BEAT
     absoluteTicks = @get('absoluteTicks')
-    snappedTicks = Math.floor(absoluteTicks / ticksPerGrid) * ticksPerGrid
+    snappedTicks = round(absoluteTicks / ticksPerGrid) * ticksPerGrid
     if snappedTicks != absoluteTicks
       @set('absoluteTicks', snappedTicks)
     else
-      @set('absoluteTicks', absoluteTicks - ticksPerGrid)
+      @set('absoluteTicks', absoluteTicks + (ticksPerGrid * direction))
+
+  nudgeLeft: (quant)->
+    @nudge(quant, Math.floor, -1)
+
+  nudgeRight: (quant)->
+    @nudge(quant, Math.ceil, 1)
 
   schedule: (offset)->
     start    = (@get('beat') * @get('secondsPerBeat') + @ticksToTime(@get('tick'))) + offset
