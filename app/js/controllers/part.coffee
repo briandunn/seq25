@@ -26,7 +26,7 @@ Seq25.PartController = Ember.ObjectController.extend
              'selectedNotes.@each.tick',
              'selectedNotes.@each.beat')
 
-  editResolution: (-> @get('quant') * Seq25.Note.TICKS_PER_BEAT ).property('quant')
+  editResolution: (-> (1 / @get('quant')) * Seq25.Note.TICKS_PER_BEAT ).property('quant')
 
   actions:
     removeNotes: ->
