@@ -8,7 +8,7 @@
       <label for='quant'>Quant</label>
     </dt>
     <dd>
-      {{view 'number' min=1 max=beat_count id='quant' value=quant}}
+      {{view 'number' min=1 max=Seq25.Note.TICKS_PER_BEAT id='quant' value=quant}}
     </dd>
   </dl>
   {{ render 'instrument' instrument }}

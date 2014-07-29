@@ -10,11 +10,9 @@ Seq25.Note = DS.Model.extend
   pitch: (-> Seq25.Pitch.all.findBy('number', @get('pitchNumber'))).property('pitchNumber')
 
   setBeatAndTick: (->
-    beatFraction = @get('beat_count') * @get('position')
-    beat = Math.floor beatFraction
-    tick = Math.floor (beatFraction - beat) * TICKS_PER_BEAT
-
-    @setProperties beat: beat, tick: tick
+    ticks = Math.round @get('beat_count') * TICKS_PER_BEAT * @get('position')
+    @set 'absoluteTicks', ticks
+    @snap(@get('quant'), Math.floor)
   ).observes('beat_count', 'position')
 
   absoluteTicks: ((_, ticks)->
@@ -35,14 +33,19 @@ Seq25.Note = DS.Model.extend
 
   secondsPerBeat: (-> 60 / @get('tempo') ).property('tempo')
 
-  nudge: (quant, round, direction)->
+  snap: (quant, round)->
+    return unless quant > 0
     ticksPerGrid = (1 / quant) * TICKS_PER_BEAT
     absoluteTicks = @get('absoluteTicks')
     snappedTicks = round(absoluteTicks / ticksPerGrid) * ticksPerGrid
     if snappedTicks != absoluteTicks
       @set('absoluteTicks', snappedTicks)
-    else
-      @set('absoluteTicks', absoluteTicks + (ticksPerGrid * direction))
+      true
+
+  nudge: (quant, round, direction)->
+    unless @snap(quant, round)
+      ticksPerGrid = (1 / quant) * TICKS_PER_BEAT
+      @set('absoluteTicks', @get('absoluteTicks') + (ticksPerGrid * direction))
 
   nudgeLeft: (quant)->
     @nudge(quant, Math.floor, -1)
