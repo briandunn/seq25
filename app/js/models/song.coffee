@@ -1,6 +1,6 @@
 Seq25.Song = DS.Model.extend
   tempo: DS.attr 'number', defaultValue: 120
-  parts: DS.hasMany 'part'
+  parts: DS.hasMany 'part', embeded: true
 
   beatCounts: Ember.computed.mapBy('parts', 'beat_count')
 
