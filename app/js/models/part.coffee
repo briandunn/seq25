@@ -1,8 +1,9 @@
 Seq25.Part = DS.Model.extend
-  notes: DS.hasMany 'note'
-  song: DS.belongsTo 'song'
-  name: DS.attr 'string'
-  volume:    DS.attr 'number', default: 0
+  notes:     DS.hasMany 'note'
+  song:      DS.belongsTo 'song'
+  name:      DS.attr 'string'
+  shape:     DS.attr 'string', default: 'sine'
+  volume:    DS.attr 'number', default: 0.75
   attack:    DS.attr 'number', default: 0
   sustain:   DS.attr 'number', default: 0
   decay:     DS.attr 'number', default: 0
