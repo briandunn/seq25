@@ -14,10 +14,9 @@ Seq25.ApplicationRoute = Ember.Route.extend
   model: ->
     Seq25.Song.loadDefault(@store)
 
-  setupController: (controller, model)->
-    model.save()
-    @controllerFor('transport').set('model', model)
-    controller.set('model', model)
+  setupController: (controller, song)->
+    song.save()
+    [@controllerFor('transport'), controller].invoke 'set', 'model', song
 
 Seq25.PartRoute = Ember.Route.extend
   model: (params)->
