@@ -27,9 +27,9 @@ Seq25.Note = DS.Model.extend
   secondsPerBeat: (-> 60 / @get('tempo') ).property('tempo')
 
   schedule: (offset)->
-    start = (@get('beat') * @get('secondsPerBeat') + @ticksToTime(@get('tick'))) + offset
-    end   = @ticksToTime(@get('duration')) + offset
-    @get('instrument').play(@get('pitch'), start, end)
+    start    = (@get('beat') * @get('secondsPerBeat') + @ticksToTime(@get('tick'))) + offset
+    duration = @ticksToTime(@get('duration'))
+    @get('instrument').play(@get('pitch'), start, duration)
 
   stop: ->
     @get('instrument').stop @get 'pitch'
