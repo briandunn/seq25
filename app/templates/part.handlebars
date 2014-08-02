@@ -9,7 +9,7 @@
 </header>
 <section id='piano-roll'>
   <section id='grid'>
-    <div class='play-bar'></div>
+    <div {{bind-attr style=playBarStyle}} class='play-bar'></div>
     {{beat-list content=beats}}
     <ul>
       {{#each pitch in pitches}}

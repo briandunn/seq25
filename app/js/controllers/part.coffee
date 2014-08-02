@@ -1,5 +1,11 @@
 Seq25.PartController = Ember.ObjectController.extend
   pitches: (-> Seq25.Pitch.all).property('model')
+  needs: 'transport'
+  progress: Em.computed.alias('controllers.transport.progress')
+
+  playBarStyle: (->
+      "left: #{@get('progress') * 100}%"
+  ).property('progress')
 
   selectedNotes: []
 

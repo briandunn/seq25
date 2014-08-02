@@ -10,4 +10,4 @@ Seq25.PitchController = Ember.ObjectController.extend
 
   actions:
     addNote: (time)->
-      @get('part').addNoteAtPoint(time, @get('model'), @get('controllers.transport').progress())
+      @get('part').addNoteAtPoint(time, @get('model'), @get('controllers.transport.progress'))
