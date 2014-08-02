@@ -17,3 +17,7 @@ Seq25.PartController = Ember.ObjectController.extend
     extendNotes: ->
       @get('selectedNotes').forEach (note) =>
         note.set('duration', note.get('duration') + 5)
+
+    shortenNotes: ->
+      @get('selectedNotes').forEach (note) =>
+        note.set('duration', note.get('duration') - 5)
