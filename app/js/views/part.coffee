@@ -1,9 +1,6 @@
 Seq25.PartView = Ember.View.extend
 
   didInsertElement: ->
-    Ember.run.scheduleOnce 'afterRender', this, 'bindKeys'
-
-  bindKeys: ->
     Mousetrap.bind 'backspace', =>
       @get('controller').send('removeNotes')
       return false
@@ -15,4 +12,4 @@ Seq25.PartView = Ember.View.extend
       @get('controller').send('shortenNotes')
 
   willDestroyElement: ->
-    Mousetrap.unbind 'backspace left right'
+    'backspace left right'.w().forEach(Mousetrap.unbind)
