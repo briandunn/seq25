@@ -13,17 +13,15 @@
     {{beat-list content=beats}}
     <ul>
       {{#each pitch in pitches}}
-      <li {{bind-attr class="isSharp:sharp :row"}}>
-        {{notes-edit content=pitch.notes}}
-      </li>
+        {{render 'pitch' pitch}}
       {{/each}}
     </ul>
   </section>
   <ul id='keyboard'>
     {{#each pitch in pitches}}
-      {{#piano-key}}
+      {{#render 'piano-key' pitch}}
         {{name}}
-      {{/piano-key}}
+      {{/render}}
     {{/each}}
   </ul>
 </section>

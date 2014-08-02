@@ -1,4 +1,6 @@
 Seq25.PitchController = Ember.ObjectController.extend
+  needs: ['transport', 'part']
+  part: Ember.computed.alias('controllers.part.model')
   beat_count: Ember.computed.alias('part.beat_count')
   instrument: Ember.computed.alias('part.instrument')
 
@@ -7,10 +9,8 @@ Seq25.PitchController = Ember.ObjectController.extend
   ).property('part.notes.@each', 'beat_count')
 
   actions:
-    play: -> @get('instrument').play @get('model')
-    stop: -> @get('instrument').stop @get('model')
     addNote: (time)->
-      @get('part').addNoteAtPoint(time, @get('model'))
+      @get('part').addNoteAtPoint(time, @get('model'), @get('controllers.transport').progress())
     removeNote: (note)->
       @get('part').removeNote(note)
 
