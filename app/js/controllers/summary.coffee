@@ -1,4 +1,5 @@
 Seq25.PartsSummaryController = Ember.ObjectController.extend
+  needs: 'transport'
   bucketCount: 10
   pitches: (->
     pitchNumbers = @get('notes').mapBy('pitchNumber').sort()
@@ -14,4 +15,4 @@ Seq25.PartsSummaryController = Ember.ObjectController.extend
 
   actions:
     hotKey: ->
-      @get('model').toggle()
+      @get('model').toggle @get('controllers.transport').progress()

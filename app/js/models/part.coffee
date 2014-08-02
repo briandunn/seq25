@@ -7,6 +7,7 @@ Seq25.Part = DS.Model.extend
   sustain:   DS.attr 'number', default: 0
   decay:     DS.attr 'number', default: 0
   resonance: DS.attr 'number', default: 0
+  tempo: Ember.computed.alias('song.tempo')
 
   beat_count: DS.attr 'number', defaultValue: 16
   isMuted: DS.attr 'boolean', defaultValue: false
@@ -14,12 +15,19 @@ Seq25.Part = DS.Model.extend
     Seq25.Instrument.create(part: this)
   ).property('volume', 'attack', 'sustain', 'decay', 'resonance')
 
-  toggle: ->
-    @set('isMuted', !@get('isMuted'))
+  duration: (-> @get('beat_count') * 60 / @get('tempo')).property('beat_count', 'tempo')
 
-  schedule: (tempo)->
+  toggle: (progress)->
+    @set('isMuted', !@get('isMuted'))
+    if @get('isMuted')
+      @stop()
+    else
+      @schedule(progress)
+
+  schedule: (progress)->
+    offset = progress * @get('duration') * -1
     @get('notes').forEach (note)->
-        note.schedule(tempo)
+      note.schedule(offset)
 
   stop: ->
     @get('notes').forEach (note)->
