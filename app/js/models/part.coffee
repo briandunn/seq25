@@ -43,9 +43,6 @@ Seq25.Part = DS.Model.extend
 
     note.schedule @offset progress
 
-    @save()
-    note.save()
-
   removeNote:(note)->
     note.stop()
     @get('notes').removeRecord(note)
