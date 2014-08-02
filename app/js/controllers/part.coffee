@@ -9,15 +9,19 @@ Seq25.PartController = Ember.ObjectController.extend
     @get('model').save()
   ).observes('beat_count')
 
+  durationSaver: ( ->
+    @get('selectedNotes').invoke 'save'
+  ).observes('selectedNotes.@each.duration')
+
   actions:
     removeNotes: ->
       @get('selectedNotes').forEach (note) =>
         @get('model').removeNote(note)
 
     extendNotes: ->
-      @get('selectedNotes').forEach (note) =>
+      @get('selectedNotes').forEach (note) ->
         note.set('duration', note.get('duration') + 5)
 
     shortenNotes: ->
-      @get('selectedNotes').forEach (note) =>
+      @get('selectedNotes').forEach (note) ->
         note.set('duration', note.get('duration') - 5)
