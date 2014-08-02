@@ -4,6 +4,7 @@ Seq25.Part = DS.Model.extend
   name: DS.attr 'string'
   beat_count: DS.attr 'number', defaultValue: 16
   isMuted: DS.attr 'boolean', defaultValue: false
+  instrument: Seq25.Osc
 
   toggle: ->
     @set('isMuted', !@get('isMuted'))
