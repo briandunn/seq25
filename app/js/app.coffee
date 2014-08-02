@@ -20,7 +20,7 @@ Song = Ember.Object.extend
 
   screenDuration: (-> @get('beat_count') * 60 / +@get('tempo')).property('tempo', 'beat_count')
 
-  currentTime: -> Seq25.Pitch.context.currentTime
+  currentTime: -> Seq25.audioContext.currentTime
 
   loopHasEnded: -> @progress() >= 1
 
@@ -30,7 +30,7 @@ Song = Ember.Object.extend
     for note in @get('notes')
       note.schedule()
     movePlayBar = =>
-      $('#play-bar').css(left: "#{@progress() * 100}%")
+      $('#play-bar').css left: "#{@progress() * 100}%"
       return unless @get('isPlaying')
       if @loopHasEnded()
         @play()
@@ -58,6 +58,8 @@ window.song = Song.create()
 
 window.Seq25 = Ember.Application.create()
 
+Seq25.audioContext = new AudioContext
+
 Seq25.Router.map ->
 
 Seq25.IndexRoute = Ember.Route.extend
@@ -74,8 +76,8 @@ Seq25.PitchController = Ember.ObjectController.extend
   ).property('song.notes.@each')
   song: song
   actions:
-    play: -> @get('model').play()
-    stop: -> @get('model').stop()
+    play: -> Seq25.Osc.play @get('model')
+    stop: -> Seq25.Osc.stop @get('model')
     addNote: (time)->
       @get('song').addNoteAtPoint(time, @get('model'))
     removeNote: (note)->
@@ -174,44 +176,18 @@ Note = Ember.Object.extend
   schedule: ->
     beats = song.get('beat_count')
     ratio = 60 * beats / song.get('tempo')
-    @pitch.play((@start - song.progress()) * ratio, (ratio/beats))
+    Seq25.Osc.play(@pitch, (@start - song.progress()) * ratio, (ratio/beats))
 
   stop: ->
-    @pitch.stop()
+    Seq25.Osc.stop(@pitch)
 
 class Seq25.Pitch
   noteNames = "A A# B C C# D D# E F F# G G#".w()
   a0Pitch = 27.5
-  context = new window.AudioContext
-  @context = context
-  getOscilator = (freq)->
-    oscillator = context.createOscillator()
-    oscillator.connect context.destination
-    oscillator.frequency.value = freq
-    oscillator
-
   constructor: (@number)->
     @name = noteNames[(number - 21) % 12] + Math.round((number - 17) / 12)
     @freq = a0Pitch * Math.pow(2, (@number - 21)/12)
     @isSharp = @name.indexOf('#') > 0
-
-  isPlaying: ->
-    @oscillator?.playbackState == OscillatorNode.PLAYING_STATE
-
-  isScheduled: ->
-    @oscillator?.playbackState == OscillatorNode.SCHEDULED_STATE
-
-  isActive: ->
-    @isScheduled() or @isPlaying()
-
-  play: (secondsFromNow=0, duration=null)->
-    @oscillator = getOscilator(@freq)
-    @oscillator.start context.currentTime + secondsFromNow
-    @stop(secondsFromNow + duration) if duration
-
-  stop: (secondsFromNow=0)->
-    if @isActive()
-      @oscillator.stop context.currentTime + secondsFromNow
 
   do ->
     pitches = for number in [45..95] #[21..108]
