@@ -3,10 +3,14 @@
     {{#each row in rows}}
       <li>
         <ul class='part-row'>
-          {{#each row}}
-            <li {{bind-attr class="isMuted:mute :part"}}>
-              {{render 'parts/summary' . }}
-            </li>
+          {{#each part in row}}
+            {{#if part.placeholder }}
+              <li {{action 'addPart' part.name }} class='empty'></li>
+            {{else}}
+              <li {{bind-attr class="part.isMuted:mute :part"}}>
+                {{render 'parts/summary' part }}
+              </li>
+            {{/if}}
           {{/each}}
         </ul>
       </li>

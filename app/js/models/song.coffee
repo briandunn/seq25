@@ -7,8 +7,7 @@ Seq25.Song = DS.Model.extend
   maxBeatCount: Ember.computed.max('beatCounts')
 
   getPart: (name)->
-    parts = @get('parts')
-    parts.findBy('name', name) || parts.createRecord(name: name).save()
+    @get('parts').findBy 'name', name
 
   schedule: (progress)->
     @get('parts').forEach (part)=>
