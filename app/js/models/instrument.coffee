@@ -9,7 +9,6 @@ Seq25.Instrument = Ember.Object.extend
   save: -> @get('part').save()
 
   init: ->
-    console.log 'instrument for:', @get('part.name')
     @set 'oscillators', {}
     @_super.apply(this, arguments)
 
