@@ -34,7 +34,7 @@ header {
 #parts {
   height: 100%;
   .part-row {
-    li {
+    li.part {
       border: 1px solid grey;
       margin: -1px;
       text-align: center;
@@ -44,9 +44,27 @@ header {
       margin: 1%;
       height: 50%;
       a {
+        height: 100px;
+        position: relative;
         display: block;
-        padding: 25% 0;
         width: 100%;
+        > ul {
+          position: relative;
+          li {
+            height: 10px;
+          }
+        }
+        ul.notes {
+          position: relative;
+          height: 100%;
+          width: 100%;
+          li {
+            height: 100%;
+            width: 6%;
+            position: absolute;
+            background-color: cornflowerblue;
+          }
+        }
       }
     }
   }
@@ -62,7 +80,6 @@ header {
     width: 100%;
     z-index: 1;
     .measure {
-      width: 6.25%;
       height: 100%;
       float: right;
       border-right: 1px dashed grey;
