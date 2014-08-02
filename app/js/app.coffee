@@ -79,34 +79,10 @@ Seq25.PartRoute = Ember.Route.extend
       @get('parts').addObject model
     controller.set('model', model)
 
-Seq25.PartController = Ember.ObjectController.extend
-  pitches: (->
-    Seq25.Pitch.all.map (pitch)=>
-      Seq25.PitchController.create content: pitch, part: @get('model')
-  ).property('model')
-
-  beats: (-> [1..@get('beat_count')] ).property('beat_count')
-
-  actions:
-    setBeatCount: (val)->
-      @get('model').set 'beatCount', val
-
 Seq25.PartsIndexRoute = Ember.Route.extend
   model: ->
     'Q W E R A S D F'.w().map (name)->
       Seq25.Part.create name: name
-
-Seq25.PartsIndexController = Ember.ArrayController.extend
-  rowSize: 4
-  rows: (->
-    [0,1].map (x)=>
-      @slice @get('rowSize') * x, @get('rowSize') + (@get('rowSize') * x)
-  ).property()
-  actions:
-    hotKey: (key)->
-      @forEach (part)=>
-        if part.get('name') == key
-          @transitionToRoute('part', part)
 
 Seq25.PartsIndexView = Ember.View.extend
   didInsertElement: ->
@@ -114,78 +90,6 @@ Seq25.PartsIndexView = Ember.View.extend
       return unless @get('state') == 'inDOM'
       e.preventDefault()
       @get('controller').send('hotKey', String.fromCharCode(e.keyCode))
-
-Seq25.TransportController = Ember.ObjectController.extend
-
-  song: Ember.computed.alias 'model'
-
-  empty: (-> @get('parts').length == 0).property('parts.@each')
-
-  loopDuration: (->
-    @get('maxBeatCount') * 60 / +@get('tempo')
-  ).property('tempo', 'maxBeatCount')
-
-  currentTime: -> Seq25.audioContext.currentTime
-
-  loopHasEnded: -> @progress() >= 1
-
-  startedAt: 0
-
-  isPlaying: false
-
-  elapsed: ->
-    @currentTime() - @get('startedAt')
-
-  progress: ->
-    @elapsed() / @get('loopDuration')
-
-  play: ->
-    @set('startedAt', @currentTime())
-    @set('isPlaying', true)
-    @get('song').schedule()
-    movePlayBar = =>
-      $('#play-bar').css left: "#{@progress() * 100}%"
-      return unless @get('isPlaying')
-      if @loopHasEnded()
-        @play()
-      else
-        requestAnimationFrame movePlayBar
-    requestAnimationFrame movePlayBar
-
-  stop: ->
-    @get('song').stop()
-    @set('startedAt', 0)
-    @set('isPlaying', false)
-
-  actions:
-    play: ->
-      return if @get('empty')
-      if @get('isPlaying') then @stop() else @play()
-
-Seq25.PitchController = Ember.ObjectController.extend
-  notes: (->
-    @get('part').get('notes').filter (note)=>
-      note.isPitch @get('model')
-  ).property('part.notes.@each', 'beat_count')
-  beat_count: (-> @get('part').get('beat_count')).property('part.beat_count')
-  actions:
-    play: -> Seq25.Osc.play @get('model')
-    stop: -> Seq25.Osc.stop @get('model')
-    addNote: (time)->
-      @get('part').addNoteAtPoint(time, @get('model'))
-    removeNote: (note)->
-      @get('part').removeNote(note)
-
-Seq25.SongController = Ember.ObjectController.extend
-  pitches: (->
-    Seq25.Pitch.all.map (pitch)-> Seq25.PitchController.create content: pitch
-  ).property()
-
-  beats: (-> [1..@get('beat_count')] ).property('beat_count')
-
-  actions:
-    setTempo: (val)->
-      @get('model').set 'tempo', val
 
 Seq25.TransportView = Ember.View.extend
   didInsertElement: ->
@@ -252,6 +156,7 @@ Ember.Handlebars.helper 'number-input',Seq25.NumberView
 
 Note = Ember.Object.extend
   init: (@pitch, position, beat_count)->
+    @_super()
     beatFraction = position * beat_count
     @beat = Math.floor(beatFraction)
     @tick = Math.floor((beatFraction - @beat) * 96)
