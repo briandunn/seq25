@@ -7,11 +7,10 @@ Seq25.audioContext = do ->
   new window[contextClass]
 
 Seq25.Router.map ->
-  @resource 'song', path: '/', ->
-    @resource 'part', path: "/parts/:name"
-    @resource 'parts', ->
+  @resource 'parts', path: '/', ->
+    @resource 'part', path: "/:name"
 
-Seq25.SongRoute = Ember.Route.extend
+Seq25.ApplicationRoute = Ember.Route.extend
   model: ->
     new Ember.RSVP.Promise (resolve, reject) =>
       @store.find('song').then (songs)=>
@@ -27,16 +26,13 @@ Seq25.SongRoute = Ember.Route.extend
     @controllerFor('transport').set('model', model)
     controller.set('model', model)
 
-  redirect: ->
-    @transitionTo 'parts'
-
 Seq25.PartRoute = Ember.Route.extend
   model: (params)->
-    @modelFor('song').get('parts').findBy('name', params.name)
+    @modelFor('application').get('parts').findBy('name', params.name)
 
 Seq25.PartsIndexRoute = Ember.Route.extend
   model: ->
-    song = @modelFor('song')
+    song = @modelFor('application')
     'Q W E R A S D F'.w().map (name)-> song.getPart(name)
 
 Seq25.PartsSummaryView = Ember.View.extend
