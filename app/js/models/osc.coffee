@@ -11,9 +11,10 @@ Seq25.Osc = Ember.Object.extend
     @oscillator.start 0
     @gain = gain.gain
     @_super(this, arguments)
+    @setShape()
 
   setShape: (->
-    @oscillator.type = @get 'shape'
+    @oscillator.type = @get('shape')
   ).observes('shape')
 
   play: (secondsFromNow, duration=null)->
