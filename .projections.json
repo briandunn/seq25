@@ -1,5 +1,6 @@
 {
   "app/js/models/*.coffee":      {"command": "model"},
+  "app/js/views/*.coffee":       {"command": "view"},
   "app/js/controllers/*.coffee": {"command": "controller"},
   "app/templates/*.handlebars":  {"command": "template"}
 }
