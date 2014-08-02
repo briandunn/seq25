@@ -1,7 +1,8 @@
 {
   "app/js/models/*.coffee":      {"command": "model", "alternate": "spec/models/{}-spec.coffee"},
   "app/js/views/*.coffee":       {"command": "view"},
-  "app/js/controllers/*.coffee": {"command": "controller"},
+  "app/js/controllers/*.coffee": {"command": "controller", "alternate": "spec/controllers/{}-spec.coffee"},
+  "app/js/routes/*.coffee":      {"command": "route"},
   "app/templates/*.handlebars":  {"command": "template"},
   "spec/*-spec.coffee":          {"command": "spec", "alternate": "app/js/{}.coffee"},
   "app/css/*.less":              {"command": "stylesheet"}
