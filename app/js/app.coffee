@@ -1,53 +1,21 @@
+window.Seq25 = Ember.Application.create()
+
 Song = Ember.Object.extend
   tempo: 120
 
-  beat_count: 16
-
-  startedAt: 0
-
-  isPlaying: false
-
   parts: []
 
-  toggle: ->
-    if @get('isPlaying') then @stop() else @play()
+  beatCounts: Ember.computed.mapBy('parts', 'beat_count')
 
-  elapsed: ->
-    @currentTime() - @get('startedAt')
+  maxBeatCount: Ember.computed.max('beatCounts')
 
-  progress: ->
-    @elapsed() / @get('screenDuration')
-
-  screenDuration: (-> @get('beat_count') * 60 / +@get('tempo')).property('tempo', 'beat_count')
-
-  currentTime: -> Seq25.audioContext.currentTime
-
-  loopHasEnded: -> @progress() >= 1
-
-  play: ->
-    @set('startedAt', @currentTime())
-    @set('isPlaying', true)
+  schedule: ->
     for part in @get('parts')
-      for note in part.get('notes')
-        note.schedule()
-    movePlayBar = =>
-      $('#play-bar').css left: "#{@progress() * 100}%"
-      return unless @get('isPlaying')
-      if @loopHasEnded()
-        @play()
-      else
-        requestAnimationFrame movePlayBar
-
-    requestAnimationFrame movePlayBar
+      part.schedule(@get('tempo'))
 
   stop: ->
     for part in @get('parts')
-      for note in part.get('notes')
-        note.stop()
-    @set('startedAt', 0)
-    @set('isPlaying', false)
-
-window.Seq25 = Ember.Application.create()
+      part.stop()
 
 Seq25.Part = Ember.Object.extend
   init: ->
@@ -56,10 +24,18 @@ Seq25.Part = Ember.Object.extend
 
   name: ''
   notes: null
+  beat_count: 16
 
-  addNoteAtPoint: (progress, pitch)->
-    note = new Note progress, pitch
-    note.schedule() if @get('isPlaying')
+  schedule: (tempo)->
+    for note in @get('notes')
+      note.schedule(tempo)
+
+  stop: ->
+    for note in @get('notes')
+      note.stop()
+
+  addNoteAtPoint: (position, pitch)->
+    note = new Note pitch, position, @get('beat_count')
     @get('notes').addObject note
 
   removeNote:(note)->
@@ -108,6 +84,9 @@ Seq25.PartController = Ember.ObjectController.extend
 
   beats: (-> [1..@get('beat_count')] ).property('beat_count')
 
+  actions:
+    setBeatCount: (val)->
+      @get('model').set 'beatCount', val
 
 Seq25.PartsIndexRoute = Ember.Route.extend
   model: ->
@@ -137,19 +116,55 @@ Seq25.TransportController = Ember.ObjectController.extend
 
   song: Ember.computed.alias 'model'
 
-  empty: (-> @get('notes').length == 0).property('notes.@each')
+  empty: (-> @get('parts').length == 0).property('parts.@each')
+
+  loopDuration: (->
+    @get('maxBeatCount') * 60 / +@get('tempo')
+  ).property('tempo', 'maxBeatCount')
+
+  currentTime: -> Seq25.audioContext.currentTime
+
+  loopHasEnded: -> @progress() >= 1
+
+  startedAt: 0
+
+  isPlaying: false
+
+  elapsed: ->
+    @currentTime() - @get('startedAt')
+
+  progress: ->
+    @elapsed() / @get('loopDuration')
+
+  play: ->
+    @set('startedAt', @currentTime())
+    @set('isPlaying', true)
+    @get('song').schedule()
+    movePlayBar = =>
+      $('#play-bar').css left: "#{@progress() * 100}%"
+      return unless @get('isPlaying')
+      if @loopHasEnded()
+        @play()
+      else
+        requestAnimationFrame movePlayBar
+    requestAnimationFrame movePlayBar
+
+  stop: ->
+    @get('song').stop()
+    @set('startedAt', 0)
+    @set('isPlaying', false)
 
   actions:
     play: ->
       return if @get('empty')
-      @get('song').toggle()
-
+      if @get('isPlaying') then @stop() else @play()
 
 Seq25.PitchController = Ember.ObjectController.extend
   notes: (->
     @get('part').get('notes').filter (note)=>
       note.isPitch @get('model')
-  ).property('part.notes.@each')
+  ).property('part.notes.@each', 'beat_count')
+  beat_count: (-> @get('part').get('beat_count')).property('part.beat_count')
   actions:
     play: -> Seq25.Osc.play @get('model')
     stop: -> Seq25.Osc.stop @get('model')
@@ -168,9 +183,6 @@ Seq25.SongController = Ember.ObjectController.extend
   actions:
     setTempo: (val)->
       @get('model').set 'tempo', val
-
-    setBeatCount: (val)->
-      @get('model').set 'beatCount', val
 
 Seq25.TransportView = Ember.View.extend
   didInsertElement: ->
@@ -217,9 +229,13 @@ Seq25.NoteListView = Ember.CollectionView.extend
       @get('controller').send 'removeNote', @get('content')
       false
 
+    percentageOfScreen: ->
+      beat_count = @get('controller').get('beat_count')
+      {beat, tick} = @get('content').getProperties('beat', 'tick')
+      ((beat + (tick / 96)) / beat_count) * 100
+
     didInsertElement: ->
-      time = @get('content').get('start')
-      @$().css(left: "#{time * 100}%")
+      @$().css(left: "#{@percentageOfScreen()}%")
 
   click: (e)->
     offsetX = e.pageX - @$().offset().left
@@ -232,15 +248,18 @@ Ember.Handlebars.helper 'note-list',   Seq25.NoteListView
 Ember.Handlebars.helper 'number-input',Seq25.NumberView
 
 Note = Ember.Object.extend
-  init: (@start, @pitch)->
+  init: (@pitch, position, beat_count)->
+    beatFraction = position * beat_count
+    @beat = Math.floor(beatFraction)
+    @tick = Math.floor((beatFraction - @beat) * 96)
 
   isPitch: (pitch)->
     @pitch.name == pitch.name
 
-  schedule: ->
-    beats = song.get('beat_count')
-    ratio = 60 * beats / song.get('tempo')
-    Seq25.Osc.play(@pitch, (@start - song.progress()) * ratio, (ratio/beats))
+  schedule: (tempo)->
+    beatDuration = 60 / tempo
+    start = (@get('beat') * beatDuration) + ((@get('tick') / 96) * beatDuration)
+    Seq25.Osc.play(@pitch, start, 0.1)
 
   stop: ->
     Seq25.Osc.stop(@pitch)
