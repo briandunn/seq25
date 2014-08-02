@@ -36,7 +36,7 @@ Seq25.Note = DS.Model.extend
   secondsPerBeat: (-> 60 / @get('tempo') ).property('tempo')
 
   nudge: (quant, round, direction)->
-    ticksPerGrid = quant * TICKS_PER_BEAT
+    ticksPerGrid = (1 / quant) * TICKS_PER_BEAT
     absoluteTicks = @get('absoluteTicks')
     snappedTicks = round(absoluteTicks / ticksPerGrid) * ticksPerGrid
     if snappedTicks != absoluteTicks
