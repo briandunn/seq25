@@ -61,6 +61,15 @@ Seq25.NumberView = Ember.TextField.extend
       action: @get('action'),
       actionContext: +@get('value')
 
+Seq25.RangeView = Ember.Component.extend
+  type: 'range'
+  tagName: 'input'
+  attributeBindings: ['type', 'min', 'max', 'step', 'action', 'value', 'id']
+  change: ->
+    @triggerAction
+      action: @get('action'),
+      actionContext: [@$().attr('id'), @$().val()]
+
 Seq25.PianoKeyView = Ember.View.extend
   attributeBindings: ['class']
   classNames: ['row']
