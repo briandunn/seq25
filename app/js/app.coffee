@@ -3,11 +3,11 @@ Song = Ember.Object.extend
 
   beat_count: 16
 
-  notes: []
-
   startedAt: 0
 
   isPlaying: false
+
+  parts: []
 
   toggle: ->
     if @get('isPlaying') then @stop() else @play()
@@ -27,8 +27,9 @@ Song = Ember.Object.extend
   play: ->
     @set('startedAt', @currentTime())
     @set('isPlaying', true)
-    for note in @get('notes')
-      note.schedule()
+    for part in @get('parts')
+      for note in part.get('notes')
+        note.schedule()
     movePlayBar = =>
       $('#play-bar').css left: "#{@progress() * 100}%"
       return unless @get('isPlaying')
@@ -40,10 +41,21 @@ Song = Ember.Object.extend
     requestAnimationFrame movePlayBar
 
   stop: ->
-    for note in @get('notes')
-      note.stop()
+    for part in @get('parts')
+      for note in part.get('notes')
+        note.stop()
     @set('startedAt', 0)
     @set('isPlaying', false)
+
+window.Seq25 = Ember.Application.create()
+
+Seq25.Part = Ember.Object.extend
+  init: ->
+    @set('notes', [])
+    @_super()
+
+  name: ''
+  notes: null
 
   addNoteAtPoint: (progress, pitch)->
     note = new Note progress, pitch
@@ -56,32 +68,70 @@ Song = Ember.Object.extend
 
 window.song = Song.create()
 
-window.Seq25 = Ember.Application.create()
-
 Seq25.audioContext = new AudioContext
 
 Seq25.Router.map ->
+  @resource 'song', path: '/', ->
+    @resource 'part', path: "/parts/:name"
+    @resource 'parts', ->
+      @route 'notes'
+      @route 'instrument'
 
-Seq25.IndexRoute = Ember.Route.extend
+Seq25.SongRoute = Ember.Route.extend
   model: -> song
 
   setupController: (controller, model)->
     @controllerFor('transport').set('model', model)
     controller.set('model', model)
 
-Seq25.PitchController = Ember.ObjectController.extend
-  notes: (->
-    @get('song').get('notes').filter (note)=>
-      note.isPitch @get('model')
-  ).property('song.notes.@each')
-  song: song
+Seq25.PartRoute = Ember.Route.extend
+  parts: (-> @modelFor('song').get('parts')).property()
+
+  findPart: (name)-> @get('parts').findBy 'name', name
+
+  model: (params)->
+    @set('intendedName', params.name)
+    @findPart @get('intendedName')
+
+  setupController: (controller, model)->
+    unless model
+      model = Seq25.Part.create name: @get('intendedName')
+    unless @findPart model.get('name')
+      @get('parts').addObject model
+    controller.set('model', model)
+
+Seq25.PartController = Ember.ObjectController.extend
+  pitches: (->
+    Seq25.Pitch.all.map (pitch)=>
+      Seq25.PitchController.create content: pitch, part: @get('model')
+  ).property('model')
+
+  beats: (-> [1..@get('beat_count')] ).property('beat_count')
+
+
+Seq25.PartsIndexRoute = Ember.Route.extend
+  model: ->
+    'Q W E R A S D F'.w().map (name)->
+      Seq25.Part.create name: name
+
+Seq25.PartsIndexController = Ember.ArrayController.extend
+  rowSize: 4
+  rows: (->
+    [0,1].map (x)=>
+      @slice @get('rowSize') * x, @get('rowSize') + (@get('rowSize') * x)
+  ).property()
   actions:
-    play: -> Seq25.Osc.play @get('model')
-    stop: -> Seq25.Osc.stop @get('model')
-    addNote: (time)->
-      @get('song').addNoteAtPoint(time, @get('model'))
-    removeNote: (note)->
-      @get('song').removeNote(note)
+    hotKey: (key)->
+      @forEach (part)=>
+        if part.get('name') == key
+          @transitionToRoute('part', part)
+
+Seq25.PartsIndexView = Ember.View.extend
+  didInsertElement: ->
+    addEventListener 'keydown', (e)=>
+      return unless @get('state') == 'inDOM'
+      e.preventDefault()
+      @get('controller').send('hotKey', String.fromCharCode(e.keyCode))
 
 Seq25.TransportController = Ember.ObjectController.extend
 
@@ -94,7 +144,21 @@ Seq25.TransportController = Ember.ObjectController.extend
       return if @get('empty')
       @get('song').toggle()
 
-Seq25.IndexController = Ember.ObjectController.extend
+
+Seq25.PitchController = Ember.ObjectController.extend
+  notes: (->
+    @get('part').get('notes').filter (note)=>
+      note.isPitch @get('model')
+  ).property('part.notes.@each')
+  actions:
+    play: -> Seq25.Osc.play @get('model')
+    stop: -> Seq25.Osc.stop @get('model')
+    addNote: (time)->
+      @get('part').addNoteAtPoint(time, @get('model'))
+    removeNote: (note)->
+      @get('part').removeNote(note)
+
+Seq25.SongController = Ember.ObjectController.extend
   pitches: (->
     Seq25.Pitch.all.map (pitch)-> Seq25.PitchController.create content: pitch
   ).property()

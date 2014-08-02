@@ -3,12 +3,13 @@
 // relative to 'app/css' or 'vendor/css'.
 
 header {
-  padding: 10px 0;
   &:after {
     content: " ";
     display: table;
     clear: both;
   }
+
+  padding: 10px 0;
   dl {
     float: left;
     width: 20%;
@@ -27,6 +28,27 @@ header {
   float: left;
   button {
     font-family: 'webdings';
+  }
+}
+
+#parts {
+  height: 100%;
+  .part-row {
+    li {
+      border: 1px solid grey;
+      margin: -1px;
+      text-align: center;
+      display: block;
+      float: left;
+      width: 20%;
+      margin: 1%;
+      height: 50%;
+      a {
+        display: block;
+        padding: 25% 0;
+        width: 100%;
+      }
+    }
   }
 }
 

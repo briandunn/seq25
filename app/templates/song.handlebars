@@ -1,0 +1,19 @@
+<header>
+  <dl>
+    <dt><label for='tempo'>Tempo</label></dt>
+    <dd>
+      {{number-input min=0 max=480 value=tempo action='setTempo' id='tempo'}}
+    </dd>
+  </dl>
+  <dl>
+    <dt><label for='beats'>Beats</label></dt>
+    <dd>
+      {{number-input min=1 max=32 value=beat_count action='setBeatCount' id='beats'}}
+    </dd>
+  </dl>
+  {{render 'transport' model }}
+  <ul>
+    <li>{{#link-to 'parts' }}Parts{{/link-to}}</li>
+  </ul>
+</header>
+{{outlet}}
