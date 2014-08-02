@@ -40,9 +40,8 @@ Seq25.PartController = Ember.ObjectController.extend
         note.set('duration', note.get('duration') - @get('editResolution'))
 
     nudgeLeft: ->
-      @get('selectedNotes').forEach (note) ->
-        note.set('tick', note.get('tick') - 5)
+      @get('selectedNotes').invoke 'nudgeLeft', @get('quant')
 
     nudgeRight: ->
-      @get('selectedNotes').forEach (note) ->
-        note.set('tick', note.get('tick') + 5)
+      @get('selectedNotes').forEach (note) =>
+        note.set('tick', note.get('tick') + @get('editResolution'))

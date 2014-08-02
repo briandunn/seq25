@@ -6,7 +6,6 @@ Seq25.Note = DS.Model.extend
   part:        DS.belongsTo 'part'
   duration:    DS.attr 'number', defaultValue: TICKS_PER_BEAT
   tempo: Ember.computed.alias 'part.tempo'
-
   instrument: Ember.computed.alias 'part.instrument'
   pitch: (-> Seq25.Pitch.all.findBy('number', @get('pitchNumber'))).property('pitchNumber')
 
@@ -18,6 +17,16 @@ Seq25.Note = DS.Model.extend
     @setProperties beat: beat, tick: tick
   ).observes('beat_count', 'position')
 
+  absoluteTicks: ((_, ticks)->
+    if ticks == undefined
+      @get('beat') * TICKS_PER_BEAT + @get('tick')
+    else
+      @setProperties
+        beat: Math.floor(ticks / TICKS_PER_BEAT)
+        tick: ticks % TICKS_PER_BEAT
+      ticks
+  ).property('beat', 'tick')
+
   isPitch: (pitch)->
     @get('pitchNumber') == pitch.number
 
@@ -25,6 +34,15 @@ Seq25.Note = DS.Model.extend
     (ticks / TICKS_PER_BEAT) * @get('secondsPerBeat')
 
   secondsPerBeat: (-> 60 / @get('tempo') ).property('tempo')
+
+  nudgeLeft: (quant)->
+    ticksPerGrid = quant * TICKS_PER_BEAT
+    absoluteTicks = @get('absoluteTicks')
+    snappedTicks = Math.floor(absoluteTicks / ticksPerGrid) * ticksPerGrid
+    if snappedTicks != absoluteTicks
+      @set('absoluteTicks', snappedTicks)
+    else
+      @set('absoluteTicks', absoluteTicks - ticksPerGrid)
 
   schedule: (offset)->
     start    = (@get('beat') * @get('secondsPerBeat') + @ticksToTime(@get('tick'))) + offset
