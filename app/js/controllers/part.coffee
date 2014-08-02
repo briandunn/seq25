@@ -20,9 +20,11 @@ Seq25.PartController = Ember.ObjectController.extend
     @get('notes').invoke 'save'
   ).observes('notes.[]')
 
-  durationSaver: ( ->
+  positionSaver: ( ->
     @get('selectedNotes').invoke 'save'
-  ).observes('selectedNotes.@each.duration')
+  ).observes('selectedNotes.@each.duration',
+             'selectedNotes.@each.tick',
+             'selectedNotes.@each.beat')
 
   editResolution: (-> @get('quant') * Seq25.Note.TICKS_PER_BEAT ).property('quant')
 
