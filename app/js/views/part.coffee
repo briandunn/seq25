@@ -18,5 +18,4 @@ Seq25.PartView = Ember.View.extend
       @get('controller').send('nudgeRight')
 
   willDestroyElement: ->
-
     Mousetrap.unbind('backspace left right'.w())
