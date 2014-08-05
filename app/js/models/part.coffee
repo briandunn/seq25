@@ -47,3 +47,8 @@ Seq25.Part = DS.Model.extend
     @get('notes').removeRecord(note)
     @save()
     note.destroy()
+
+  bumpVolume: (direction) ->
+    amount = 0.1
+    amount = amount * -1 if direction == "down"
+    @incrementProperty('volume', amount)

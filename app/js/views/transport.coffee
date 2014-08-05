@@ -9,6 +9,8 @@ Seq25.TransportView = Ember.View.extend
     'q w e r a s d f'.w().forEach (partKey) =>
       Mousetrap.bind("g #{partKey}", => @gotoPart(partKey.toUpperCase()))
       Mousetrap.bind("m #{partKey}", => @mutePart(partKey.toUpperCase()))
+      Mousetrap.bind "n #{partKey}", => @bumpVolumeForPart(partKey.toUpperCase())
+      Mousetrap.bind("shift+n #{partKey}", => @bumpVolumeForPart(partKey.toUpperCase(), "down"))
 
   tagName: 'section'
 
@@ -19,6 +21,9 @@ Seq25.TransportView = Ember.View.extend
 
   mutePart: (partKey) ->
     @partForKey(partKey).toggle @get('controller').get('progress')
+
+  bumpVolumeForPart: (partKey, direction="up") ->
+    @partForKey(partKey).bumpVolume(direction)
 
   gotoSummary: ->
     @get('controller').transitionToRoute('parts')
