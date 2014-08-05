@@ -1,6 +1,4 @@
 Seq25.TransportView = Ember.View.extend
-  numberStack: []
-
   didInsertElement: ->
     Mousetrap.bind("t", => @gotoSummary())
 
@@ -15,7 +13,7 @@ Seq25.TransportView = Ember.View.extend
       Mousetrap.bind("shift+n #{partKey}", => @bumpVolumeForPart(partKey.toUpperCase(), "down"))
 
     '0 1 2 3 4 5 6 7 8 9'.w().forEach (number) =>
-      Mousetrap.bind(number, => @addToNumberStack(number))
+      Mousetrap.bind(number, => Seq25.numStack.push(number))
 
   tagName: 'section'
 
@@ -28,15 +26,20 @@ Seq25.TransportView = Ember.View.extend
     @partForKey(partKey).toggle @get('controller').get('progress')
 
   bumpVolumeForPart: (partKey, direction="up") ->
-    @partForKey(partKey).bumpVolume(direction, @numberFromStack())
+    @partForKey(partKey).bumpVolume(direction, Seq25.numStack.drain())
 
   gotoSummary: ->
     @get('controller').transitionToRoute('parts')
 
-  addToNumberStack: (number) ->
-    @numberStack.push number
+class Seq25.NumStack
+  stack: []
 
-  numberFromStack: ->
-    num = parseInt(@numberStack.join('')) || 1
-    @numberStack = []
+  push: (num) ->
+    @stack.push(num)
+
+  drain: () ->
+    num = parseInt(@stack.join('')) || 1
+    @stack = []
     num
+
+Seq25.numStack = new Seq25.NumStack()
