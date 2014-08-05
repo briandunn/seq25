@@ -34,12 +34,10 @@ Seq25.PartController = Ember.ObjectController.extend
         @get('model').removeNote(note)
 
     extendNotes: ->
-      @get('selectedNotes').forEach (note) =>
-        note.set('duration', note.get('duration') + @get('editResolution'))
+      @get('selectedNotes').invoke 'changeDuration', @get('editResolution')
 
     shortenNotes: ->
-      @get('selectedNotes').forEach (note) =>
-        note.set('duration', note.get('duration') - @get('editResolution'))
+      @get('selectedNotes').invoke 'changeDuration', (@get('editResolution') * -1)
 
     nudgeLeft: ->
       @get('selectedNotes').invoke 'nudgeLeft', @get('quant')

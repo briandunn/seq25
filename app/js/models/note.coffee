@@ -53,6 +53,9 @@ Seq25.Note = DS.Model.extend
   nudgeRight: (quant)->
     @nudge(quant, Math.ceil, 1)
 
+  changeDuration: (editResolution) ->
+    @incrementProperty('duration', editResolution)
+
   schedule: (offset)->
     start    = (@get('beat') * @get('secondsPerBeat') + @ticksToTime(@get('tick'))) + offset
     duration = @ticksToTime(@get('duration'))
