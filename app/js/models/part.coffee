@@ -35,9 +35,9 @@ Seq25.Part = DS.Model.extend
     @get('notes').forEach (note)->
       note.stop()
 
-  addNoteAtPoint: (position, pitch, quant)->
+  addNoteAtPoint: (position, pitchNumber, quant)->
     @get('notes').createRecord
-      pitchNumber: pitch.number
+      pitchNumber: pitchNumber
       position:    position
       beat_count:  @get('beat_count')
       quant:       quant
