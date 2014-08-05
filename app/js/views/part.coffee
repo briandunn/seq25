@@ -5,16 +5,16 @@ Seq25.PartView = Ember.View.extend
       @get('controller').send('removeNotes')
       return false
 
-    Mousetrap.bind 'right', =>
+    Mousetrap.bind 'shift+right', =>
       @get('controller').send('extendNotes')
 
-    Mousetrap.bind 'left', =>
+    Mousetrap.bind 'shift+left', =>
       @get('controller').send('shortenNotes')
 
-    Mousetrap.bind 'shift+left', =>
+    Mousetrap.bind 'left', =>
       @get('controller').send('nudgeLeft')
 
-    Mousetrap.bind 'shift+right', =>
+    Mousetrap.bind 'right', =>
       @get('controller').send('nudgeRight')
 
   willDestroyElement: ->
