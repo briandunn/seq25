@@ -54,3 +54,6 @@ Seq25.PartController = Ember.ObjectController.extend
 
     nudgeRight: ->
       @get('selectedNotes').invoke 'nudgeRight', @get('quant')
+
+    createNote: ->
+      @get('model').addNoteAtPoint(0, TOP_NOTE_ON_PIANO_ROLL=95, @get('quant'))
