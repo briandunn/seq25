@@ -48,7 +48,7 @@ Seq25.Part = DS.Model.extend
     @save()
     note.destroy()
 
-  bumpVolume: (direction) ->
-    amount = 0.1
+  bumpVolume: (direction, multiplier=1) ->
+    amount = 0.1 * multiplier
     amount = amount * -1 if direction == "down"
     @incrementProperty('volume', amount)
