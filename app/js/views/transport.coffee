@@ -24,7 +24,11 @@ Seq25.TransportView = Ember.View.extend
   partForKey: (name) -> @get('controller').get("song").getPart(name)
 
   gotoPart: (partKey) ->
-    @get('controller').transitionToRoute('part', @partForKey(partKey))
+    part = @partForKey(partKey)
+    if part
+      @get('controller').transitionToRoute('part', part)
+    else
+      @get('controller').send('addPart', partKey)
 
   mutePart: (partKey) ->
     @partForKey(partKey)?.toggle @get('controller').get('progress')
