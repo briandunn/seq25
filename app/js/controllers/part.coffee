@@ -32,28 +32,25 @@ Seq25.PartController = Ember.ObjectController.extend
     beatSlice * Seq25.Note.TICKS_PER_BEAT
   ).property('quant')
 
-  multiplier: ->
-    Seq25.numStack.drain()
-
-  changeNoteDuration: (direction)->
-    @get('selectedNotes').invoke 'changeDuration', @get('editResolution') * @multiplier() * direction
+  changeNoteDuration: (direction, num)->
+    @get('selectedNotes').invoke 'changeDuration', @get('editResolution') * num * direction
 
   actions:
     removeNotes: ->
       @get('selectedNotes').forEach (note) =>
         @get('model').removeNote(note)
 
-    extendNotes: ->
-      @changeNoteDuration(1)
+    extendNotes: (num) ->
+      @changeNoteDuration(1, num)
 
-    shortenNotes: ->
-      @changeNoteDuration(-1)
+    shortenNotes: (num) ->
+      @changeNoteDuration(-1, num)
 
-    nudgeLeft: ->
-      @get('selectedNotes').invoke 'nudgeLeft', @get('quant')
+    nudgeLeft: (num) ->
+      _.times(num, => @get('selectedNotes').invoke 'nudgeLeft', @get('quant'))
 
-    nudgeRight: ->
-      @get('selectedNotes').invoke 'nudgeRight', @get('quant')
+    nudgeRight: (num) ->
+      _.times(num, => @get('selectedNotes').invoke 'nudgeRight', @get('quant'))
 
     createNote: ->
       note = @get('model').addNoteAtPoint(0, TOP_NOTE_ON_PIANO_ROLL=95, @get('quant'))
