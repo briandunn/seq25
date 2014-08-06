@@ -1,16 +1,20 @@
 Seq25.TransportView = Ember.View.extend
   didInsertElement: ->
-    Mousetrap.bind("t", => @gotoSummary())
+    Mousetrap.bind("t", => @keyEvent( => @gotoSummary()))
 
-    Mousetrap.bind("space", (e)=>
+    Mousetrap.bind("space", (e) =>
       e.preventDefault()
-      @get('controller').send('play'))
+      @keyEvent( => @get('controller').send('play')))
 
     'q w e r a s d f'.w().forEach (partKey) =>
-      Mousetrap.bind("g #{partKey}", => @gotoPart(partKey.toUpperCase()))
-      Mousetrap.bind("m #{partKey}", => @mutePart(partKey.toUpperCase()))
-      Mousetrap.bind "n #{partKey}", => @bumpVolumeForPart(partKey.toUpperCase())
-      Mousetrap.bind("shift+n #{partKey}", => @bumpVolumeForPart(partKey.toUpperCase(), "down"))
+      Mousetrap.bind "g #{partKey}", =>
+        @keyEvent( => @gotoPart(partKey.toUpperCase()))
+      Mousetrap.bind "m #{partKey}", =>
+        @keyEvent( => @mutePart(partKey.toUpperCase()))
+      Mousetrap.bind "n #{partKey}", =>
+        @keyEvent( (num) => @bumpVolumeForPart(partKey.toUpperCase(), "up", num))
+      Mousetrap.bind "shift+n #{partKey}", =>
+        @keyEvent( (num) => @bumpVolumeForPart(partKey.toUpperCase(), "down", num))
 
     '0 1 2 3 4 5 6 7 8 9'.w().forEach (number) =>
       Mousetrap.bind(number, => Seq25.numStack.push(number))
@@ -23,13 +27,16 @@ Seq25.TransportView = Ember.View.extend
     @get('controller').transitionToRoute('part', @partForKey(partKey))
 
   mutePart: (partKey) ->
-    @partForKey(partKey).toggle @get('controller').get('progress')
+    @partForKey(partKey)?.toggle @get('controller').get('progress')
 
-  bumpVolumeForPart: (partKey, direction="up") ->
-    @partForKey(partKey).bumpVolume(direction, Seq25.numStack.drain())
+  bumpVolumeForPart: (partKey, direction="up", num) ->
+    @partForKey(partKey)?.bumpVolume(direction, num)
 
   gotoSummary: ->
     @get('controller').transitionToRoute('parts')
+
+  keyEvent: (handler) ->
+    handler(Seq25.numStack.drain())
 
 class Seq25.NumStack
   stack: []
