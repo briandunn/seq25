@@ -1,12 +1,3 @@
-Ember.Test.registerAsyncHelper 'keyTrigger', (app, key) ->
-  Mousetrap.trigger(key)
-
-Ember.Test.registerHelper 'width', (app, selector) ->
-  find(selector).attr("style").split(";")[1].split(": ")[1]
-
-Ember.Test.registerHelper 'left', (app, selector) ->
-  find(selector).attr("style").split(";")[0].split(": ")[1]
-
 module 'Feature: user note actions must be constrained',
   setup: ->
     Seq25.ApplicationAdapter = DS.LSAdapter.extend namespace: 'seq25test'
