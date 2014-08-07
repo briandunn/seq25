@@ -1,5 +1,5 @@
 Seq25.TransportController = Ember.ObjectController.extend
-  needs: 'partsIndex'
+  needs: ['partsIndex', 'part']
 
   song: Ember.computed.alias 'model'
 
