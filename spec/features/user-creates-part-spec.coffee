@@ -7,7 +7,7 @@ Ember.Test.registerHelper 'width', (app, selector) ->
 Ember.Test.registerHelper 'left', (app, selector) ->
   find(selector).attr("style").split(";")[0].split(": ")[1]
 
-module 'Integration: Transitions',
+module 'Feature: user creates note',
   setup: ->
     Seq25.ApplicationAdapter = DS.LSAdapter.extend namespace: 'seq25test'
 
