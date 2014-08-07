@@ -30,3 +30,19 @@ test 'cannot shorten note to 0', ->
 
   andThen ->
     equal(width(".notes li"), "6.25%")
+
+test 'cannot move note to < 0', ->
+  visit('/')
+  click('li.empty')
+
+  andThen ->
+    keyTrigger("c")
+
+  andThen ->
+    equal(left(".notes li"), "0%")
+
+  andThen ->
+    keyTrigger("left")
+
+  andThen ->
+    equal(left(".notes li"), "0%")
