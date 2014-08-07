@@ -11,6 +11,8 @@ Seq25.TransportView = Ember.View.extend
         @keyEvent( => @gotoPart(partKey.toUpperCase()))
       Mousetrap.bind "m #{partKey}", =>
         @keyEvent( => @mutePart(partKey.toUpperCase()))
+      Mousetrap.bind "b #{partKey}", =>
+        @keyEvent( (num) => @changeBeatsForPart(partKey.toUpperCase(), "up", num))
       Mousetrap.bind "n #{partKey}", =>
         @keyEvent( (num) => @bumpVolumeForPart(partKey.toUpperCase(), "up", num))
       Mousetrap.bind "shift+n #{partKey}", =>
@@ -35,6 +37,9 @@ Seq25.TransportView = Ember.View.extend
 
   bumpVolumeForPart: (partKey, direction="up", num) ->
     @partForKey(partKey)?.bumpVolume(direction, num)
+
+  changeBeatsForPart: (partKey, direction="up", num) ->
+    @partForKey(partKey)?.incrementProperty("beat_count", num)
 
   gotoSummary: ->
     @get('controller').transitionToRoute('parts')
