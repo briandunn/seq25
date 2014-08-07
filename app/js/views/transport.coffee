@@ -39,7 +39,10 @@ Seq25.TransportView = Ember.View.extend
     @partForKey(partKey)?.bumpVolume(direction, num)
 
   changeBeatsForPart: (partKey, direction="up", num) ->
-    @partForKey(partKey)?.incrementProperty("beat_count", num)
+    if num is 1
+      @partForKey(partKey)?.incrementProperty("beat_count", num)
+    else
+      @partForKey(partKey)?.set("beat_count", num)
 
   gotoSummary: ->
     @get('controller').transitionToRoute('parts')
