@@ -21,6 +21,12 @@ Seq25.PartView = Ember.View.extend
     Mousetrap.bind 'right', =>
       @keyEvent( (num) => @get('controller').send('nudgeRight', num))
 
+    Mousetrap.bind 'up', =>
+      @keyEvent( (num) => @get('controller').send('moveUp', num))
+
+    Mousetrap.bind 'down', =>
+      @keyEvent( (num) => @get('controller').send('moveDown', num))
+
   keyEvent: (handler) ->
     handler(Seq25.numStack.drain())
 

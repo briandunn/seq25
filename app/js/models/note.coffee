@@ -59,6 +59,12 @@ Seq25.Note = DS.Model.extend
   nudgeRight: (quant)->
     @nudge(quant, Math.ceil, 1)
 
+  moveUp: (num) ->
+    @incrementProperty('pitchNumber', num)
+
+  moveDown: (num) ->
+    @incrementProperty('pitchNumber', -1 * num)
+
   changeDuration: (editResolution) ->
     if @get('duration') + editResolution > 0
       @incrementProperty('duration', editResolution)

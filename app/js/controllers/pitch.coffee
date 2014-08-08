@@ -6,7 +6,7 @@ Seq25.PitchController = Ember.ObjectController.extend
 
   notes: (->
     @get('part.notes').filter (note)=> note.isPitch @get('model')
-  ).property('part.notes.@each', 'beat_count')
+  ).property('part.notes.@each.pitchNumber', 'beat_count')
 
   actions:
     addNote: (time)->
