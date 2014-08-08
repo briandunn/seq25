@@ -6,12 +6,12 @@ Seq25.Instrument = Ember.Object.extend
   resonance: Ember.computed.alias('part.resonance')
   isMuted:   Ember.computed.alias('part.isMuted')
   shape:     Ember.computed.alias('part.shape')
-  context:   Seq25.audioContext
 
   save: -> @get('part').save()
 
   init: ->
     @set 'oscillators', {}
+    @set('context', Seq25.audioContext)
     context = @get('context')
     @set('output', context.createGain())
     @get('output').connect context.destination
