@@ -35,9 +35,9 @@ Seq25.Part = DS.Model.extend
     @get('notes').forEach (note)->
       note.stop()
 
-  addNoteAtPoint: (position, pitch, quant)->
+  addNoteAtPoint: (position, pitchNumber, quant)->
     @get('notes').createRecord
-      pitchNumber: pitch.number
+      pitchNumber: pitchNumber
       position:    position
       beat_count:  @get('beat_count')
       quant:       quant
@@ -47,3 +47,8 @@ Seq25.Part = DS.Model.extend
     @get('notes').removeRecord(note)
     @save()
     note.destroy()
+
+  bumpVolume: (direction, multiplier=1) ->
+    amount = 0.1 * multiplier
+    amount = amount * -1 if direction == "down"
+    @incrementProperty('volume', amount)

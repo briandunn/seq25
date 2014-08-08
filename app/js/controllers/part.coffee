@@ -2,7 +2,7 @@ Seq25.PartController = Ember.ObjectController.extend
   pitches: (-> Seq25.Pitch.all).property('model')
   needs: 'transport'
   progress: Em.computed.alias('controllers.transport.progress')
-  quant: 0
+  quant: 1
 
   playBarStyle: (->
       "left: #{@get('progress') * 100}%"
@@ -26,23 +26,32 @@ Seq25.PartController = Ember.ObjectController.extend
              'selectedNotes.@each.tick',
              'selectedNotes.@each.beat')
 
-  editResolution: (-> (1 / @get('quant')) * Seq25.Note.TICKS_PER_BEAT ).property('quant')
+  editResolution: (->
+    q = parseInt(@get('quant')) || Seq25.Note.TICKS_PER_BEAT
+    beatSlice = 1 / q
+    beatSlice * Seq25.Note.TICKS_PER_BEAT
+  ).property('quant')
+
+  changeNoteDuration: (direction, num)->
+    @get('selectedNotes').invoke 'changeDuration', @get('editResolution') * num * direction
 
   actions:
     removeNotes: ->
       @get('selectedNotes').forEach (note) =>
         @get('model').removeNote(note)
 
-    extendNotes: ->
-      @get('selectedNotes').forEach (note) =>
-        note.set('duration', note.get('duration') + @get('editResolution'))
+    extendNotes: (num) ->
+      @changeNoteDuration(1, num)
 
-    shortenNotes: ->
-      @get('selectedNotes').forEach (note) =>
-        note.set('duration', note.get('duration') - @get('editResolution'))
+    shortenNotes: (num) ->
+      @changeNoteDuration(-1, num)
 
-    nudgeLeft: ->
-      @get('selectedNotes').invoke 'nudgeLeft', @get('quant')
+    nudgeLeft: (num) ->
+      _.times(num, => @get('selectedNotes').invoke 'nudgeLeft', @get('quant'))
 
-    nudgeRight: ->
-      @get('selectedNotes').invoke 'nudgeRight', @get('quant')
+    nudgeRight: (num) ->
+      _.times(num, => @get('selectedNotes').invoke 'nudgeRight', @get('quant'))
+
+    createNote: ->
+      note = @get('model').addNoteAtPoint(0, TOP_NOTE_ON_PIANO_ROLL=95, @get('quant'))
+      @set('selectedNotes', [note])

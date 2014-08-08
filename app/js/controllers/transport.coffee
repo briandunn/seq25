@@ -1,4 +1,5 @@
 Seq25.TransportController = Ember.ObjectController.extend
+  needs: ['partsIndex', 'part']
 
   song: Ember.computed.alias 'model'
 
@@ -49,4 +50,5 @@ Seq25.TransportController = Ember.ObjectController.extend
       return if @get('empty')
       if @get('isPlaying') then @stop() else @play()
 
-
+    addPart: (name) ->
+      @get('controllers.partsIndex').send("addPart", name)

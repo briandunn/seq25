@@ -18,7 +18,3 @@ Seq25.PartsSummaryController = Ember.ObjectController.extend
       buckets[bucketNumber].push note
     buckets.reverse()
   ).property('notes.@each')
-
-  actions:
-    hotKey: ->
-      @get('model').toggle @get('progress')

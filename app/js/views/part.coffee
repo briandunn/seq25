@@ -1,21 +1,30 @@
 Seq25.PartView = Ember.View.extend
 
   didInsertElement: ->
-    Mousetrap.bind 'backspace', =>
-      @get('controller').send('removeNotes')
+    Mousetrap.bind 'c', =>
+      @keyEvent( => @get('controller').send('createNote'))
       return false
 
-    Mousetrap.bind 'right', =>
-      @get('controller').send('extendNotes')
-
-    Mousetrap.bind 'left', =>
-      @get('controller').send('shortenNotes')
-
-    Mousetrap.bind 'shift+left', =>
-      @get('controller').send('nudgeLeft')
+    Mousetrap.bind 'backspace', =>
+      @keyEvent( => @get('controller').send('removeNotes'))
+      return false
 
     Mousetrap.bind 'shift+right', =>
-      @get('controller').send('nudgeRight')
+      @keyEvent( (num) => @get('controller').send('extendNotes', num))
+
+    Mousetrap.bind 'shift+left', =>
+      @keyEvent( (num) => @get('controller').send('shortenNotes', num))
+
+    Mousetrap.bind 'left', =>
+      @keyEvent( (num) => @get('controller').send('nudgeLeft', num))
+
+    Mousetrap.bind 'right', =>
+      @keyEvent( (num) => @get('controller').send('nudgeRight', num))
+
+  keyEvent: (handler) ->
+    handler(Seq25.numStack.drain())
 
   willDestroyElement: ->
-    'backspace left right'.w().forEach(Mousetrap.unbind)
+    Mousetrap.unbind('backspace left right'.w())
+
+  beatsChanged: (-> this.rerender() ).observes('controller.model.beat_count')
