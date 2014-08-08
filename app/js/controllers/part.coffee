@@ -24,7 +24,8 @@ Seq25.PartController = Ember.ObjectController.extend
     @get('selectedNotes').invoke 'save'
   ).observes('selectedNotes.@each.duration',
              'selectedNotes.@each.tick',
-             'selectedNotes.@each.beat')
+             'selectedNotes.@each.beat',
+             'selectedNotes.@each.pitchNumber')
 
   editResolution: (->
     q = parseInt(@get('quant')) || Seq25.Note.TICKS_PER_BEAT
@@ -55,3 +56,9 @@ Seq25.PartController = Ember.ObjectController.extend
     createNote: ->
       note = @get('model').addNoteAtPoint(0, TOP_NOTE_ON_PIANO_ROLL=95, @get('quant'))
       @set('selectedNotes', [note])
+
+    moveUp: (num) ->
+      @get('selectedNotes').invoke 'moveUp', num
+
+    moveDown: (num) ->
+      @get('selectedNotes').invoke 'moveDown', num
