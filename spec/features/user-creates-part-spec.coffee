@@ -1,4 +1,4 @@
-module 'Feature: user creates note',
+module 'Feature: user creates part',
   setup: ->
     Seq25.ApplicationAdapter = DS.LSAdapter.extend namespace: 'seq25test'
 

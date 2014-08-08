@@ -65,7 +65,10 @@ class Seq25.NumStack
     @stack.push(num)
 
   drain: () ->
-    num = parseInt(@stack.join('')) || 1
+    if @stack.length is 0
+      num = 1
+    else
+      num = parseInt(@stack.join(''))
     @stack = []
     num
 
