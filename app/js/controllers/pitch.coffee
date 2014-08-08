@@ -4,12 +4,12 @@ Seq25.PitchController = Ember.ObjectController.extend
   beat_count: Ember.computed.alias('part.beat_count')
   instrument: Ember.computed.alias('part.instrument')
 
-  notes: Ember.computed.filter 'part.notes', (note)->
-    note.isPitch @get('model')
+  notes: (->
+    @get('part.notes').filter (note)=> note.isPitch @get('model')
+  ).property('part.notes.@each', 'beat_count')
 
   actions:
     addNote: (time)->
       note = @get('part').addNoteAtPoint time, @get('model').number, @get('controllers.part.quant')
       if @get('controllers.transport.isPlaying')
         note.schedule -@get('controllers.transport').elapsed()
-

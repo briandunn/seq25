@@ -26,5 +26,3 @@ Seq25.PartView = Ember.View.extend
 
   willDestroyElement: ->
     Mousetrap.unbind('backspace left right'.w())
-
-  beatsChanged: (-> this.rerender() ).observes('controller.model.beat_count')

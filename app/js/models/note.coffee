@@ -44,7 +44,7 @@ Seq25.Note = DS.Model.extend
 
   nudge: (quant, round, direction)->
     unless @snap(quant, round)
-      ticksPerGrid = (1 / quant) * TICKS_PER_BEAT
+      ticksPerGrid = (1 / (quant || TICKS_PER_BEAT)) * TICKS_PER_BEAT
       newTicks = @get('absoluteTicks') + (ticksPerGrid * direction)
       if newTicks >= 0
         @set('absoluteTicks', newTicks)
