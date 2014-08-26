@@ -1,12 +1,50 @@
+@import 'reset'
+
+$body: 'Open Sans'
+$header: 'Permanent Marker'
+$subheader: 'Permanent Marker'
+$num: 'Open Sans'
+
+html
+  font-size: 100%
+
 body
-  background-color: grey
+  font-family: $body
+  background: #F6F6F6
+
+a
+  color: #CC0000
+  &:hover
+    color: #008BCC
+    transition: .2s
+
+input[type="text"], input[type="number"], textarea, select
+  font: .75rem $num
+  color: #474747
+  padding: .5rem .7rem
+  background: #FAFAFA
+  border: 1px solid #E5E5E5
+  border-radius: 1rem
+  display: inline-block
+  &:focus
+    border: 1px solid darken(#E5E5E5, 40%)
+    outline: none
+
+input[type="range"]
+  display: inline-block
+  vertical-align: middle
+
+select
+  padding: 1.5rem
 
 header
-  &:after
-    content: " "
-    display: table
-    clear: both
-  padding: 10px 0
+  font-size: 1em
+  background: #fff
+  > h1
+    font: 2rem $header
+    color: #CC0000
+    text-align: center
+    padding: .8rem 0
   dl
     float: left
     width: 18%
@@ -14,25 +52,109 @@ header
     dd
       margin: 0
 
-    dt
-      margin-right: 10px
-      float:right
-
-#transport
-  float: left
-  button
-    width: 30px
+section
+  &.controls
     font-size: 1em
+    width: 90%
+    max-width: 1000px
+    margin: 0 auto
+    dl
+      dt
+        margin-left: 1rem
+        &:first-child
+          margin-left: 0
+        label
+          font-size: .75rem
+          color: #565656
+          text-transform: uppercase
+          display: inline-block
+          margin-bottom: .3rem
+          &#volume-control
+            text-indent: -9999px
+            width: 12px
+            height: 1.05rem
+            background: url("../img/icon_sound@2x.png") center left no-repeat
+            background-size: 12px 12px
+    &.controls
+      padding: 1rem 0
+      h2
+        font: 1.5rem $subheader
+        color: #363636
+        float: left
+        margin: 0 0 0 1rem
+      h3
+        font: .75rem $body
+        font-weight: 600
+        color: #363636
+      > a
+        font: .75rem/2rem $body
+        text-transform: uppercase
+        float: right
+        margin: .4rem 1rem 0 0
+      article
+        font-size: 1em
+        clear: both
+        background: #fff
+        border: 1px solid #DADADA
+        border-radius: 3rem
+        padding: .8rem 1rem
+        position: relative
+        margin: 3.3rem 0 0 0
+        dl
+          dt, dd
+            display: inline
+          dt
+            margin-right: .5rem
+        > section
+          position: absolute
+          top: -.9rem
+          right: 4rem
+          width: 4.5rem
+          #transport
+            width: 11rem
+            button
+              font-size: 2rem
+              color: #fff
+              background: #363636
+              border: .5rem solid #fff
+              border-radius: 3.5rem
+              padding: 1rem 3rem 1rem 1.5rem
+              display: inline-block
+              margin: 0 .5rem 0 0
+              width: 4.875rem
+              position: relative
+              z-index: 1000
+              &:focus
+                outline: none
+              &:before
+                content: ""
+                border: 1px solid #D0CECE
+                border-radius: 3.5rem
+                position: absolute
+                padding: 1rem 1rem 1rem 1.5rem
+                width: 2.875rem
+                height: 3.3rem
+                top: -.5rem
+                left: -.5rem
+                z-index: 2
+            h3
+              display: inline-block
+              float: right
+              margin: 2.4rem 0 0 0
+              padding-right: 3.7rem
 
 #parts
-  height: 100%
+  width: 90%
+  max-width: 1000px
+  margin: 0 auto
+  overflow: auto
   .part-row
     > li
       display: block
-      border: 1px solid black
       float: left
-      width: 20%
-      margin: 1%
+      border: 1px solid #DADADA
+      width: 22.8%
+      margin: .625rem
       height: 100px
       cursor: pointer
       &.part
@@ -83,26 +205,27 @@ header
       left: 0%
       top: 11%
       height: 78%
-      background-color: cornflowerblue
+      background: #007EDF
       border-radius: 5px
       box-shadow: 0 -1px 2px 0 rgba(0,0,0,.7)
       &.selected
-        background-color: limegreen
+        background: limegreen
 
 .play-bar
   position: absolute
   height: 100%
   width: 2px
-  background-color: green
+  background: #CC0000
   z-index: 3
 
 #keyboard
-  background-color: white
+  font: 1rem $num
+  background: #fff
   width: 10%
   li
     &.sharp
-      color: white
-      background-color: black
+      color: #fff
+      background: #000
 
 ul
   list-style-type: none
@@ -115,4 +238,4 @@ ul
   height: 25px
 
 .sharp
-  background-color: #CCC
+  background-color: #EEEEEE
