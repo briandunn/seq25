@@ -1,0 +1,13 @@
+<dt>
+  <label for='beats'>Beats</label>
+</dt>
+<dd>
+  {{view 'number' min=1 max=32 id='beats' value=beat_count}}
+</dd>
+<dt>
+  <label for='quant'>Quant</label>
+</dt>
+<dd>
+  {{view 'number' min=0 max=Seq25.Note.TICKS_PER_BEAT id='quant' value=quant}}
+</dd>
+{{ render 'instrument' instrument }}
