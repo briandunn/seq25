@@ -5,5 +5,5 @@
   "app/js/routes/*.coffee":      {"command": "route"},
   "app/templates/*.handlebars":  {"command": "template"},
   "spec/*-spec.coffee":          {"command": "spec", "alternate": "app/js/{}.coffee"},
-  "app/css/*.less":              {"command": "stylesheet"}
+  "app/css/*.sass":              {"command": "stylesheet"}
 }

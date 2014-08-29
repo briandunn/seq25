@@ -1,10 +1,8 @@
-<dl id='instrument'>
   <dt><label for='shape'>shape</label></dt>
   <dd>
     {{view Ember.Select id='shape' content=shapes value=shape}}
   </dd>
-  <dt><label for='volume'>volume</label></dt>
+  <dt><label for='volume' id='volume-control'>volume</label></dt>
   <dd>
     {{view 'range' id='volume' min='0' max='1' step='0.01' value=volume action='updateParameter'}}
   </dd>
-</dl>

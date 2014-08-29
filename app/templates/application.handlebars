@@ -1,13 +1,29 @@
 <header>
-  <dl>
-    <dt><label for='tempo'>Tempo</label></dt>
-    <dd>
-      {{view 'number' min=0 max=480 value=tempo}}
-    </dd>
-  </dl>
-  {{render 'transport' }}
-  <ul>
-    <li>{{#link-to 'parts' }}Parts{{/link-to}}</li>
-  </ul>
+  <h1>Sequencer</h1>
 </header>
+
+<section class="controls">
+  <h2>Sequence</h2>
+  {{#link-to 'parts' class="parts"}}Parts{{/link-to}}
+  <article>
+    <dl>
+      <dt><label for='tempo'>Tempo</label></dt>
+      <dd>
+        {{view 'number' min=0 max=480 value=tempo}}
+      </dd>
+      <dt><label for='beats'>Beats</label></dt>
+      <dd>
+        {{view 'number' min=1 max=32 id='beats' value=beat_count}}
+      </dd>
+      <dt>
+        <label for='quant'>Quant</label>
+      </dt>
+      <dd>
+        {{view 'number' min=0 max=Seq25.Note.TICKS_PER_BEAT id='quant' value=quant}}
+      </dd>
+      {{ render 'instrument' instrument }}
+    </dl>
+    {{render 'transport' }}
+  </article>
+</section>
 {{outlet}}
