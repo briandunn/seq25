@@ -34,9 +34,6 @@ input[type="range"]
   display: inline-block
   vertical-align: middle
 
-select
-  padding: 1.5rem
-
 header
   font-size: 1em
   background: #fff
@@ -58,6 +55,78 @@ section
     width: 90%
     max-width: 1000px
     margin: 0 auto
+    padding: 1rem 0
+    h2
+      font: 1.5rem $subheader
+      color: #363636
+      float: left
+      margin: 0 0 0 1rem
+    h3
+      font: .75rem $body
+      font-weight: 600
+      color: #363636
+    > a
+      font: .75rem/2rem $body
+      text-transform: uppercase
+      float: right
+      margin: .4rem 1rem 0 0
+    article
+      font-size: 1em
+      clear: both
+      background: #fff
+      border: 1px solid #DADADA
+      border-radius: 3rem
+      padding: .8rem 1rem
+      position: relative
+      margin: 3.3rem 0 0 0
+      dl
+        dt, dd
+          display: inline
+          position: relative
+        dt
+          margin-right: .5rem
+      > section
+        position: absolute
+        top: -.9rem
+        right: 4rem
+        width: 4.5rem
+        #transport
+          width: 11rem
+          button
+            font-size: 2rem
+            color: #fff
+            background: #363636
+            border: .5rem solid #fff
+            border-radius: 3.5rem
+            padding: 1rem 3rem 1rem 1.5rem
+            display: inline-block
+            margin: 0 .5rem 0 0
+            width: 4.875rem
+            position: relative
+            z-index: 1000
+            &:focus
+              outline: none
+            &:before
+              content: ""
+              border: 1px solid #D0CECE
+              border-radius: 3.5rem
+              position: absolute
+              padding: 1rem 1rem 1rem 1.5rem
+              width: 2.875rem
+              height: 3.3rem
+              top: -.5rem
+              left: -.5rem
+              z-index: 2
+            &:hover
+              cursor: pointer
+              background: darken(#363636, 8%)
+              transition: .8s
+          h3
+            display: inline-block
+            float: right
+            margin: 2.4rem 0 0 0
+            padding-right: 3.7rem
+
     dl
       dt
         margin-left: 1rem
@@ -75,77 +144,6 @@ section
             height: 1.05rem
             background: url("../img/icon_sound@2x.png") center left no-repeat
             background-size: 12px 12px
-    &.controls
-      padding: 1rem 0
-      h2
-        font: 1.5rem $subheader
-        color: #363636
-        float: left
-        margin: 0 0 0 1rem
-      h3
-        font: .75rem $body
-        font-weight: 600
-        color: #363636
-      > a
-        font: .75rem/2rem $body
-        text-transform: uppercase
-        float: right
-        margin: .4rem 1rem 0 0
-      article
-        font-size: 1em
-        clear: both
-        background: #fff
-        border: 1px solid #DADADA
-        border-radius: 3rem
-        padding: .8rem 1rem
-        position: relative
-        margin: 3.3rem 0 0 0
-        dl
-          dt, dd
-            display: inline
-          dt
-            margin-right: .5rem
-        > section
-          position: absolute
-          top: -.9rem
-          right: 4rem
-          width: 4.5rem
-          #transport
-            width: 11rem
-            button
-              font-size: 2rem
-              color: #fff
-              background: #363636
-              border: .5rem solid #fff
-              border-radius: 3.5rem
-              padding: 1rem 3rem 1rem 1.5rem
-              display: inline-block
-              margin: 0 .5rem 0 0
-              width: 4.875rem
-              position: relative
-              z-index: 1000
-              &:focus
-                outline: none
-              &:before
-                content: ""
-                border: 1px solid #D0CECE
-                border-radius: 3.5rem
-                position: absolute
-                padding: 1rem 1rem 1rem 1.5rem
-                width: 2.875rem
-                height: 3.3rem
-                top: -.5rem
-                left: -.5rem
-                z-index: 2
-              &:hover
-                cursor: pointer
-                background: darken(#363636, 8%)
-                transition: .8s
-            h3
-              display: inline-block
-              float: right
-              margin: 2.4rem 0 0 0
-              padding-right: 3.7rem
 
 #parts
   width: 90%
