@@ -27,12 +27,30 @@ input[type="text"], input[type="number"], textarea, select
   border-radius: 1rem
   display: inline-block
   &:focus
-    border: 1px solid darken(#E5E5E5, 40%)
+    border-color: darken(#E5E5E5, 40%)
     outline: none
 
 input[type="range"]
+  -webkit-appearance: none
   display: inline-block
   vertical-align: middle
+  background: #e0e0e0
+  border: 1px solid #cbcbcb
+  border-radius: 1rem
+  height: .3rem
+  margin-top: .0625rem
+  &:focus
+    outline: none
+
+::-webkit-slider-thumb
+  -webkit-appearance: none
+  background: #ffffff
+  border: 1px solid #bbbbbb
+  border-radius: 1rem
+  height: 1rem
+  width: 1rem
+  &:focus
+    border-color: darken(#E5E5E5, 40%)
 
 header
   font-size: 1em
