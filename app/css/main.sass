@@ -7,6 +7,7 @@ $num: 'Open Sans'
 
 html
   font-size: 100%
+  box-sizing: border-box
 
 body
   font-family: $body
@@ -165,11 +166,10 @@ section
 
 #parts
   width: 90%
-  max-width: 1000px
+  max-width: 1024px
   margin: 0 auto
   overflow: auto
   .part-row
-    min-width: 640px
     &:before
       content: " "
     &:after
@@ -180,8 +180,8 @@ section
       display: block
       float: left
       border: 1px solid #E5E5E5
-      width: 22.4%
-      margin: 1%
+      width: calc(23% - 1px)
+      margin: calc(1% - 1px)
       height: 100px
       cursor: pointer
       &.part
