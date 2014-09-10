@@ -169,12 +169,19 @@ section
   margin: 0 auto
   overflow: auto
   .part-row
+    min-width: 640px
+    &:before
+      content: " "
+    &:after
+      display: table
+      content: " "
+      clear: both
     > li
       display: block
       float: left
       border: 1px solid #E5E5E5
-      width: 22.8%
-      margin: .625rem
+      width: 22.4%
+      margin: 1%
       height: 100px
       cursor: pointer
       &.part
@@ -201,6 +208,14 @@ section
               position: absolute
               background: #74C0E8
               border-radius: 2px
+
+
+.play-bar
+  position: absolute
+  height: 100%
+  width: 2px
+  background: #CC0000
+  z-index: 3
 
 #piano-roll
   #grid
@@ -232,12 +247,6 @@ section
         border-radius: .625rem
         &.selected
           background: #18BF3B
-  .play-bar
-    position: absolute
-    height: 100%
-    width: 2px
-    background: #CC0000
-    z-index: 3
   #keyboard
     font: .875rem/1.625rem $num
     background: #fff
