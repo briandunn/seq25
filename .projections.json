@@ -1,9 +1,22 @@
 {
-  "app/js/models/*.coffee":      {"command": "model", "alternate": "spec/models/{}-spec.coffee"},
-  "app/js/views/*.coffee":       {"command": "view"},
-  "app/js/controllers/*.coffee": {"command": "controller", "alternate": "spec/controllers/{}-spec.coffee"},
-  "app/js/routes/*.coffee":      {"command": "route"},
-  "app/templates/*.handlebars":  {"command": "template"},
-  "spec/*-spec.coffee":          {"command": "spec", "alternate": "app/js/{}.coffee"},
-  "app/css/*.sass":              {"command": "stylesheet"}
+  "app/js/routes/*.coffee":     {"type": "route"},
+  "app/templates/*.handlebars": {"type": "template"},
+  "app/css/*.sass":             {"type": "stylesheet"},
+  "app/js/views/*.coffee":      {
+    "type": "view",
+    "template":  ["Seq25.{camelcase}View = Ember.View.extend"]
+  },
+  "app/js/models/*.coffee": {
+    "type":      "model",
+    "alternate": "spec/models/{}-spec.coffee"
+  },
+  "app/js/controllers/*.coffee": {
+    "type":      "controller",
+    "alternate": "spec/controllers/{}-spec.coffee",
+    "template":  ["Seq25.{camelcase}Controller = Ember.Controller.extend"]
+  },
+  "spec/*-spec.coffee": {
+    "type":      "spec",
+    "alternate": "app/js/{}.coffee"
+  }
 }
