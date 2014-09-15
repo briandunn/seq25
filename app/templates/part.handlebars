@@ -1,6 +1,6 @@
 <section id='piano-roll'>
   <section id='grid'>
-    <div {{bind-attr style=playBarStyle}} class='play-bar'></div>
+    {{play-bar part=this transport=transport}}
     {{beat-list content=beats}}
     <ul>
       {{#each pitch in pitches}}
