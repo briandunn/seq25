@@ -3,12 +3,6 @@ Seq25.TransportController = Ember.ObjectController.extend
 
   song: Ember.computed.alias 'model'
 
-  empty: (-> @get('parts').length == 0).property('parts.@each')
-
-  loopDuration: (->
-    @get('maxBeatCount') * 60 / +@get('tempo')
-  ).property('tempo', 'maxBeatCount')
-
   currentTime: -> Seq25.audioContext.currentTime
 
   loopHasEnded: -> @get('progress') >= 1
@@ -23,27 +17,28 @@ Seq25.TransportController = Ember.ObjectController.extend
   ).property('progress')
 
   elapsed: ->
-    return 0 unless @get('isPlaying')
+    return 0 unless @get('startedAt') > 0
     @currentTime() - @get('startedAt')
 
   play: ->
-    @set('startedAt', @currentTime())
-    @set('isPlaying', true)
+    @setProperties
+      startedAt: @currentTime()
+      isPlaying: true
     @get('song').schedule(@get('progress'))
-    movePlayBar = =>
-      @set('progress', @elapsed() / @get('loopDuration'))
-      return unless @get('isPlaying')
-      if @loopHasEnded()
-        @set('progress', 0)
-        @play()
-      else
-        requestAnimationFrame movePlayBar
-    requestAnimationFrame movePlayBar
+
+    advancePosition = ->
+      @set('progress', @elapsed())
+      if @get 'isPlaying'
+        Ember.run.later this, advancePosition, 20
+
+    Ember.run.later this, advancePosition, 20
 
   stop: ->
     @get('song').stop()
-    @set('startedAt', 0)
-    @set('isPlaying', false)
+    @setProperties
+      startedAt: 0
+      progress: 0
+      isPlaying: false
 
   actions:
     play: ->

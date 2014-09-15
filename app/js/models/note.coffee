@@ -5,8 +5,8 @@ Seq25.Note = DS.Model.extend
   tick:        DS.attr 'number'
   part:        DS.belongsTo 'part'
   duration:    DS.attr 'number', defaultValue: TICKS_PER_BEAT
-  tempo: Ember.computed.alias 'part.tempo'
-  instrument: Ember.computed.alias 'part.instrument'
+  secondsPerBeat: Em.computed.alias 'part.secondsPerBeat'
+  instrument:     Em.computed.alias 'part.instrument'
   pitch: (-> Seq25.Pitch.all.findBy('number', @get('pitchNumber'))).property('pitchNumber')
 
   setBeatAndTick: (->
@@ -30,8 +30,6 @@ Seq25.Note = DS.Model.extend
 
   ticksToTime: (ticks)->
     (ticks / TICKS_PER_BEAT) * @get('secondsPerBeat')
-
-  secondsPerBeat: (-> 60 / @get('tempo') ).property('tempo')
 
   snap: (quant, round)->
     return unless quant > 0

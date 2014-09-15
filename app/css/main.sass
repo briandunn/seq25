@@ -185,6 +185,7 @@ section
       height: 100px
       cursor: pointer
       &.part
+        overflow: hidden
         background-color: white
         &:hover
           border: 1px solid darken(#E5E5E5, 10%)
@@ -213,9 +214,13 @@ section
 .play-bar
   position: absolute
   height: 100%
-  width: 2px
+  transition-timing-function: linear
+  transition-property: left
+  width: 4px
   background: #CC0000
   z-index: 3
+  box-shadow: 1px 0 white
+  opacity: 0.5
 
 #piano-roll
   #grid

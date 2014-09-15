@@ -1,10 +1,7 @@
 Seq25.Song = DS.Model.extend
   tempo: DS.attr 'number', defaultValue: 120
   parts: DS.hasMany 'part'
-
-  beatCounts: Ember.computed.mapBy('parts', 'beat_count')
-
-  maxBeatCount: Ember.computed.max('beatCounts')
+  secondsPerBeat: (-> 60 / @get('tempo') ).property('tempo')
 
   getPart: (name)->
     @get('parts').findBy 'name', name
