@@ -69,6 +69,7 @@ Seq25.Note = DS.Model.extend
 
     start    = absolueSeconds - offset
     duration = @ticksToTime(duration)
+
     instrument.play pitch, start, duration
 
   stop: ->
