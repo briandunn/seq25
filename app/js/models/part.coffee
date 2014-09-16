@@ -30,6 +30,7 @@ Seq25.Part = DS.Model.extend
       @schedule(progress)
 
   schedule: (now, from, to)->
+    [now, from, to] = [now, from, to].map (time)=> (Math.round(time * 100) / 100) % @get('duration')
     @get('notes')
     .filter (note)=>
       note.get('absolueSeconds') >= from && note.get('absolueSeconds') < to
