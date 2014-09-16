@@ -6,13 +6,11 @@ Seq25.Song = DS.Model.extend
   getPart: (name)->
     @get('parts').findBy 'name', name
 
-  schedule: (progress)->
-    @get('parts').forEach (part)=>
-      part.schedule progress
+  schedule: (now, from, to)->
+    @get('parts').invoke 'schedule', now, from, to
 
   stop: ->
-    @get('parts').forEach (part)->
-      part.stop()
+    @get('parts').invoke 'stop'
 
   save: ->
     @_super()

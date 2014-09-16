@@ -15,6 +15,10 @@ Seq25.Note = DS.Model.extend
     @snap(@get('quant'), Math.floor)
   ).observes('beat_count', 'position')
 
+  absolueSeconds: (->
+    @ticksToTime @get 'absoluteTicks'
+  ).property('absoluteTicks', 'secondsPerBeat')
+
   absoluteTicks: ((_, ticks)->
     if ticks == undefined
       @get('beat') * TICKS_PER_BEAT + @get('tick')
@@ -58,9 +62,12 @@ Seq25.Note = DS.Model.extend
       @incrementProperty('duration', editResolution)
 
   schedule: (offset)->
-    start    = (@get('beat') * @get('secondsPerBeat') + @ticksToTime(@get('tick'))) + offset
-    duration = @ticksToTime(@get('duration'))
-    @get('instrument').play(@get('pitch'), start, duration)
+    {absolueSeconds, duration, instrument, pitch} =
+      @getProperties 'absolueSeconds', 'duration', 'instrument', 'pitch'
+
+    start    = absolueSeconds - offset
+    duration = @ticksToTime(duration)
+    instrument.play pitch, start, duration
 
   stop: ->
     @get('instrument').stop @get 'pitch'

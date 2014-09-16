@@ -29,13 +29,14 @@ Seq25.Part = DS.Model.extend
     else
       @schedule(progress)
 
-  schedule: (progress)->
-    @get('notes').forEach (note)=>
-      note.schedule @offset progress
+  schedule: (now, from, to)->
+    @get('notes')
+    .filter (note)=>
+      note.get('absolueSeconds') >= from && note.get('absolueSeconds') < to
+    .invoke 'schedule', now
 
   stop: ->
-    @get('notes').forEach (note)->
-      note.stop()
+    @get('notes').invoke 'stop'
 
   addNoteAtPoint: (position, pitchNumber, quant)->
     @get('notes').createRecord

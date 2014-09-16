@@ -1,5 +1,6 @@
+BUFFER_TIME = 0.02
 Seq25.TransportController = Ember.ObjectController.extend
-  needs: ['partsIndex', 'part']
+  needs: 'partsIndex'
 
   song: Ember.computed.alias 'model'
 
@@ -9,6 +10,7 @@ Seq25.TransportController = Ember.ObjectController.extend
 
   startedAt: 0
   progress: 0
+  scheduledUntil: 0
 
   isPlaying: false
 
@@ -24,18 +26,27 @@ Seq25.TransportController = Ember.ObjectController.extend
     @setProperties
       startedAt: @currentTime()
       isPlaying: true
-    @get('song').schedule(@get('progress'))
+      scheduledUntil: 2*BUFFER_TIME
+
+    {progress, song, scheduledUntil} = @getProperties 'progress', 'song', 'scheduledUntil'
+
+    song.schedule progress, progress, scheduledUntil
 
     advancePosition = ->
+      return unless @get 'isPlaying'
       @set('progress', @elapsed())
-      if @get 'isPlaying'
-        Ember.run.later this, advancePosition, 20
+      {progress, scheduledUntil} = @getProperties 'progress', 'scheduledUntil'
+      if (progress + BUFFER_TIME) > scheduledUntil
+        song.schedule(progress, scheduledUntil, scheduledUntil + 2*BUFFER_TIME)
+        @incrementProperty 'scheduledUntil', 2*BUFFER_TIME
+      Ember.run.later this, advancePosition, BUFFER_TIME * 1000
 
-    Ember.run.later this, advancePosition, 20
+    Ember.run.later this, advancePosition, BUFFER_TIME * 1000
 
   stop: ->
     @get('song').stop()
     @setProperties
+      scheduledUntil: 0
       startedAt: 0
       progress: 0
       isPlaying: false
