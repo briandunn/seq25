@@ -6,6 +6,28 @@ Seq25.injectTestHelpers()
 QUnit.testStart ->
   Seq25.reset()
 
+QUnit.begin ->
+  sinon.expectation.fail = sinon.assert.fail = (msg) -> QUnit.ok false, msg
+
+  sinon.assert.pass = (assertion) -> QUnit.ok true, assertion
+
+  sinon.config =
+    injectIntoThis: true
+    injectInto: null
+    properties: ["spy", "stub", "mock", "clock", "sandbox"]
+    useFakeTimers: false
+    useFakeServer: false
+
+  do ->
+    qTest = QUnit.test
+
+    QUnit.test = @test = (testName, expected, callback, async) ->
+      if arguments.length == 2
+        callback = expected
+        expected = null
+
+      qTest(testName, expected, sinon.test(callback), async)
+
 parseStyles = (selector) ->
   styles = {}
   _.each(find(selector).attr("style").split(";"), (keyval) ->
