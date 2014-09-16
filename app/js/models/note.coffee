@@ -7,7 +7,9 @@ Seq25.Note = DS.Model.extend
   duration:    DS.attr 'number', defaultValue: TICKS_PER_BEAT
   secondsPerBeat: Em.computed.alias 'part.secondsPerBeat'
   instrument:     Em.computed.alias 'part.instrument'
-  pitch: (-> Seq25.Pitch.all.findBy('number', @get('pitchNumber'))).property('pitchNumber')
+
+  pitch: Em.computed 'pitchNumber', ->
+    Seq25.Pitch.all.findBy 'number', @get('pitchNumber')
 
   setBeatAndTick: (->
     ticks = Math.round @get('beat_count') * TICKS_PER_BEAT * @get('position')

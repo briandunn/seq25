@@ -1,25 +1,19 @@
 BUFFER_TIME = 0.02
 Seq25.TransportController = Ember.ObjectController.extend
-  needs: 'partsIndex'
+  needs: ['partsIndex', 'part']
 
   song: Ember.computed.alias 'model'
-
   currentTime: -> Seq25.audioContext.currentTime
-
-  loopHasEnded: -> @get('progress') >= 1
-
   startedAt: 0
   progress: 0
   scheduledUntil: 0
-
   isPlaying: false
 
-  beat: (->
-    Math.floor((@elapsed() * @get('tempo')) / 60)
-  ).property('progress')
+  beat: Em.computed 'progress', 'tempo', ->
+    Math.floor (@get('progress') * @get('tempo')) / 60
 
   elapsed: ->
-    return 0 unless @get('startedAt') > 0
+    return 0 unless @get 'isPlaying'
     @currentTime() - @get('startedAt')
 
   play: ->
@@ -53,8 +47,7 @@ Seq25.TransportController = Ember.ObjectController.extend
 
   actions:
     play: ->
-      return if @get('empty')
       if @get('isPlaying') then @stop() else @play()
 
     addPart: (name) ->
-      @get('controllers.partsIndex').send("addPart", name)
+      @get('controllers.partsIndex').send "addPart", name

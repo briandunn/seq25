@@ -12,15 +12,12 @@ Seq25.Part = DS.Model.extend
 
   beat_count: DS.attr 'number', defaultValue: 16
   isMuted: DS.attr 'boolean', defaultValue: false
-  instrument: (->
-    Seq25.Instrument.create(part: this)
-  ).property()
 
-  duration: (->
+  instrument: Em.computed ->
+    Seq25.Instrument.create part: this
+
+  duration: Em.computed 'secondsPerBeat', 'beat_count', ->
     @get('secondsPerBeat') * @get('beat_count')
-  ).property('secondsPerBeat', 'beat_count')
-
-  offset: (progress)-> progress * @get('duration') * -1
 
   toggle: (progress)->
     @set('isMuted', !@get('isMuted'))
