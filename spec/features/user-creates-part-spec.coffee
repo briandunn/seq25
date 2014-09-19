@@ -4,7 +4,6 @@ module 'Feature: user creates part',
 
   teardown: ->
     delete localStorage.seq25test
-    Seq25.reset()
 
 test 'add new part', ->
   visit('/')

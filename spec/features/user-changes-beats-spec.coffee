@@ -4,7 +4,6 @@ module 'Feature: user note actions must be constrained',
 
   teardown: ->
     delete localStorage.seq25test
-    Seq25.reset()
 
 test 'change beats with keyboard', ->
   visit('/')
@@ -16,7 +15,7 @@ test 'change beats with keyboard', ->
   andThen ->
     keyTrigger("2")
     keyTrigger("0")
-    keyTrigger("b q")
+    keyTrigger("b")
 
   andThen ->
     equal(width(".measure"), "5%")
@@ -34,7 +33,7 @@ test 'change beats with keyboard should change note width', ->
   andThen ->
     keyTrigger("2")
     keyTrigger("0")
-    keyTrigger("b q")
+    keyTrigger("b")
 
   andThen ->
     equal(width(".notes li"), "5%")

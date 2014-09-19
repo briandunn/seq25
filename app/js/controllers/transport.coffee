@@ -3,6 +3,15 @@ Seq25.TransportController = Ember.ObjectController.extend
   needs: ['partsIndex', 'part']
 
   song: Ember.computed.alias 'model'
+
+  currentPart: (-> @get('controllers.part.name')).property('controllers.part')
+
+  empty: (-> @get('parts').length == 0).property('parts.@each')
+
+  loopDuration: (->
+    @get('maxBeatCount') * 60 / +@get('tempo')
+  ).property('tempo', 'maxBeatCount')
+
   currentTime: -> Seq25.audioContext.currentTime
   startedAt: 0
   progress: 0

@@ -4,7 +4,6 @@ module 'Feature: user moves note',
 
   teardown: ->
     delete localStorage.seq25test
-    Seq25.reset()
 
 test 'move note when is quant is 0', ->
   visit('/')
@@ -13,14 +12,14 @@ test 'move note when is quant is 0', ->
   andThen -> #set beats to 20 for nice %s
     keyTrigger("2")
     keyTrigger("0")
-    keyTrigger("b q")
+    keyTrigger("b")
 
   andThen ->
     keyTrigger("c")
 
   andThen ->
     keyTrigger("0")
-    keyTrigger("x q")
+    keyTrigger("x")
 
   andThen ->
     equal(find("input#quant").val(), "0")

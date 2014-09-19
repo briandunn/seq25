@@ -37,7 +37,7 @@ parseStyles = (selector) ->
   styles
 
 Ember.Test.registerAsyncHelper 'keyTrigger', (app, key) ->
-  Mousetrap.trigger(key)
+  Seq25.Keystrokes.trigger(key)
 
 Ember.Test.registerHelper 'width', (app, selector) ->
   styles = parseStyles(selector)

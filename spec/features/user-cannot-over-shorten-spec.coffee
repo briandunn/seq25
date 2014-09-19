@@ -4,7 +4,6 @@ module 'Feature: user note actions must be constrained',
 
   teardown: ->
     delete localStorage.seq25test
-    Seq25.reset()
 
 test 'cannot shorten note to 0', ->
   visit('/')
