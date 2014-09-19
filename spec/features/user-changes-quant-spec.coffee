@@ -4,7 +4,6 @@ module 'Feature: User changes quant',
 
   teardown: ->
     delete localStorage.seq25test
-    Seq25.reset()
 
 test 'change quant with keyboard', ->
   visit('/')
@@ -12,15 +11,20 @@ test 'change quant with keyboard', ->
 
   andThen ->
     keyTrigger("2")
-    keyTrigger("x q")
+
+  andThen ->
+    keyTrigger("x")
 
   andThen ->
     keyTrigger("c")
 
+  andThen ->
+    equal(left(".notes li"), "0%")
+
   andThen -> #set beats to 20 for nice %s
     keyTrigger("2")
     keyTrigger("0")
-    keyTrigger("b q")
+    keyTrigger("b")
 
   andThen ->
     equal(left(".notes li"), "0%")

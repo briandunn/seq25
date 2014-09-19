@@ -1,27 +1,50 @@
+class Seq25.Keystrokes
+  @callbacks = {}
+  @bind: (key, callback) ->
+    Mousetrap.bind(key, callback)
+    @callbacks[key] = callback
+
+  @trigger: (key) ->
+    @callbacks[key]()
+
+
 Seq25.TransportView = Ember.View.extend
   didInsertElement: ->
-    Mousetrap.bind("t", => @keyEvent( => @gotoSummary()))
+    Seq25.Keystrokes.bind("t", => @keyEvent( => @gotoSummary()))
 
-    Mousetrap.bind("space", (e) =>
+    Seq25.Keystrokes.bind("space", (e) =>
       e.preventDefault()
       @keyEvent( => @get('controller').send('play')))
 
+    Seq25.Keystrokes.bind "g", =>
+      @keyEvent( => @gotoPart(@currentPart()))
+    Seq25.Keystrokes.bind "m", =>
+      @keyEvent( => @mutePart(@currentPart()))
+    Seq25.Keystrokes.bind "b", =>
+      @keyEvent( (num) => @changeBeatsForPart(@currentPart(), "up", num))
+    Seq25.Keystrokes.bind "x", =>
+      @keyEvent( (num) => @changeQuantForPart(@currentPart(), num))
+    Seq25.Keystrokes.bind "n", =>
+      @keyEvent( (num) => @bumpVolumeForPart(@currentPart(), "up", num))
+    Seq25.Keystrokes.bind "shift+n", =>
+      @keyEvent( (num) => @bumpVolumeForPart(@currentPart(), "down", num))
+
     'q w e r a s d f'.w().forEach (partKey) =>
-      Mousetrap.bind "g #{partKey}", =>
+      Seq25.Keystrokes.bind "#{partKey} g", =>
         @keyEvent( => @gotoPart(partKey.toUpperCase()))
-      Mousetrap.bind "m #{partKey}", =>
+      Seq25.Keystrokes.bind "#{partKey} m", =>
         @keyEvent( => @mutePart(partKey.toUpperCase()))
-      Mousetrap.bind "b #{partKey}", =>
+      Seq25.Keystrokes.bind "#{partKey} b", =>
         @keyEvent( (num) => @changeBeatsForPart(partKey.toUpperCase(), "up", num))
-      Mousetrap.bind "x #{partKey}", =>
+      Seq25.Keystrokes.bind "#{partKey} x", =>
         @keyEvent( (num) => @changeQuantForPart(partKey.toUpperCase(), num))
-      Mousetrap.bind "n #{partKey}", =>
+      Seq25.Keystrokes.bind "#{partKey} n", =>
         @keyEvent( (num) => @bumpVolumeForPart(partKey.toUpperCase(), "up", num))
-      Mousetrap.bind "shift+n #{partKey}", =>
+      Seq25.Keystrokes.bind "#{partKey} shift+n", =>
         @keyEvent( (num) => @bumpVolumeForPart(partKey.toUpperCase(), "down", num))
 
     '0 1 2 3 4 5 6 7 8 9'.w().forEach (number) =>
-      Mousetrap.bind(number, => Seq25.numStack.push(number))
+      Seq25.Keystrokes.bind(number, => Seq25.numStack.push(number))
 
   tagName: 'section'
 
@@ -57,6 +80,9 @@ Seq25.TransportView = Ember.View.extend
 
   keyEvent: (handler) ->
     handler(Seq25.numStack.drain())
+
+  currentPart: ->
+    @get('controller.currentPart')
 
 class Seq25.NumStack
   stack: []
