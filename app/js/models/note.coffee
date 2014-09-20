@@ -63,13 +63,11 @@ Seq25.Note = DS.Model.extend
     if @get('duration') + editResolution > 0
       @incrementProperty('duration', editResolution)
 
-  schedule: (offset)->
-    {absolueSeconds, duration, instrument, pitch} =
-      @getProperties 'absolueSeconds', 'duration', 'instrument', 'pitch'
+  schedule: (start)->
+    {duration, instrument, pitch} =
+      @getProperties 'duration', 'instrument', 'pitch'
 
-    start    = absolueSeconds - offset
     duration = @ticksToTime(duration)
-
     instrument.play pitch, start, duration
 
   stop: ->

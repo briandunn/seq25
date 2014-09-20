@@ -27,13 +27,16 @@ Seq25.Part = DS.Model.extend
       @schedule(progress)
 
   schedule: (now, from, to)->
-    duration = @get 'duration'
+    {duration, notes} = @getProperties 'duration', 'notes'
     loopOffset = Math.floor(from / duration) * duration
-    @get('notes')
-    .filter (note)=>
-      seconds = loopOffset + note.get 'absolueSeconds'
-      seconds >= from && seconds < to
-    .invoke 'schedule', now - loopOffset
+    now = now - loopOffset
+    to = to   - loopOffset
+    notes.forEach (note)->
+      loopRelativeStart = note.get 'absolueSeconds'
+      loopCount = 0
+      while (start = loopRelativeStart - (now - (duration * loopCount))) < to
+        note.schedule start
+        loopCount += 1
 
   stop: ->
     @get('notes').invoke 'stop'
