@@ -21,14 +21,9 @@ Seq25.Instrument = Ember.Object.extend
     @get('output').gain.value = @get('volume')
   ).observes('volume').on('init')
 
-  applyShape: (->
-    _.values(@get('oscillators')).forEach (oscillator)=>
-      oscillator.set('shape', @get('shape'))
-  ).observes 'shape'
-
   play: (pitch, secondsFromNow=0, duration=null)->
     unless @get 'isMuted'
-      (@get('oscillators')[pitch.number] ||= Seq25.Osc.create(Ember.merge(pitch: pitch, @getProperties('context', 'output', 'shape'))))
+      (@get('oscillators')[pitch.number] ||= Seq25.Osc.create(pitch: pitch, instrument: this))
         .play(secondsFromNow, duration)
       Seq25.midi.sendOnAt(pitch.name, secondsFromNow)
       Seq25.midi.sendOffAt(pitch.name, secondsFromNow + duration) if duration

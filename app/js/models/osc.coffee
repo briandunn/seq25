@@ -1,4 +1,9 @@
 Seq25.Osc = Ember.Object.extend
+  attack:  Em.computed.alias 'instrument.attack'
+  context: Em.computed.alias 'instrument.context'
+  output:  Em.computed.alias 'instrument.output'
+  shape:   Em.computed.alias 'instrument.shape'
+
   init: ->
     context = @get('context')
     @oscillator = context.createOscillator()
