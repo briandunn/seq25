@@ -10,4 +10,15 @@
 <dd>
   {{view 'number' min=0 max=Seq25.Note.TICKS_PER_BEAT id='quant' value=quant}}
 </dd>
-{{ render 'instrument' instrument }}
+<dt>
+  {{#link-to 'part.instrument' this }}
+  &downarrow;
+  &downarrow;
+  &downarrow;
+  {{/link-to}}
+  {{#link-to 'part' this }}
+  &uparrow;
+  &uparrow;
+  &uparrow;
+  {{/link-to}}
+</dt>

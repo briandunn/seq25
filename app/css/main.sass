@@ -103,6 +103,27 @@ section
           position: relative
         dt
           margin-right: .5rem
+          margin-left: 1rem
+          &:first-child
+            margin-left: 0
+          label
+            font-size: .75rem
+            color: #565656
+            text-transform: uppercase
+            display: inline-block
+            margin-bottom: .3rem
+          a.active
+            display: none
+          a.active + a
+            display: inline
+
+      &.instrument
+        #volume-control
+          text-indent: -9999px
+          width: 12px
+          height: 1.05rem
+          background: url("../img/icon_sound@2x.png") center left no-repeat
+          background-size: 12px 12px
       > section
         position: absolute
         top: -.9rem
@@ -144,25 +165,6 @@ section
             float: right
             margin: 2.4rem 0 0 0
             padding-right: 3.7rem
-
-    dl
-      dt
-        margin-left: 1rem
-        &:first-child
-          margin-left: 0
-        label
-          font-size: .75rem
-          color: #565656
-          text-transform: uppercase
-          display: inline-block
-          margin-bottom: .3rem
-          &#volume-control
-            text-indent: -9999px
-            width: 12px
-            height: 1.05rem
-            background: url("../img/icon_sound@2x.png") center left no-repeat
-            background-size: 12px 12px
-
 #parts
   width: 90%
   max-width: 1024px
