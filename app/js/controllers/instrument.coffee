@@ -1,6 +1,5 @@
 Seq25.InstrumentController = Ember.ObjectController.extend
   shapes: 'sine square sawtooth triangle'.w()
 
-  saver: ( ->
+  saver: Em.observer 'volume', 'shape', 'attack', ->
     @get('model').save()
-  ).observes('volume', 'shape')

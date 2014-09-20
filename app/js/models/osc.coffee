@@ -22,11 +22,11 @@ Seq25.Osc = Ember.Object.extend
 
   play: (secondsFromNow, duration=null)->
     contextTime = @get('context').currentTime + secondsFromNow
-    @gain.setValueAtTime(1, contextTime)
+    @gain.setValueAtTime(0, contextTime)
+    @gain.linearRampToValueAtTime(1, contextTime + @get('attack'))
     @stop(secondsFromNow + duration) if duration
 
   stop: (secondsFromNow)->
     contextTime = @get('context').currentTime + secondsFromNow
-    if secondsFromNow == 0
-      @gain.cancelScheduledValues(@get('context').currentTime)
+    @gain.cancelScheduledValues(contextTime)
     @gain.setValueAtTime(0, contextTime)

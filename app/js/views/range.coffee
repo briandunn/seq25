@@ -3,4 +3,4 @@ Seq25.RangeView = Ember.View.extend
   tagName: 'input'
   attributeBindings: ['type', 'min', 'max', 'step', 'value']
   change: ->
-    @set 'value', @$().val()
+    @set 'value', +@$().val()
