@@ -37,14 +37,17 @@ class Seq25.Keystrokes
 
   @executeCallback = (keyStroke) =>
     Seq25.numStack.push(keyStroke) if /\d/.test(keyStroke)
-    @callbacks[keyStroke]?.call(null, Seq25.numStack.drain())
+    Seq25.partStack.push(keyStroke) if /[qwerasdf]/.test(keyStroke)
+    @callbacks[keyStroke]?.call(null, Seq25.numStack.drain(), @getPart())
 
   @handleKeyDown = (e) =>
     result = @executeKeyDownCallback(eventCombo(e.keyCode, e.shiftKey))
     e.preventDefault() if result
 
   @executeKeyDownCallback = (keyStroke) =>
-    @keyDownCallbacks[keyStroke]?.call(null, Seq25.numStack.drain())
+    @keyDownCallbacks[keyStroke]?.call(null, Seq25.numStack.drain(), @getPart())
+
+  @getPart =  => @partfn(Seq25.partStack.drain())
 
   document.addEventListener('keypress', @handleKeyPress, false)
   document.addEventListener('keydown', @handleKeyDown, false)
@@ -64,3 +67,16 @@ class Seq25.NumStack
     num
 
 Seq25.numStack = new Seq25.NumStack()
+
+class Seq25.PartStack
+  stack: ''
+
+  push: (parkKey) ->
+    @stack = parkKey
+
+  drain: () ->
+    part = @stack.toUpperCase()
+    @stack = ''
+    part
+
+Seq25.partStack = new Seq25.PartStack()
