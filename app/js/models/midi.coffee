@@ -1,7 +1,5 @@
 NOTE_NAMES = "B C C# D D# E F F# G G# A A#".w()
 class Seq25.Midi
-  constructor: ->
-    @scheduled = {"A2": []}
 
   connect: ->
     if navigator.requestMIDIAccess
@@ -16,30 +14,21 @@ class Seq25.Midi
   connectFailure: =>
     console.log("midi connection failure")
 
-  sendOnAt: (pitch, timeFromNow) ->
-    scheduledOn = setTimeout((=> @sendOn(pitch)), timeFromNow * 1000)
-    (@scheduled[pitch] ||= []).push(scheduledOn)
+  play: (pitch, start, duration)->
+    if @connected
+      pitch = @translatePitch(pitch)
+      VELOCITY = 0x7f
+      now = performance.now()
+      @sendOnAt(pitch, now + (start * 1e3), VELOCITY)
+      @sendOffAt(pitch, now + ((start + duration) * 1e3), VELOCITY) if duration
 
-  sendOffAt: (pitch, timeFromNow) ->
-    scheduledOff = setTimeout((=> @sendOff(pitch)), timeFromNow * 1000)
-    (@scheduled[pitch] ||= []).push(scheduledOff)
-
-  clearAllScheduled: (pitch) ->
-    if @scheduled[pitch]
-      for timeout in @scheduled[pitch]
-        clearTimeout(timeout)
-
-  sendOn: (pitch="A4", velocity=0x7f)=>
-    pitch = @translatePitch(pitch)
+  sendOnAt: (pitch, timeFromNow, velocity)=>
     ON = 0x90
-    if @connected
-      @output.send( [ ON, pitch, velocity ] )
+    @output.send [ON, pitch, velocity], timeFromNow
 
-  sendOff: (pitch="A4", velocity=0x7f)=>
-    pitch = @translatePitch(pitch)
+  sendOffAt: (pitch, timeFromNow, velocity)=>
     OFF = 0x80
-    if @connected
-      @output.send( [ OFF, pitch, velocity ] )
+    @output.send [ OFF, pitch, velocity], timeFromNow
 
   translatePitch: (pitch="A4")->
     bottomA = 0x47 - 24

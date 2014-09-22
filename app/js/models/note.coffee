@@ -74,7 +74,8 @@ Seq25.Note = DS.Model.extend
       @getProperties 'duration', 'instrument', 'pitch'
 
     duration = @ticksToTime(duration)
-    instrument.play pitch, start, duration
+    if start >= 0
+      instrument.play pitch, start, duration
 
   stop: ->
     @get('instrument').stop @get 'pitch'
