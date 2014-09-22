@@ -41,6 +41,8 @@ input[type="range"]
   margin-top: .0625rem
   &:focus
     outline: none
+    &::-webkit-slider-thumb
+      border-color: darken(#E5E5E5, 40%)
 
 ::-webkit-slider-thumb
   -webkit-appearance: none
@@ -49,8 +51,6 @@ input[type="range"]
   border-radius: 1rem
   height: 1rem
   width: 1rem
-  &:focus
-    border-color: darken(#E5E5E5, 40%)
 
 header
   font-size: 1em
