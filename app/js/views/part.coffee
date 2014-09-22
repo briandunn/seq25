@@ -22,6 +22,8 @@ Seq25.PartView = Ember.View.extend
 
     Seq25.Keystrokes.keyDownBind 'up', (num) =>
       @get('controller').send('moveUp', num)
+      return true
 
-    Seq25.Keystrokes.keyDownBind 'down', =>
+    Seq25.Keystrokes.keyDownBind 'down', (num) =>
       @get('controller').send('moveDown', num)
+      return true
