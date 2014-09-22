@@ -116,14 +116,16 @@ section
             display: none
           a.active + a
             display: inline
-
       &.instrument
-        #volume-control
-          text-indent: -9999px
+        label
           width: 12px
-          height: 1.05rem
-          background: url("../img/icon_sound@2x.png") center left no-repeat
-          background-size: 12px 12px
+          &[for='volume']
+            text-indent: -9999px
+            height: 1.05rem
+            background: url("../img/icon_sound@2x.png") center left no-repeat
+            background-size: 12px 12px
+          &[for='shape']
+            width: auto
       > section
         position: absolute
         top: -.9rem

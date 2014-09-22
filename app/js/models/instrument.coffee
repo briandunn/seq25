@@ -1,11 +1,11 @@
 Seq25.Instrument = Ember.Object.extend
-  volume:    Em.computed.alias 'part.volume'
-  attack:    Em.computed.alias 'part.attack'
-  sustain:   Em.computed.alias 'part.sustain'
-  decay:     Em.computed.alias 'part.decay'
-  resonance: Em.computed.alias 'part.resonance'
-  isMuted:   Em.computed.alias 'part.isMuted'
-  shape:     Em.computed.alias 'part.shape'
+  attack:     Em.computed.alias 'part.attack'
+  filterFreq: Em.computed.alias 'part.filterFreq'
+  filterQ:    Em.computed.alias 'part.filterQ'
+  isMuted:    Em.computed.alias 'part.isMuted'
+  resonance:  Em.computed.alias 'part.resonance'
+  shape:      Em.computed.alias 'part.shape'
+  volume:     Em.computed.alias 'part.volume'
   context:   Seq25.audioContext
 
   save: -> @get('part').save()

@@ -1,13 +1,13 @@
 Seq25.Part = DS.Model.extend
-  notes:     DS.hasMany 'note'
-  song:      DS.belongsTo 'song'
-  name:      DS.attr 'string'
-  shape:     DS.attr 'string', defaultValue: 'sine'
-  volume:    DS.attr 'number', defaultValue: 0.75
-  attack:    DS.attr 'number', defaultValue: 0
-  sustain:   DS.attr 'number', defaultValue: 0
-  decay:     DS.attr 'number', defaultValue: 0
-  resonance: DS.attr 'number', defaultValue: 0
+  notes:      DS.hasMany 'note'
+  song:       DS.belongsTo 'song'
+  name:       DS.attr 'string'
+  shape:      DS.attr 'string', defaultValue: 'sine'
+  volume:     DS.attr 'number', defaultValue: 0.75
+  attack:     DS.attr 'number', defaultValue: 0
+  resonance:  DS.attr 'number', defaultValue: 0
+  filterFreq: DS.attr 'number', defaultValue: 1
+  filterQ:    DS.attr 'number', defaultValue: 0
   secondsPerBeat: Ember.computed.alias 'song.secondsPerBeat'
 
   beat_count: DS.attr 'number', defaultValue: 16
