@@ -35,6 +35,14 @@ class Seq25.Keystrokes
     keyStroke = eventChar(e.which)
     @executeCallback(keyStroke)
 
+  @registerKeyPressEvents = (keyPressEvents) ->
+    for k, v of keyPressEvents
+      @bind k, v
+
+  @registerKeyDownEvents = (keyDownEvents) ->
+    for k, v of keyDownEvents
+      @keyDownBind k, v
+
   @executeCallback = (keyStroke) =>
     Seq25.numStack.push(keyStroke) if /\d/.test(keyStroke)
     Seq25.partStack.push(keyStroke) if /[qwerasdf]/.test(keyStroke)

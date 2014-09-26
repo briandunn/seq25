@@ -1,18 +1,20 @@
 Seq25.TransportView = Ember.View.extend
   didInsertElement: ->
     Seq25.Keystrokes.partfn = (n) => @partForKey.call(@, n)
-    Seq25.Keystrokes.bind "t", => @gotoSummary.call(@)
 
-    Seq25.Keystrokes.keyDownBind "space", (e) =>
-      @get('controller').send('play')
-      return true
+    Seq25.Keystrokes.registerKeyPressEvents
+      "t": (n, p) => @gotoSummary.call(@)
+      "g": (n, p) => @gotoPart(p)
+      "m": (n, p) => @mutePart(p)
+      "b": (n, p) => @changeBeatsForPart(p, "up", n)
+      "x": (n, p) => @changeQuantForPart(p, n)
+      "n": (n, p) => @bumpVolumeForPart(p, "up", n)
 
-    Seq25.Keystrokes.bind "g", (n, p) => @gotoPart(p)
-    Seq25.Keystrokes.bind "m", (n, p) => @mutePart(p)
-    Seq25.Keystrokes.bind "b", (n, p) => @changeBeatsForPart(p, "up", n)
-    Seq25.Keystrokes.bind "x", (n, p) => @changeQuantForPart(p, n)
-    Seq25.Keystrokes.bind "n", (n, p) => @bumpVolumeForPart(p, "up", n)
-    Seq25.Keystrokes.keyDownBind "shift+n", (n, p) => @bumpVolumeForPart(p, "down", n)
+    Seq25.Keystrokes.registerKeyPressEvents
+      "shift+n": (n, p) => @bumpVolumeForPart(p, "down", n)
+      "space":   (n, p) =>
+        @get('controller').send('play')
+        return true
 
   tagName: 'section'
 
@@ -23,7 +25,7 @@ Seq25.TransportView = Ember.View.extend
       @get('controller').get("song").getPart(@currentPart())
 
   gotoPart: (part) ->
-    if /[QWERASDF]/.test(part)
+    if /[QWERASDF]/i.test(part)
       @get('controller').send('addPart', part)
     else
       @get('controller').transitionToRoute('part', part)
