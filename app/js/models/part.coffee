@@ -1,20 +1,13 @@
 Seq25.Part = DS.Model.extend
-  notes:      DS.hasMany 'note'
-  song:       DS.belongsTo 'song'
-  name:       DS.attr 'string'
-  shape:      DS.attr 'string', defaultValue: 'sine'
-  volume:     DS.attr 'number', defaultValue: 0.75
-  attack:     DS.attr 'number', defaultValue: 0
-  release:  DS.attr 'number', defaultValue: 0
-  filterFreq: DS.attr 'number', defaultValue: 1
-  filterQ:    DS.attr 'number', defaultValue: 0
-  secondsPerBeat: Ember.computed.alias 'song.secondsPerBeat'
-
-  beat_count: DS.attr 'number', defaultValue: 16
-  isMuted: DS.attr 'boolean', defaultValue: false
-
-  instrument: Em.computed ->
-    Seq25.Instrument.create part: this
+  notes:        DS.hasMany 'note'
+  synthesizers: DS.hasMany 'synthesizer'
+  song:         DS.belongsTo 'song'
+  name:         DS.attr 'string'
+  volume:       DS.attr 'number', defaultValue: 0.75
+  beat_count:   DS.attr 'number', defaultValue: 16
+  isMuted:      DS.attr 'boolean', defaultValue: false
+  secondsPerBeat: Em.computed.alias 'song.secondsPerBeat'
+  instruments:    Em.computed.alias 'synthesizers'
 
   duration: Em.computed 'secondsPerBeat', 'beat_count', ->
     @get('secondsPerBeat') * @get('beat_count')
@@ -27,7 +20,7 @@ Seq25.Part = DS.Model.extend
       @schedule(progress)
 
   schedule: (now, from, to)->
-    {duration, notes} = @getProperties 'duration', 'notes'
+    {duration, notes, instruments} = @getProperties 'duration', 'notes', 'instruments'
     loopOffset = Math.floor(from / duration) * duration
     now = now - loopOffset
     to = to   - loopOffset
@@ -35,11 +28,11 @@ Seq25.Part = DS.Model.extend
       loopRelativeStart = note.get 'absolueSeconds'
       loopCount = 0
       while (start = loopRelativeStart - (now - (duration * loopCount))) < to
-        note.schedule start
+        instruments.invoke 'play', note, start
         loopCount += 1
 
   stop: ->
-    @get('notes').invoke 'stop'
+    @get('instruments').invoke 'stop'
 
   addNoteAtPoint: (position, pitchNumber, quant)->
     @get('notes').createRecord
@@ -49,7 +42,6 @@ Seq25.Part = DS.Model.extend
       quant:       quant
 
   removeNote:(note)->
-    note.stop()
     @get('notes').removeRecord(note)
     @save()
     note.destroy()

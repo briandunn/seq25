@@ -1,0 +1,6 @@
+{{#each instrument in controller}}
+  {{#with instrument}}
+    {{view instrument.viewName }}
+  {{/with}}
+{{/each}}
+<button {{action 'addInstrument'}}>+</button>

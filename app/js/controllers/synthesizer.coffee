@@ -1,4 +1,5 @@
-Seq25.InstrumentController = Ember.ObjectController.extend
+Seq25.SynthesizerController = Ember.ObjectController.extend
+  viewName: 'synthesizer'
   shapes: 'sine square sawtooth triangle'.w()
 
   saver: (->

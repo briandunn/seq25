@@ -1,0 +1,28 @@
+<dl>
+  <dt><label for='volume'>v</label></dt>
+  <dd>
+    {{view 'range' min='0' max='1' step='0.01' value=volume}}
+  </dd>
+  <dt><label for='attack'>a</label></dt>
+  <dd>
+    {{view 'range' min='0' max='1' step='0.01' value=attack}}
+  </dd>
+  <dt><label for='release'>r</label></dt>
+  <dd>
+    {{view 'range' min='0' max='1' step='0.01' value=release}}
+  </dd>
+</dl>
+<dl>
+  <dt><label for='filterQ'>q</label></dt>
+  <dd>
+    {{view 'range' min='0' max='1' step='0.01' value=filterQ}}
+  </dd>
+  <dt><label for='filterFreq'>f</label></dt>
+  <dd>
+    {{view 'range' min='0' max='1' step='0.01' value=filterFreq}}
+  </dd>
+  <dt><label for='shape'>shape</label></dt>
+  <dd>
+    {{view 'select' content=shapes value=shape}}
+  </dd>
+</dl>

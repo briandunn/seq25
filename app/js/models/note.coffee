@@ -6,7 +6,6 @@ Seq25.Note = DS.Model.extend
   part:        DS.belongsTo 'part'
   duration:    DS.attr 'number', defaultValue: TICKS_PER_BEAT
   secondsPerBeat: Em.computed.alias 'part.secondsPerBeat'
-  instrument:     Em.computed.alias 'part.instrument'
 
   pitch: Em.computed 'pitchNumber', ->
     Seq25.Pitch.all.findBy 'number', @get('pitchNumber')
@@ -20,6 +19,9 @@ Seq25.Note = DS.Model.extend
   absolueSeconds: (->
     @ticksToTime @get 'absoluteTicks'
   ).property('absoluteTicks', 'secondsPerBeat')
+
+  durationSeconds: Em.computed 'duration', 'secondsPerBeat', ->
+    @ticksToTime @get 'duration'
 
   absoluteTicks: ((_, ticks)->
     if ticks == undefined
@@ -68,16 +70,5 @@ Seq25.Note = DS.Model.extend
   changeDuration: (editResolution) ->
     if @get('duration') + editResolution > 0
       @incrementProperty('duration', editResolution)
-
-  schedule: (start)->
-    {duration, instrument, pitch} =
-      @getProperties 'duration', 'instrument', 'pitch'
-
-    duration = @ticksToTime(duration)
-    if start >= 0
-      instrument.play pitch, start, duration
-
-  stop: ->
-    @get('instrument').stop @get 'pitch'
 
 Seq25.Note.TICKS_PER_BEAT = TICKS_PER_BEAT

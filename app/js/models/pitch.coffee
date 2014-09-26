@@ -2,6 +2,7 @@ NOTE_NAMES = "A A# B C C# D D# E F F# G G#".w()
 A0_PITCH = 27.5
 
 Seq25.Pitch = Ember.Object.extend
+  pitch: Em.computed -> this
 
   init: ->
     number = @get('number')
