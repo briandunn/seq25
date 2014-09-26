@@ -3,7 +3,7 @@ Seq25.Instrument = Ember.Object.extend
   filterFreq: Em.computed.alias 'part.filterFreq'
   filterQ:    Em.computed.alias 'part.filterQ'
   isMuted:    Em.computed.alias 'part.isMuted'
-  resonance:  Em.computed.alias 'part.resonance'
+  release:  Em.computed.alias 'part.release'
   shape:      Em.computed.alias 'part.shape'
   volume:     Em.computed.alias 'part.volume'
   context:   Seq25.audioContext

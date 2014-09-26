@@ -3,4 +3,4 @@ Seq25.InstrumentController = Ember.ObjectController.extend
 
   saver: (->
     @get('model').save()
-  ).observes('attack', 'filterFreq', 'filterQ', 'resonance', 'shape',  'volume')
+  ).observes('attack', 'filterFreq', 'filterQ', 'release', 'shape',  'volume')

@@ -8,9 +8,9 @@
     <dd>
       {{view 'range' id='attack' min='0' max='1' step='0.01' value=attack}}
     </dd>
-    <dt><label for='resonance'>r</label></dt>
+    <dt><label for='release'>r</label></dt>
     <dd>
-      {{view 'range' id='resonance' min='0' max='1' step='0.01' value=resonance}}
+      {{view 'range' id='release' min='0' max='1' step='0.01' value=release}}
     </dd>
   </dl>
   <dl>
@@ -25,6 +25,14 @@
     <dt><label for='shape'>shape</label></dt>
     <dd>
       {{view 'select' id='shape' content=shapes value=shape}}
+    </dd>
+  </dl>
+  <dl>
+    <dt>
+      <label for='channel'>channel</label>
+    </dt>
+    <dd>
+      {{view 'number' min=0 max=15 id='channel' value=channel}}
     </dd>
   </dl>
 </article>

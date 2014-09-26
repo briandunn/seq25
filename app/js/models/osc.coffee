@@ -4,7 +4,7 @@ Seq25.Osc = Ember.Object.extend
   filterFreq: Em.computed.alias 'instrument.filterFreq'
   filterQ:    Em.computed.alias 'instrument.filterQ'
   output:     Em.computed.alias 'instrument.output'
-  resonance:  Em.computed.alias 'instrument.resonance'
+  release:  Em.computed.alias 'instrument.release'
   shape:      Em.computed.alias 'instrument.shape'
 
   init: ->
@@ -41,7 +41,7 @@ Seq25.Osc = Ember.Object.extend
     @stop(secondsFromNow + duration) if duration
 
   stop: (secondsFromNow)->
-    {context, resonance} = @getProperties 'context', 'resonance'
+    {context, release} = @getProperties 'context', 'release'
     contextTime = context.currentTime + secondsFromNow
     @gain.cancelScheduledValues(contextTime)
-    @gain.linearRampToValueAtTime(0, contextTime + resonance)
+    @gain.linearRampToValueAtTime(0, contextTime + release)
