@@ -7,3 +7,9 @@ Seq25.InstrumentsController = Ember.ArrayController.extend
       instrument = @store.createRecord 'synthesizer'
       @pushObject instrument
       instrument.get('part').save()
+
+    removeInstrument: (instrument)->
+      {part, id} = instrument.getProperties 'part', 'id'
+      @removeObject @findProperty 'id', id
+      part.save()
+      instrument.destroyRecord()

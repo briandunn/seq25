@@ -5,6 +5,14 @@ $header: 'Permanent Marker'
 $subheader: 'Permanent Marker'
 $num: 'Open Sans'
 
+=clearfix
+  &:before
+    content: " "
+  &:after
+    display: table
+    content: " "
+    clear: both
+
 html
   font-size: 100%
 
@@ -89,8 +97,8 @@ section
       float: right
       margin: .4rem .8rem 0 0
     article
+      +clearfix
       font-size: 1em
-      clear: both
       background: #fff
       border: 1px solid #DADADA
       border-radius: 3rem
@@ -117,6 +125,12 @@ section
           a.active + a
             display: inline
       &.instrument
+        dl
+          float: left
+          width: calc(100% - 25px)
+        button
+          float: left
+          width: 25px
         label
           width: 12px
           &[for='volume']
@@ -173,12 +187,7 @@ section
   margin: 0 auto
   overflow: auto
   .part-row
-    &:before
-      content: " "
-    &:after
-      display: table
-      content: " "
-      clear: both
+    +clearfix
     > li
       box-sizing: border-box
       display: block
