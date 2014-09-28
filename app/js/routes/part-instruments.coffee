@@ -2,7 +2,7 @@ Seq25.PartInstrumentsRoute = Ember.Route.extend
   controllerName: 'instruments'
 
   model: ->
-    @modelFor('part').get 'instruments'
+    @modelFor 'part'
 
   renderTemplate: ->
     @render outlet: 'instruments', into: 'application'

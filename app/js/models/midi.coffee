@@ -1,44 +1,32 @@
-NOTE_NAMES = "B C C# D D# E F F# G G# A A#".w()
+VELOCITY = 0x7f
 class Seq25.Midi
+  constructor: (@output)->
 
-  connect: ->
-    if navigator.requestMIDIAccess
-      navigator.requestMIDIAccess().then(@connectSuccess, @connectFailure)
-    else
-      @connected = false
+  play: (pitch, channel, start, duration)->
+    now = performance.now()
+    noteOnTime = now + (start * 1e3)
+    @sendOnAt(pitch, channel, noteOnTime)
+    noteOffTime = now + ((start + duration) * 1e3)
+    @sendOffAt(pitch, channel, noteOffTime) if duration
 
-  connectSuccess: (access)=>
-    @output = access.outputs()[0]
-    @connected = true if @output
+  sendOnAt: (pitch, channel, timeFromNow)->
+    ON = 0x90 ^ channel
+    @output.send [ON, pitch, VELOCITY], timeFromNow
 
-  connectFailure: =>
-    console.log("midi connection failure")
+  sendOffAt: (pitch, channel, timeFromNow)->
+    OFF = 0x80 ^ channel
+    @output.send [ OFF, pitch, VELOCITY], timeFromNow
 
-  play: (pitch, start, duration)->
-    if @connected
-      pitch = @translatePitch(pitch)
-      VELOCITY = 0x7f
-      now = performance.now()
-      @sendOnAt(pitch, now + (start * 1e3), VELOCITY)
-      @sendOffAt(pitch, now + ((start + duration) * 1e3), VELOCITY) if duration
-
-  sendOnAt: (pitch, timeFromNow, velocity)=>
-    ON = 0x90
-    @output.send [ON, pitch, velocity], timeFromNow
-
-  sendOffAt: (pitch, timeFromNow, velocity)=>
-    OFF = 0x80
-    @output.send [ OFF, pitch, velocity], timeFromNow
-
-  translatePitch: (pitch="A4")->
-    bottomA = 0x47 - 24
-    [octave, note] = @splitPitch(pitch)
-    return bottomA + (NOTE_NAMES.indexOf(note) + (12 * (octave - 2)))
-
-  splitPitch: (pitch)->
-    octave = pitch[2] || pitch[1]
-    note = pitch.replace(octave, '')
-    return [octave, note]
-
-Seq25.midi = new Seq25.Midi()
-Seq25.midi.connect()
+connectionPromise = null
+Seq25.Midi.connect = ->
+  connectionPromise ||= new Em.RSVP.Promise (resolve, reject) ->
+    navigator.requestMIDIAccess()
+    .then (access)->
+      if output = access.outputs()[0]
+        resolve(new Seq25.Midi(output))
+      else
+        console.log 'connected, but no outputs'
+        reject()
+    .catch ->
+      console.log "midi connection failure"
+      reject()

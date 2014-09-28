@@ -1,15 +1,11 @@
-Seq25.InstrumentsController = Ember.ArrayController.extend
-  lookupItemController: (instrument)->
-    instrument.constructor.typeKey
-
+Seq25.InstrumentsController = Ember.ObjectController.extend
   actions:
-    addInstrument: ->
-      instrument = @store.createRecord 'synthesizer'
-      @pushObject instrument
-      instrument.get('part').save()
+    addInstrument: (collectionName)->
+      @get(collectionName).createRecord().save()
+      @get('model').save()
 
     removeInstrument: (instrument)->
-      {part, id} = instrument.getProperties 'part', 'id'
-      @removeObject @findProperty 'id', id
-      part.save()
+      collection = @get "#{instrument.constructor.typeKey}s"
+      collection.removeRecord(instrument)
       instrument.destroyRecord()
+      @get('model').save()

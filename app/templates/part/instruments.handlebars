@@ -1,6 +1,8 @@
-{{#each instrument in controller}}
-  {{#with instrument}}
-    {{view instrument.viewName }}
-  {{/with}}
+{{#each synthesizer in synthesizers }}
+  {{render 'synthesizer' synthesizer }}
 {{/each}}
-<button {{action 'addInstrument'}}>+</button>
+<button {{action 'addInstrument' 'synthesizers' }}>+ synth</button>
+{{#each midiInstrument in midiInstruments }}
+  {{render 'midiInstrument' midiInstrument }}
+{{/each}}
+<button {{action 'addInstrument' 'midiInstruments' }}>+ midi</button>

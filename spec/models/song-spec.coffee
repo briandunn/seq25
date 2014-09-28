@@ -1,7 +1,8 @@
 moduleFor 'model:song', 'Song',
   needs:[
     'model:part'
-    'model:instrument'
+    'model:synthesizer'
+    'model:midiInstrument'
     'model:note'
   ]
   setup: (container)->
@@ -60,13 +61,19 @@ test 'loads song with instruments', ->
         p:
           id: 'p'
           song: 's'
-          instruments: ['i']
-    instrument:
+          synthesizers: ['syn']
+          midiInstruments: ['midi']
+    synthesizer:
       records:
-        i:
-          id: 'i'
+        syn:
+          id: 'syn'
+          part: 'p'
+    midiInstrument:
+      records:
+        midi:
+          id: 'midi'
           part: 'p'
 
   Seq25.Song.loadDefault(@store)
   .then (song)->
-    equal song.get('parts.firstObject.instruments.firstObject.id'), 'i'
+    deepEqual song.get('parts.firstObject.instruments').mapProperty('id'), ['syn', 'midi']

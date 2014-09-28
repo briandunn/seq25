@@ -3,6 +3,7 @@ moduleForModel 'part', 'Part', needs: [
   'model:note'
   'model:song'
   'model:synthesizer'
+  'model:midiInstrument'
 ],
 setup: ->
   part = @subject()

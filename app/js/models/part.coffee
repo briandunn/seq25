@@ -1,13 +1,17 @@
+calls = 0
 Seq25.Part = DS.Model.extend
-  notes:        DS.hasMany 'note'
-  synthesizers: DS.hasMany 'synthesizer'
-  song:         DS.belongsTo 'song'
-  name:         DS.attr 'string'
-  volume:       DS.attr 'number', defaultValue: 0.75
-  beat_count:   DS.attr 'number', defaultValue: 16
-  isMuted:      DS.attr 'boolean', defaultValue: false
+  notes:           DS.hasMany 'note'
+  synthesizers:    DS.hasMany 'synthesizer'
+  midiInstruments: DS.hasMany 'midiInstrument'
+  song:            DS.belongsTo 'song'
+  name:            DS.attr 'string'
+  volume:          DS.attr 'number', defaultValue: 0.75
+  beat_count:      DS.attr 'number', defaultValue: 16
+  isMuted:         DS.attr 'boolean', defaultValue: false
   secondsPerBeat: Em.computed.alias 'song.secondsPerBeat'
-  instruments:    Em.computed.alias 'synthesizers'
+  instruments:    Em.computed 'synthesizers.[]', 'midiInstruments.[]', ->
+    {synthesizers, midiInstruments} = @getProperties 'synthesizers', 'midiInstruments'
+    synthesizers.toArray().concat midiInstruments.toArray()
 
   duration: Em.computed 'secondsPerBeat', 'beat_count', ->
     @get('secondsPerBeat') * @get('beat_count')
