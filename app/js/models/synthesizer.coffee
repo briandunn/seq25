@@ -5,14 +5,25 @@ Seq25.Synthesizer = Seq25.Instrument.extend
   filterFreq: DS.attr 'number', defaultValue: 1
   filterQ:    DS.attr 'number', defaultValue: 0
   volume:     Em.computed.alias 'part.volume'
+  isMuted:    Em.computed.alias 'part.isMuted'
   context:    Seq25.audioContext
 
   init: ->
     @set 'oscillators', {}
-    context = @get('context')
+    context = @get 'context'
     @set('output', context.createGain())
     @get('output').connect context.destination
-    @_super.apply(this, arguments)
+    @set 'lastVolume', @get('volume')
+    @_super()
+
+  mute: (->
+    {output, isMuted} = @getProperties 'output', 'isMuted'
+    if isMuted
+      @set('lastVolume', @get('volume'))
+      output.gain.value = 0
+    else
+      output.gain.value = @get('lastVolume')
+  ).observes('isMuted').on('init')
 
   adjustVolume: (->
     {output, volume} = @getProperties 'output', 'volume'
