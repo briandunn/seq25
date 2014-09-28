@@ -9,6 +9,6 @@ Seq25.ApplicationRoute = Ember.Route.extend
     @setupPitches()
 
   setupPitches: ->
-    pitches = for number in [45..95] #[21..108]
+    pitches = for number in [21..95] #[21..108]
       Seq25.Pitch.create(number: number)
     Seq25.Pitch.all = pitches.reverse()
