@@ -22,14 +22,12 @@ Seq25.Part = DS.Model.extend
   schedule: (now, from, to)->
     {duration, notes, instruments} = @getProperties 'duration', 'notes', 'instruments'
     loopOffset = Math.floor(from / duration) * duration
-    now = now - loopOffset
-    to = to   - loopOffset
     notes.forEach (note)->
-      loopRelativeStart = note.get 'absolueSeconds'
-      loopCount = 0
-      while (start = loopRelativeStart - (now - (duration * loopCount))) < to
-        instruments.invoke 'play', note, start
-        loopCount += 1
+      start = loopOffset + note.get 'absolueSeconds'
+      while start < to
+        if start >= from
+          instruments.invoke 'play', note, start - now
+        start += duration
 
   stop: ->
     @get('instruments').invoke 'stop'
