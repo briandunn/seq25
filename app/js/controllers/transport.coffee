@@ -43,9 +43,9 @@ Seq25.TransportController = Ember.ObjectController.extend
         newScheduleEnd = scheduledUntil + BUFFER_TIME
         song.schedule(progress, scheduledUntil, newScheduleEnd)
         @set 'scheduledUntil', newScheduleEnd
-      Ember.run.later this, advancePosition, 25
+      Ember.run.later this, advancePosition, 50
 
-    Ember.run.later this, advancePosition, 25
+    Ember.run.later this, advancePosition, 50
 
   stop: ->
     @get('song').stop()
