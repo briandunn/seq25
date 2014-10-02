@@ -31,7 +31,7 @@ Seq25.TransportView = Ember.View.extend
       @get('controller').transitionToRoute('part', part)
 
   mutePart: (part) ->
-    part?.toggle?(@get('controller').get('progress'))
+    part?.toggle()
 
   bumpVolumeForPart: (part, direction="up", num) ->
     part.bumpVolume?(direction, num)

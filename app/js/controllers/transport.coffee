@@ -1,16 +1,11 @@
 BUFFER_TIME = 0.5
+PROGRESS_INTERVAL = 50
 Seq25.TransportController = Ember.ObjectController.extend
   needs: ['partsIndex', 'part']
 
   song: Ember.computed.alias 'model'
 
   currentPart: (-> @get('controllers.part.name')).property('controllers.part')
-
-  empty: (-> @get('parts').length == 0).property('parts.@each')
-
-  loopDuration: (->
-    @get('maxBeatCount') * 60 / +@get('tempo')
-  ).property('tempo', 'maxBeatCount')
 
   currentTime: -> Seq25.audioContext.currentTime
   startedAt: 0
@@ -43,9 +38,9 @@ Seq25.TransportController = Ember.ObjectController.extend
         newScheduleEnd = scheduledUntil + BUFFER_TIME
         song.schedule(progress, scheduledUntil, newScheduleEnd)
         @set 'scheduledUntil', newScheduleEnd
-      Ember.run.later this, advancePosition, 50
+      Ember.run.later this, advancePosition, PROGRESS_INTERVAL
 
-    Ember.run.later this, advancePosition, 50
+    Ember.run.later this, advancePosition, PROGRESS_INTERVAL
 
   stop: ->
     @get('song').stop()

@@ -44,5 +44,4 @@ Seq25.Osc = Ember.Object.extend
   stop: (secondsFromNow=0)->
     {context, release} = @getProperties 'context', 'release'
     contextTime = context.currentTime + secondsFromNow
-    @gain.cancelScheduledValues(contextTime)
     @gain.linearRampToValueAtTime(0, contextTime + release)

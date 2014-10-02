@@ -18,10 +18,6 @@ Seq25.Part = DS.Model.extend
 
   toggle: (progress)->
     @set('isMuted', !@get('isMuted'))
-    if @get('isMuted')
-      @stop()
-    else
-      @schedule(progress)
 
   schedule: (now, from, to)->
     {duration, notes, instruments} = @getProperties 'duration', 'notes', 'instruments'
