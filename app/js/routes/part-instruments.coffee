@@ -5,4 +5,4 @@ Seq25.PartInstrumentsRoute = Ember.Route.extend
     @modelFor 'part'
 
   renderTemplate: ->
-    @render outlet: 'instruments', into: 'application'
+    @render outlet: 'instruments', into: 'song'

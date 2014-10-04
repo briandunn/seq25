@@ -1,6 +1,5 @@
-Seq25.PartsIndexController = Ember.ObjectController.extend
-  needs: 'application'
-  song: Ember.computed.alias 'controllers.application.model'
+Seq25.SongIndexController = Ember.ObjectController.extend
+  song: Em.computed.alias 'model'
   rowSize: 4
   parts: (->
     song = @get 'song'

@@ -1,19 +1,19 @@
 module 'Feature: user creates part',
   setup: ->
     Seq25.ApplicationAdapter = DS.LSAdapter.extend namespace: 'seq25test'
+    visit('/')
+    click('button')
 
   teardown: ->
     delete localStorage.seq25test
 
 test 'add new part', ->
-  visit('/')
   click('li.empty')
 
   andThen ->
     equal(find('section#piano-roll #keyboard li').eq(0).text().trim(), 'B7', "fantastic")
 
 test 'add new note', ->
-  visit('/')
   click('li.empty')
 
   andThen ->
@@ -23,7 +23,6 @@ test 'add new note', ->
     equal(find(".notes li").length, 1)
 
 test 'move note', ->
-  visit('/')
   click('li.empty')
 
   andThen ->
@@ -39,7 +38,6 @@ test 'move note', ->
     equal(left(".notes li"), "6.25%")
 
 test 'extend note', ->
-  visit('/')
   click('li.empty')
 
   andThen ->

@@ -1,3 +1,4 @@
+Seq25.rootElement = '#qunit-fixture'
 Seq25.setupForTesting()
 emq.globalize()
 setResolver Ember.DefaultResolver.create namespace: Seq25

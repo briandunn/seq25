@@ -1,13 +1,14 @@
 module 'Feature: user moves note',
   setup: ->
     Seq25.ApplicationAdapter = DS.LSAdapter.extend namespace: 'seq25test'
+    visit('/')
+    click('button')
+    click('li.empty')
 
   teardown: ->
     delete localStorage.seq25test
 
 test 'move note when is quant is 0', ->
-  visit('/')
-  click('li.empty')
 
   andThen -> #set beats to 20 for nice %s
     keyTrigger("2")

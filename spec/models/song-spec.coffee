@@ -26,7 +26,7 @@ test 'loads empty songs', ->
         1:
           id: 1
 
-  Seq25.Song.loadDefault(@store)
+  Seq25.Song.load(@store, 1)
   .then (song)->
     equal song.get('id'), 1
 
@@ -44,7 +44,7 @@ test 'loads songs with parts', ->
           id: 'p'
           song: 's'
 
-  Seq25.Song.loadDefault(@store)
+  Seq25.Song.load(@store, 's')
   .then (song)->
     equal song.get('parts.firstObject.id'), 'p'
 
@@ -74,6 +74,6 @@ test 'loads song with instruments', ->
           id: 'midi'
           part: 'p'
 
-  Seq25.Song.loadDefault(@store)
+  Seq25.Song.load(@store, 's')
   .then (song)->
     deepEqual song.get('parts.firstObject.instruments').mapProperty('id'), ['syn', 'midi']

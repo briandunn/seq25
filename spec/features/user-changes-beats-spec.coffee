@@ -1,13 +1,14 @@
 module 'Feature: user note actions must be constrained',
   setup: ->
     Seq25.ApplicationAdapter = DS.LSAdapter.extend namespace: 'seq25test'
+    visit('/')
+    click('button')
+    click('li.empty')
 
   teardown: ->
     delete localStorage.seq25test
 
 test 'change beats with keyboard', ->
-  visit('/')
-  click('li.empty')
 
   andThen ->
     equal(width(".measure"), "6.25%")
@@ -21,8 +22,6 @@ test 'change beats with keyboard', ->
     equal(width(".measure"), "5%")
 
 test 'change beats with keyboard should change note width', ->
-  visit('/')
-  click('li.empty')
 
   andThen ->
     keyTrigger("c")

@@ -1,0 +1,13 @@
+<section id='songs'>
+  <ul>
+    {{#each model}}
+    <li>
+      <button {{action 'removeSong' this }}>-</button>
+      {{#link-to 'song' id }}
+        {{id}}
+      {{/link-to}}
+    </li>
+    {{/each}}
+  </ul>
+  <button {{action 'addSong' }}>+</button>
+</section>
