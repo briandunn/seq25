@@ -1,19 +1,13 @@
 <section id='parts'>
   <ul>
-    {{#each row in rows}}
-      <li>
-        <ul class='part-row'>
-          {{#each part in row}}
-            {{#if part.placeholder }}
-              <li {{action 'addPart' part.name }} class='empty'></li>
-            {{else}}
-              <li {{bind-attr class="part.isMuted:mute :part"}}>
-                {{render 'parts/summary' part }}
-              </li>
-            {{/if}}
-          {{/each}}
-        </ul>
-      </li>
+    {{#each parts}}
+      {{#if placeholder }}
+        <li {{action 'addPart' name }} class='empty'></li>
+      {{else}}
+        <li {{bind-attr class="isMuted:mute :part"}}>
+          {{render 'parts/summary' this }}
+        </li>
+      {{/if}}
     {{/each}}
   </ul>
 </section>
