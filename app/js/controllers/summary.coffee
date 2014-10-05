@@ -3,6 +3,10 @@ Seq25.PartsSummaryController = Ember.ObjectController.extend
   transport: Em.computed.alias 'controllers.transport'
   bucketCount: 10
 
+  partSaver: (->
+    @get('model').save()
+  ).observes('isMuted')
+
   pitches: (->
     {notes, bucketCount} = @getProperties 'notes', 'bucketCount'
     pitchNumbers = notes.mapBy('pitchNumber').sort()

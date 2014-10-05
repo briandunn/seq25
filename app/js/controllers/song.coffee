@@ -1,5 +1,5 @@
 Seq25.SongController = Ember.ObjectController.extend
 
-  tempoSaver: ( ->
+  songSaver: ( ->
     @get('model').save()
   ).observes('tempo')

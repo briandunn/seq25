@@ -8,9 +8,9 @@ Seq25.PartController = Ember.ObjectController.extend
 
   beats: (-> [1..@get('beat_count')] ).property('beat_count')
 
-  beatCountSaver: ( ->
+  partSaver: ( ->
     @get('model').save()
-  ).observes('beat_count', 'notes.[]')
+  ).observes('beat_count', 'volume', 'isMuted', 'notes.[]')
 
   noteSaver: ( ->
     @get('notes').invoke 'save'

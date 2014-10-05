@@ -16,19 +16,18 @@ Seq25.Synthesizer = Seq25.Instrument.extend
     @set 'lastVolume', @get('volume')
     @_super()
 
-  mute: (->
-    {output, isMuted} = @getProperties 'output', 'isMuted'
-    if isMuted
-      @set('lastVolume', @get('volume'))
-      output.gain.value = 0
-    else
-      output.gain.value = @get('lastVolume')
-  ).observes('isMuted').on('init')
-
   adjustVolume: (->
     {output, volume} = @getProperties 'output', 'volume'
     output.gain.value = volume
-  ).observes('volume').on('init')
+  ).observes('volume')
+
+  mute: (->
+    {output, isMuted} = @getProperties 'output', 'isMuted'
+    if isMuted
+      output.disconnect()
+    else
+      output.connect @get('context').destination
+  ).observes('isMuted')
 
   findOrCreateOscillator: (pitch)->
     @get('oscillators')[pitch.get('number')] ||= Seq25.Osc.create
