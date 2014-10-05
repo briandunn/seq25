@@ -50,6 +50,15 @@ Seq25.TransportController = Ember.ObjectController.extend
       progress: 0
       isPlaying: false
 
+  muteAll: ->
+   @setMuteForAll(true)
+
+  unmuteAll: ->
+    @setMuteForAll(false)
+
+  setMuteForAll: (val) ->
+    @get('song.parts').forEach( (part) -> part.set('isMuted', val))
+
   actions:
     play: ->
       if @get('isPlaying') then @stop() else @play()

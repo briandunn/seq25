@@ -6,6 +6,7 @@ Seq25.TransportView = Ember.View.extend
       "t": (n, p) => @gotoSummary.call(@)
       "g": (n, p) => @gotoPart(p)
       "m": (n, p) => @mutePart(p)
+      "o": (n, p) => @muteAllPartsExcept(p)
       "b": (n, p) => @changeBeatsForPart(p, "up", n)
       "x": (n, p) => @changeQuantForPart(p, n)
       "n": (n, p) => @bumpVolumeForPart(p, "up", n)
@@ -31,7 +32,10 @@ Seq25.TransportView = Ember.View.extend
       @get('controller').transitionToRoute('part', part)
 
   mutePart: (part) ->
-    part?.toggle()
+    if part
+      part.toggle()
+    else
+      @muteAll()
 
   bumpVolumeForPart: (part, direction="up", num) ->
     part.bumpVolume?(direction, num)
@@ -53,3 +57,16 @@ Seq25.TransportView = Ember.View.extend
 
   currentPart: ->
     @get('controller.currentPart')
+
+  muteAllPartsExcept: (part) ->
+    if part
+      @muteAll()
+      @mutePart(part)
+    else
+      @unmuteAll()
+
+  unmuteAll: () ->
+    @get('controller').unmuteAll()
+
+  muteAll: () ->
+    @get('controller').muteAll()
