@@ -29,7 +29,7 @@ Seq25.TransportView = Ember.View.extend
 
   gotoPart: (part) ->
     if /[QWERASDF]/i.test(part)
-      @get('controller').send('addPart', part)
+      @get('controller.controllers.songIndex').send('addPart', part)
     else
       @get('controller').transitionToRoute('part', part)
 

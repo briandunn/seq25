@@ -1,7 +1,7 @@
 BUFFER_TIME = 0.5
 PROGRESS_INTERVAL = 50
 Seq25.TransportController = Ember.ObjectController.extend
-  needs: 'part'
+  needs: ['part', 'songIndex']
 
   song: Ember.computed.alias 'model'
 
