@@ -6,9 +6,12 @@ Seq25.TransportView = Ember.View.extend
       "t": (n, p) => @gotoSummary.call(@)
       "g": (n, p) => @gotoPart(p)
       "m": (n, p) => @mutePart(p)
+      "o": (n, p) => @muteAllPartsExcept(p)
       "b": (n, p) => @changeBeatsForPart(p, "up", n)
       "x": (n, p) => @changeQuantForPart(p, n)
       "n": (n, p) => @bumpVolumeForPart(p, "up", n)
+      "shift+o": => @unmuteAll()
+      "shift+m": => @muteAll()
 
     Seq25.Keystrokes.registerKeyPressEvents
       "shift+n": (n, p) => @bumpVolumeForPart(p, "down", n)
@@ -26,12 +29,9 @@ Seq25.TransportView = Ember.View.extend
 
   gotoPart: (part) ->
     if /[QWERASDF]/i.test(part)
-      @get('controller').send('addPart', part)
+      @get('controller.controllers.songIndex').send('addPart', part)
     else
       @get('controller').transitionToRoute('part', part)
-
-  mutePart: (part) ->
-    part?.toggle()
 
   bumpVolumeForPart: (part, direction="up", num) ->
     part.bumpVolume?(direction, num)
@@ -49,7 +49,26 @@ Seq25.TransportView = Ember.View.extend
       @get('controller.controllers.part').set("quant", num)
 
   gotoSummary: ->
-    this.get('controller').transitionToRoute('parts')
+    this.get('controller').transitionToRoute('song')
 
   currentPart: ->
     @get('controller.currentPart')
+
+  mutePart: (part) ->
+    if part
+      part.toggle?()
+    else
+      @muteAll()
+
+  muteAllPartsExcept: (part) ->
+    if part
+      @muteAll()
+      @mutePart(part)
+    else
+      @unmuteAll()
+
+  unmuteAll: ->
+    @get('controller').unmuteAll()
+
+  muteAll: ->
+    @get('controller').muteAll()

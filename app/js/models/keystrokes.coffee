@@ -32,7 +32,7 @@ class Seq25.Keystrokes
       @executeKeyDownCallback(key)
 
   @handleKeyPress = (e) =>
-    keyStroke = eventChar(e.which)
+    keyStroke = eventCombo(e.which, e.shiftKey)
     @executeCallback(keyStroke)
 
   @registerKeyPressEvents = (keyPressEvents) ->
