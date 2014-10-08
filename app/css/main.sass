@@ -26,6 +26,22 @@ a
     color: #008BCC
     transition: .2s
 
+.modal
+  position: relative
+  margin: 74px auto 0 auto
+  width: 300px
+  background-color: #fff
+  padding: 1em
+
+.overlay
+  height: 100%
+  width: 100%
+  position: fixed
+  top: 0
+  left: 0
+  background-color: rgba(0, 0, 0, 0.2)
+  z-index: 100
+
 input[type="text"], input[type="number"], textarea, select
   font: .75rem $num
   color: #474747
@@ -160,7 +176,7 @@ section
             margin: 0 .5rem 0 0
             width: 4.875rem
             position: relative
-            z-index: 1000
+            z-index: 50
             &:focus
               outline: none
             &:before
