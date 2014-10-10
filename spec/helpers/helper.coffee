@@ -37,6 +37,13 @@ parseStyles = (selector) ->
   )
   styles
 
+Ember.Test.registerHelper 'stubAudio', (app, container) ->
+  stubContext =
+    createGain: ->
+      connect: ->
+      gain: {}
+  container.register 'audioContext:main', stubContext
+
 Ember.Test.registerAsyncHelper 'keyTrigger', (app, key) ->
   Seq25.Keystrokes.trigger(key)
 

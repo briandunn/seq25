@@ -6,7 +6,7 @@ Seq25.Synthesizer = Seq25.Instrument.extend
   filterQ:    DS.attr 'number', defaultValue: 0
   volume:     Em.computed.alias 'part.volume'
   isMuted:    Em.computed.alias 'part.isMuted'
-  context:    Seq25.audioContext
+  context:    Em.computed -> @container.resolve 'audioContext:main'
 
   init: ->
     @set 'oscillators', {}

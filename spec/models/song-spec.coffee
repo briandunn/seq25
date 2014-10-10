@@ -13,6 +13,7 @@ moduleFor 'model:song', 'Song',
     container.register 'serializer:application', Seq25.ApplicationSerializer
     DS._setupContainer(container)
     @store = container.lookup 'store:main'
+    stubAudio container
 
   teardown: ->
     delete localStorage.seq25test

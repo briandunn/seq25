@@ -7,7 +7,8 @@ Seq25.TransportController = Ember.ObjectController.extend
 
   currentPart: (-> @get('controllers.part.name')).property('controllers.part')
 
-  currentTime: -> Seq25.audioContext.currentTime
+  context: Em.computed -> @container.resolve 'audioContext:main'
+  currentTime: -> @get('context').currentTime
   startedAt: 0
   progress: 0
   scheduledUntil: 0
