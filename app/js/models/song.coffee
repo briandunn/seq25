@@ -1,6 +1,7 @@
 Seq25.Song = DS.Model.extend
-  tempo: DS.attr 'number', defaultValue: 120
-  parts: DS.hasMany 'part'
+  parts:    DS.hasMany 'part'
+  remoteId: DS.attr 'number'
+  tempo:    DS.attr 'number', defaultValue: 120
   secondsPerBeat: (-> 60 / @get('tempo') ).property('tempo')
 
   getPart: (name)->

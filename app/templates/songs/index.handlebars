@@ -3,6 +3,7 @@
     {{#each model}}
     <li>
       <button {{action 'removeSong' this }}>-</button>
+      <button {{action 'sendToServer' this }}>&uparrow;</button>
       {{#link-to 'song' id }}
         {{id}}
       {{/link-to}}
