@@ -9,28 +9,15 @@ module 'Feature: User changes quant',
     delete localStorage.seq25test
 
 test 'change quant with keyboard', ->
-  andThen ->
-    keyTrigger("2")
 
-  andThen ->
-    keyTrigger("x")
+  press("2, x")
+  press("c")
+  assertLeft("0%")
 
-  andThen ->
-    keyTrigger("c")
+  press("2, 0, b")
 
-  andThen ->
-    equal(left(".notes li"), "0%")
+  assertLeft("0%")
 
-  andThen -> #set beats to 20 for nice %s
-    keyTrigger("2")
-    keyTrigger("0")
-    keyTrigger("b")
+  press("right")
 
-  andThen ->
-    equal(left(".notes li"), "0%")
-
-  andThen ->
-    keyTrigger("right")
-
-  andThen ->
-    equal(left(".notes li"), "2.5%")
+  assertLeft("2.5%")

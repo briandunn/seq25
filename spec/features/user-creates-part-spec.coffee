@@ -15,39 +15,23 @@ test 'add new part', ->
 
 test 'add new note', ->
   click('li.empty')
-
-  andThen ->
-    keyTrigger("c")
-
-  andThen ->
-    equal(find(".notes li").length, 1)
+  press("c")
+  assertNotesLength(1)
 
 test 'move note', ->
   click('li.empty')
-
-  andThen ->
-    keyTrigger("c")
-
-  andThen ->
-    equal(left(".notes li"), "0%")
-
-  andThen ->
-    keyTrigger("right")
-
-  andThen ->
-    equal(left(".notes li"), "6.25%")
+  press("c")
+  assertLeft("0%")
+  press("right")
+  assertLeft("6.25%")
 
 test 'extend note', ->
   click('li.empty')
+  press("c")
+  assertWidth("6.25%")
+  press("shift+right")
+  assertWidth("12.5%")
 
+assertNotesLength = (n) ->
   andThen ->
-    keyTrigger("c")
-
-  andThen ->
-    equal(width(".notes li"), "6.25%")
-
-  andThen ->
-    keyTrigger("shift+right")
-
-  andThen ->
-    equal(width(".notes li"), "12.5%")
+    equal(find(".notes li").length, n)
