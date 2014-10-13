@@ -24,8 +24,10 @@ show = -> id do
   result = connection.exec <<-SQL, [id]
     select data from songs where id = $1
   SQL
-  result.first.fetch 'data'
+  result.first && result.first['data']
 end
+
+not_found = [404, JSON.dump(error: 'not found')]
 
 map '/songs' do
   run -> env do
@@ -37,9 +39,10 @@ map '/songs' do
     when %r[^GET $]
       [200, index.call]
     when %r[^GET /(?<id>\d+)$]
-      [200, show[$~[:id]]]
+      song = show[$~[:id]]
+      (song && [200, song]) || not_found
     else
-      [404, JSON.dump(error: 'not found')]
+      not_found
     end
     [status, {'Content-Type' => 'application/json'}, [body]]
   end
