@@ -10,6 +10,10 @@
     "type":      "model",
     "alternate": "spec/models/{}-spec.coffee"
   },
+  "app/js/serializers/*.coffee": {
+    "type":      "serializer",
+    "alternate": "spec/serializers/{}-spec.coffee"
+  },
   "app/js/controllers/*.coffee": {
     "type":      "controller",
     "alternate": "spec/controllers/{}-spec.coffee",
