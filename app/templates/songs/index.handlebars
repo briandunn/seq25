@@ -1,6 +1,7 @@
 <section id='songs'>
+  <button {{action 'addSong' }}>+</button>
   <ul>
-    {{#each model}}
+    {{#each}}
     <li>
       <button {{action 'removeSong' this }}>-</button>
       <button {{action 'sendToServer' this }}>&uparrow;</button>
@@ -9,6 +10,12 @@
       {{/link-to}}
     </li>
     {{/each}}
+    {{#each remoteSongs}}
+    <li>
+      {{#link-to 'loadSong' id }}
+        {{id}}
+      {{/link-to}}
+    </li>
+    {{/each}}
   </ul>
-  <button {{action 'addSong' }}>+</button>
 </section>

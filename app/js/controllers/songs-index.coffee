@@ -1,4 +1,9 @@
 Seq25.SongsIndexController = Ember.ArrayController.extend
+  refreshRemoteSongs: (->
+    Em.$.get('/songs').then (songs)=>
+      @set 'remoteSongs', songs
+  ).observes('@each.remoteId').on 'init'
+
   actions:
     addSong: ->
       song = @store.createRecord('song')
