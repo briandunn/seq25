@@ -4,8 +4,19 @@ emq.globalize()
 setResolver Ember.DefaultResolver.create namespace: Seq25
 Seq25.injectTestHelpers()
 
+server = null
+
 QUnit.testStart ->
+  server = sinon.fakeServer.create()
+  server.autoRespond = true
+  server.respondWith "GET", "/songs", (request)->
+    Ember.run ->
+      request.respond 200, { "Content-Type": "application/json" }, '[]'
+
   Seq25.reset()
+
+QUnit.testDone ->
+  server.restore()
 
 QUnit.begin ->
   sinon.expectation.fail = sinon.assert.fail = (msg) -> QUnit.ok false, msg
@@ -17,7 +28,7 @@ QUnit.begin ->
     injectInto: null
     properties: ["spy", "stub", "mock", "clock", "sandbox"]
     useFakeTimers: false
-    useFakeServer: false
+    useFakeServer: true
 
   do ->
     qTest = QUnit.test
