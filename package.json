@@ -5,7 +5,7 @@
   "private": true,
   "author": "John Doe",
   "devDependencies": {
-    "lineman": "~0.33",
+    "lineman": "~0.34",
     "lineman-ember": ">= 0.0.1",
     "lineman-less": "0.0.1",
     "handlebars": "2.0"
