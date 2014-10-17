@@ -44,6 +44,12 @@ Ember.Test.registerHelper 'stubAudio', (app, container) ->
       gain: {}
   container.register 'audioContext:main', stubContext
 
+Ember.Test.registerHelper 'configureTestStore', (app, container) ->
+  container.register 'adapter:application', DS.LSAdapter.extend(namespace: 'seq25test')
+  container.register 'serializer:application', DS.LSSerializer.extend()
+  DS._setupContainer container
+  container.lookup 'store:main'
+
 Ember.Test.registerAsyncHelper 'keyTrigger', (app, key) ->
   Seq25.Keystrokes.trigger(key)
 

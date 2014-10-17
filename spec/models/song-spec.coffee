@@ -6,14 +6,8 @@ moduleFor 'model:song', 'Song',
     'model:note'
   ]
   setup: (container)->
-    Seq25.ApplicationAdapter = DS.LSAdapter.extend namespace: 'seq25test'
-    Seq25.ApplicationSerializer = DS.LSSerializer.extend()
-
-    container.register 'adapter:application', Seq25.ApplicationAdapter
-    container.register 'serializer:application', Seq25.ApplicationSerializer
-    DS._setupContainer(container)
-    @store = container.lookup 'store:main'
     stubAudio container
+    @store = configureTestStore container
 
   teardown: ->
     delete localStorage.seq25test
