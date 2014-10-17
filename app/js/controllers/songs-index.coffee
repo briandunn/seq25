@@ -9,9 +9,12 @@ Seq25.SongsIndexController = Ember.ArrayController.extend
       song = @store.createRecord('song')
       song.save()
       @transitionToRoute('song', song)
+
     removeSong: (song)->
-      if confirm '!'
-        song.destroyRecord()
+      Seq25.Song.load(@store, song.get('id')).then (song)->
+        if confirm '!'
+          song.destroyRecord()
+
     sendToServer: (song)->
       Seq25.Song.load(@store, song.get('id')).then (song)=>
         serializer = @container.lookup('serializer:remote')

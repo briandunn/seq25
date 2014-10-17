@@ -13,9 +13,9 @@ Seq25.Song = DS.Model.extend
   stop: ->
     @get('parts').invoke 'stop'
 
-  save: ->
+  destroyRecord: ->
+    @get('parts').invoke 'destroyRecord'
     @_super()
-    @get('parts').invoke 'save'
 
 Seq25.Song.load = (store, id)->
   new Ember.RSVP.Promise (resolve, reject)->

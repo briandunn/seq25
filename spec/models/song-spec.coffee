@@ -10,12 +10,12 @@ moduleFor 'model:song', 'Song',
     @store = configureTestStore container
 
   teardown: ->
-    delete localStorage.seq25test
+    localStorage.removeItem('seq25test')
     Seq25.reset()
 
 test 'loads empty songs', ->
   expect(1)
-  localStorage.seq25test = JSON.stringify
+  localStorage.setItem 'seq25test', JSON.stringify
     song:
       records:
         1:
@@ -27,7 +27,7 @@ test 'loads empty songs', ->
 
 test 'loads songs with parts', ->
   expect(1)
-  localStorage.seq25test = JSON.stringify
+  localStorage.setItem 'seq25test', JSON.stringify
     song:
       records:
         s:
@@ -45,7 +45,7 @@ test 'loads songs with parts', ->
 
 test 'loads song with instruments', ->
   expect(1)
-  localStorage.seq25test = JSON.stringify
+  localStorage.setItem 'seq25test', JSON.stringify
     song:
       records:
         s:
@@ -72,3 +72,54 @@ test 'loads song with instruments', ->
   Seq25.Song.load(@store, 's')
   .then (song)->
     deepEqual song.get('parts.firstObject.instruments').mapProperty('id'), ['syn', 'midi']
+
+test 'deletes parts when deleted', ->
+  expect(2)
+  localStorage.setItem 'seq25test', JSON.stringify
+    song:
+      records:
+        s:
+          id: 's'
+          parts: ['p']
+    part:
+      records:
+        p:
+          id: 'p'
+          song: 's'
+          notes: ['n']
+          synthesizers: ['syn']
+          midiInstruments: ['midi']
+    note:
+      records:
+        n:
+          id: 'n'
+          part: 'p'
+
+    synthesizer:
+      records:
+        syn:
+          id: 'syn'
+          part: 'p'
+
+    midiInstrument:
+      records:
+        midi:
+          id: 'midi'
+          part: 'p'
+
+  Seq25.Song.load(@store, 's')
+  .then (song)->
+    equal song.get('parts.length'), 1
+    song.destroyRecord()
+    .then ->
+      deepEqual JSON.parse(localStorage.seq25test),
+        part:
+          records: {}
+        song:
+          records: {}
+        note:
+          records: {}
+        synthesizer:
+          records: {}
+        midiInstrument:
+          records: {}

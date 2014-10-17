@@ -44,6 +44,11 @@ Seq25.Part = DS.Model.extend
     @save()
     note.destroy()
 
+  destroyRecord: ->
+    for collection in 'synthesizers midiInstruments notes'.w()
+      @get(collection).invoke 'destroyRecord'
+    @_super()
+
   bumpVolume: (direction, multiplier=1) ->
     amount = 0.1 * multiplier
     amount = amount * -1 if direction == "down"

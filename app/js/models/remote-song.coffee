@@ -23,6 +23,6 @@ Seq25.RemoteSong =
       Em.$.get("/songs/#{id}").then (data)=>
         models = extract(store, store.modelFor('song'), data)
         song = models.pop()
-        Em.RSVP.all(song.save()).then ->
+        song.save().then ->
           Em.RSVP.all(models.invoke('save')).then ->
             resolve(song)
