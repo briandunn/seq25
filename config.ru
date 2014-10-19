@@ -4,7 +4,12 @@ require 'pg'
 # SCHEMA
 # create table songs (id serial primary key not null, data json not null);
 
-connection = PG.connect dbname: 'seq25'
+uri = URI.parse(ENV['DATABASE_URL'])
+connection = PG::Connection.open host:     uri.host,
+                                 user:     uri.user,
+                                 password: uri.password,
+                                 port:     uri.port || 5432,
+                                 dbname:   uri.path[1..-1]
 
 create = -> json do
   result = connection.exec <<-SQL, [json]
