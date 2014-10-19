@@ -1,3 +1,5 @@
+URL = if window.location.hostname == 'seq25.com' then 'http://seq25.herokuapp.com/songs' else '/songs'
+
 extract = (store, model, payload)->
   creations = []
   flattenHasManys = (model, payload)->
@@ -20,9 +22,21 @@ extract = (store, model, payload)->
 Seq25.RemoteSong =
   saveInto: (store, id)->
     new Em.RSVP.Promise (resolve, reject)=>
-      Em.$.get("/songs/#{id}").then (data)=>
+      Em.$.get("#{URL}/#{id}").then (data)=>
         models = extract(store, store.modelFor('song'), data)
         song = models.pop()
         song.save().then ->
           Em.RSVP.all(models.invoke('save')).then ->
             resolve(song)
+
+  send: (serializer, song)->
+    data = serializer.serialize song
+    Em.$.ajax
+      data:         JSON.stringify data
+      dataType:    'json'
+      contentType: 'application/json; charset=utf-8'
+      type:        'POST'
+      url:         URL
+      success: (response)=>
+        song.set 'remoteId', response.id
+        song.save()
