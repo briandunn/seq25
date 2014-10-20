@@ -49,6 +49,6 @@ map '/songs' do
     else
       not_found
     end
-    [status, {'Content-Type' => 'application/json'}, [body]]
+    [status, {'Content-Type' => 'application/json', 'Access-Control-Allow-Origin' => 'http://seq25.com' }, [body]]
   end
 end
