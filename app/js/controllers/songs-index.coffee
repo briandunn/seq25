@@ -1,6 +1,6 @@
 Seq25.SongsIndexController = Ember.ArrayController.extend
   refreshRemoteSongs: (->
-    Em.$.get('/songs').then (songs)=>
+    Seq25.RemoteSong.all().then (songs)=>
       @set 'remoteSongs', songs
   ).observes('@each.remoteId').on 'init'
 

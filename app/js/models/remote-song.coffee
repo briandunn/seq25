@@ -40,3 +40,7 @@ Seq25.RemoteSong =
       success: (response)=>
         song.set 'remoteId', response.id
         song.save()
+
+  all: ->
+    Em.$.get URL
+
