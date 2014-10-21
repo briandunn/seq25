@@ -15,7 +15,7 @@ class Server
     }
   end
 
-  def create
+  def create(json)
     with_connection do |connection|
       result = connection.exec <<-SQL, [json]
         insert into songs (data) values ($1) returning id
@@ -56,24 +56,33 @@ class Server
   end
 end
 
-not_found = [404, JSON.dump(error: 'not found')]
+not_found = [404, {}, JSON.dump(error: 'not found')]
 
 map '/songs' do
   run -> env do
     server = Server.new URI ENV['DATABASE_URL']
     route = env.values_at 'REQUEST_METHOD', 'PATH_INFO'
-    status, body = case route.join ' '
+    code, headers, body = case route.join ' '
+    when %r[^OPTIONS $]
+      [
+        200,
+        {
+          'Access-Control-Allow-Methods' => 'POST',
+          'Access-Control-Allow-Headers' => 'Content-Type'
+        },
+        ''
+      ]
     when %r[^POST $]
       response = server.create env['rack.input'].read
-      [201, response]
+      [201, {}, response]
     when %r[^GET $]
-      [200, server.index]
+      [200, {}, server.index]
     when %r[^GET /(?<id>\d+)$]
       song = server.show $~[:id]
-      (song && [200, song]) || not_found
+      (song && [200, {}, song]) || not_found
     else
       not_found
     end
-    [status, {'Content-Type' => 'application/json', 'Access-Control-Allow-Origin' => 'http://seq25.com' }, [body]]
+    [code, headers.merge('Content-Type' => 'application/json', 'Access-Control-Allow-Origin'  => 'http://seq25.com'), [body]]
   end
 end
