@@ -5,7 +5,7 @@ require 'pg'
 # create table songs (id serial primary key not null, data json not null);
 
 class Server
-  def initialize(uri=URI.parse(ENV['DATABASE_URL']))
+  def initialize(uri)
     @connection_params = {
       host:     uri.host,
       user:     uri.user,
@@ -62,7 +62,7 @@ not_found = [404, JSON.dump(error: 'not found')]
 
 map '/songs' do
   run -> env do
-    server = Server.new
+    server = Server.new URI.parse ENV['DATABASE_URL']
     route = env.values_at 'REQUEST_METHOD', 'PATH_INFO'
     status, body = case route.join ' '
     when %r[^POST $]
