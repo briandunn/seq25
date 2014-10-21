@@ -12,9 +12,7 @@ class Server
       password: uri.password,
       port:     uri.port || 5432,
       dbname:   uri.path[1..-1]
-    }.select! do |key, value|
-      value
-    end
+    }
   end
 
   def create
@@ -62,7 +60,7 @@ not_found = [404, JSON.dump(error: 'not found')]
 
 map '/songs' do
   run -> env do
-    server = Server.new URI.parse ENV['DATABASE_URL']
+    server = Server.new URI ENV['DATABASE_URL']
     route = env.values_at 'REQUEST_METHOD', 'PATH_INFO'
     status, body = case route.join ' '
     when %r[^POST $]
