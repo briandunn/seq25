@@ -1,14 +1,5 @@
 require 'json'
 require 'pg'
-
-# SCHEMA
-# create table songs (
-#   id serial primary key not null,
-#   data json not null,
-#   child_id integer references songs(id),
-#   reated_at timestamptz not null default now()
-# );
-
 class Server
   def initialize(uri)
     @connection_params = {
@@ -52,7 +43,6 @@ class Server
     end
   end
 
-
   private
 
   def with_connection
@@ -65,4 +55,3 @@ class Server
     end
   end
 end
-
