@@ -1,60 +1,5 @@
-require 'json'
-require 'pg'
-
-# SCHEMA
-# create table songs (id serial primary key not null, data json not null);
-
-class Server
-  def initialize(uri)
-    @connection_params = {
-      host:     uri.host,
-      user:     uri.user,
-      password: uri.password,
-      port:     uri.port,
-      dbname:   uri.path[1..-1]
-    }.reject { |k, v| v.nil? }
-  end
-
-  def create(json)
-    with_connection do |connection|
-      result = connection.exec <<-SQL, [json]
-        insert into songs (data) values ($1) returning id
-      SQL
-      JSON.dump result.first
-    end
-  end
-
-  def index
-    with_connection do |connection|
-      result = connection.exec <<-SQL
-        select id from songs
-      SQL
-      JSON.dump result.to_a
-    end
-  end
-
-  def show(id)
-    with_connection do |connection|
-      result = connection.exec <<-SQL, [id]
-        select data from songs where id = $1
-      SQL
-      result.first && result.first['data']
-    end
-  end
-
-
-  private
-
-  def with_connection
-    connection = nil
-    begin
-      connection = PG.connect @connection_params
-      yield connection
-    ensure
-      connection && connection.close
-    end
-  end
-end
+require 'pathname'
+require Pathname(__FILE__).dirname.join 'lib/server'
 
 not_found = [404, {}, JSON.dump(error: 'not found')]
 
@@ -83,6 +28,13 @@ map '/songs' do
     else
       not_found
     end
-    [code, headers.merge('Content-Type' => 'application/json', 'Access-Control-Allow-Origin'  => 'http://seq25.com'), [body]]
+    [
+      code,
+      headers.merge(
+        'Content-Type'                => 'application/json',
+        'Access-Control-Allow-Origin' => 'http://seq25.com'
+      ),
+      [body]
+    ]
   end
 end
