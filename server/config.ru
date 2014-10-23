@@ -10,9 +10,9 @@ class Server
       host:     uri.host,
       user:     uri.user,
       password: uri.password,
-      port:     uri.port || 5432,
+      port:     uri.port,
       dbname:   uri.path[1..-1]
-    }
+    }.reject { |k, v| v.nil? }
   end
 
   def create(json)

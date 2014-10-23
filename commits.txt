@@ -1,0 +1,35 @@
+ace6273 Mon Oct 20 20:40:20 2014 -0500 select! doesn't work that way.
+a64aab2 Mon Oct 20 20:35:16 2014 -0500 debug
+d8eaf10 Mon Oct 20 20:31:40 2014 -0500 Delay reading database env
+9123247 Mon Oct 20 20:31:40 2014 -0500 Delay reading database env
+dd75a79 Mon Oct 20 20:27:06 2014 -0500 Designate ruby
+67abd81 Mon Oct 20 20:27:06 2014 -0500 Designate ruby
+6df1c5c Mon Oct 20 20:22:30 2014 -0500 use thin
+d67f461 Mon Oct 20 20:22:30 2014 -0500 use thin
+e496787 Mon Oct 20 20:22:02 2014 -0500 Connect to the db afresh with each request
+72ff8b9 Mon Oct 20 20:22:02 2014 -0500 Connect to the db afresh with each request
+7ee2c6c Mon Oct 20 10:43:25 2014 -0500 WIP on wip-remote-store: c53db33 Remote song index goes in the model too
+2b210f1 Mon Oct 20 10:43:25 2014 -0500 index on wip-remote-store: c53db33 Remote song index goes in the model too
+41e907c Mon Oct 20 10:39:18 2014 -0500 Remote song index goes in the model too
+c53db33 Mon Oct 20 10:39:18 2014 -0500 Remote song index goes in the model too
+5d78d91 Mon Oct 20 10:38:49 2014 -0500 nest the server dir
+e046192 Mon Oct 20 10:38:49 2014 -0500 nest the server dir
+c11baa1 Mon Oct 20 10:38:49 2014 -0500 nest the server dir
+f7801c8 Sun Oct 19 00:44:25 2014 -0500 connect to heroku db in production
+b1d47bb Sun Oct 19 00:26:08 2014 -0500 parse a database_url
+7eca79e Sun Oct 19 00:09:49 2014 -0500 add gemfile
+5b15126 Fri Oct 17 22:05:01 2014 -0500 wip
+c77cea7 Fri Oct 17 16:53:26 2014 -0500 sharing notes
+6247020 Fri Oct 17 16:50:31 2014 -0500 update readme
+0ed5fdf Fri Oct 17 16:50:30 2014 -0500 delete song cascades
+b9cd8eb Thu Oct 16 14:19:42 2014 -0500 Stub out the song index xhr
+254cae0 Wed Oct 15 22:32:06 2014 -0500 upgrade lineman
+b370d3a Wed Oct 15 22:31:10 2014 -0500 And just like that it now works on teh phonez
+bf1d428 Sun Oct 12 23:21:11 2014 -0500 Load remote songs into local store
+ab736d6 Sun Oct 12 23:13:21 2014 -0500 list remote songs
+534b4de Sun Oct 12 22:16:29 2014 -0500 better 404s
+269f02a Sun Oct 12 22:15:10 2014 -0500 Break remote serializer into its own file
+234d3d3 Fri Oct 17 10:47:21 2014 -0500 Extract store configuration helper
+e53998d Fri Oct 10 10:34:53 2014 -0500 Upload songs to a server
+771928a Fri Oct 10 10:33:32 2014 -0500 More explicit store configuration
+393fd96 Fri Oct 10 10:30:53 2014 -0500 Use container to access audio context
