@@ -12,16 +12,27 @@ class Server
   end
 
   def create(json)
-    with_connection do |connection|
-      result = connection.exec <<-SQL, [json]
-        insert into songs (data) values ($1) returning id
-      SQL
-      parent_id = JSON.parse(json)['remoteId']
+    json = JSON.parse json
+    parent_id = json.delete 'remoteId'
+    json = JSON.dump json
 
-      connection.exec(<<-SQL, [result.first['id'], parent_id]) if parent_id
-        update songs set child_id = $1 where id = $2
+    with_connection do |connection|
+      id = connection.exec <<-SQL, [json]
+        select id from songs where data::text = $1
       SQL
-      JSON.dump result.first
+
+      id = id.any? && id.first['id']
+
+      unless id
+        id = connection.exec(<<-SQL, [json]).first['id'] unless id
+          insert into songs (data) values ($1) returning id
+        SQL
+
+        connection.exec(<<-SQL, [id, parent_id]) if parent_id
+          update songs set child_id = $1 where id = $2
+        SQL
+      end
+      JSON.dump id: id
     end
   end
 

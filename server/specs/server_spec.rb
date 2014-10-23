@@ -7,7 +7,7 @@ require 'uri'
 require Pathname(__FILE__).dirname.expand_path.join '../lib/server'
 
 describe Server do
-  attr_reader :connection
+  attr_reader :connection, :server
 
   before do
     system <<-EOF
@@ -16,6 +16,8 @@ describe Server do
     @connection = PG.connect dbname: 'seq25test'
     connection.exec DATA.read
     connection.exec 'delete from songs'
+
+    @server = Server.new URI '/seq25test'
   end
 
   def count
@@ -24,48 +26,62 @@ describe Server do
     EOF
   end
 
-  describe '#create' do
-    attr_reader :server
+  describe 'when no parent exists' do
+    it 'stores the song' do
+      id = JSON.parse(server.create(<<-JSON))['id']
+        {"tempo": 5, "parts":[], "remoteId": 7}
+      JSON
 
+      id.must_match /\d+/
+      count.must_equal 1
+    end
+  end
+
+  describe 'when a parent exists' do
+    attr_reader :parent_id
     before do
-      @server = Server.new URI '/seq25test'
+      @parent_id = connection.exec(<<-EOF).first['id']
+        insert into songs (data) values ('{}') returning id
+      EOF
     end
 
-    describe 'when no parent exists' do
-      it 'stores the song' do
-        id = JSON.parse(server.create(<<-JSON))['id']
-          {"tempo": 5, "parts":[], "remoteId": 7}
-        JSON
+    it 'associates the parent with the new child' do
 
-        id.must_match /\d+/
-        count.must_equal 1
-      end
+      result = server.create JSON.dump tempo: 5, parts:[], remoteId: parent_id
+
+      connection.exec(<<-EOF, [parent_id]).first['child_id'].must_equal JSON.parse(result)['id']
+        select child_id from songs where id = $1
+      EOF
+
     end
 
-    describe 'when a parent exists' do
-      attr_reader :parent_id
-      before do
-        @parent_id = connection.exec(<<-EOF).first['id']
-          insert into songs (data) values ('{}') returning id
-        EOF
-      end
+    it 'only returns the head of each list' do
+      server.create JSON.dump tempo: 5, parts:[], remoteId: parent_id
+      JSON.parse(server.index).map {|song| song['id'] }.wont_include parent_id
 
-      it 'associates the parent with the new child' do
+      count.must_equal 2
+    end
+  end
 
-        result = server.create JSON.dump tempo: 5, parts:[], remoteId: parent_id
+  describe 'when a song with the same data already exists' do
+    it 'returns the id of the prior song' do
+      first_id  = JSON.parse(server.create('{"tempo": 120, "parts":[]}'))['id']
+      second_id = JSON.parse(server.create('{"tempo": 120, "parts":[]}'))['id']
 
-        connection.exec(<<-EOF, [parent_id]).first['child_id'].must_equal JSON.parse(result)['id']
-          select child_id from songs where id = $1
-        EOF
+      second_id.must_equal first_id
+    end
 
-      end
+    it 'does not add a new song' do
+      JSON.parse(server.create('{"tempo": 120, "parts":[]}'))['id']
+      JSON.parse(server.create('{"tempo": 120, "parts":[]}'))['id']
 
-      it 'only returns the head of each list' do
-        server.create JSON.dump tempo: 5, parts:[], remoteId: parent_id
-        JSON.parse(server.index).map {|song| song['id'] }.wont_include parent_id
+      count.must_equal 1
+    end
 
-        count.must_equal 2
-      end
+    it 'does not create a child relationship' do
+      server.create '{"tempo": 120, "parts":[]}'
+      server.create '{"tempo": 120, "parts":[]}'
+      connection.exec('select child_id from songs').first['child_id'].must_equal nil
     end
   end
 end
