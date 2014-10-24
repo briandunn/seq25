@@ -42,8 +42,8 @@ QUnit.begin ->
 
 parseStyles = (selector) ->
   styles = {}
-  _.each(find(selector).attr("style").split(";"), (keyval) ->
-    [key, value] = keyval.split(":")
+  _.each(find(selector).attr("style").split(/\s*;\s*/), (keyval) ->
+    [key, value] = keyval.split /\s*:\s*/
     styles[key.trim()] = value?.trim()
   )
   styles

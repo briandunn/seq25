@@ -37,6 +37,9 @@ Seq25.PartController = Ember.ObjectController.extend
       @get('selectedNotes').forEach (note) =>
         @get('model').removeNote(note)
 
+    addNote: (position)->
+      @get('model').addNoteAtPoint position, @get('quant')
+
     extendNotes: (num) ->
       @changeNoteDuration(1, num)
 
@@ -50,7 +53,7 @@ Seq25.PartController = Ember.ObjectController.extend
       _.times(num, => @get('selectedNotes').invoke 'nudgeRight', @get('quant'))
 
     createNote: ->
-      note = @get('model').addNoteAtPoint(0, TOP_NOTE_ON_PIANO_ROLL=95, @get('quant'))
+      note = @get('model').addNoteAtPoint({x: 0, y: 0}, @get('quant'))
       @set('selectedNotes', [note])
 
     moveUp: (num) ->

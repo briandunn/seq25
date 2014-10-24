@@ -6,15 +6,20 @@ Seq25.Note = DS.Model.extend
   part:        DS.belongsTo 'part'
   duration:    DS.attr 'number', defaultValue: TICKS_PER_BEAT
   secondsPerBeat: Em.computed.alias 'part.secondsPerBeat'
+  totalTicks:     Em.computed.alias 'part.totalTicks'
 
   pitch: Em.computed 'pitchNumber', ->
     Seq25.Pitch.all.findBy 'number', @get('pitchNumber')
 
+  setPitchNumber: (->
+    @set 'pitchNumber', Seq25.Pitch.numberAtScale(@get('position.y'))
+  ).observes('position.y')
+
   setBeatAndTick: (->
-    ticks = Math.round @get('beat_count') * TICKS_PER_BEAT * @get('position')
+    ticks = Math.round @get('beat_count') * TICKS_PER_BEAT * @get('position.x')
     @set 'absoluteTicks', ticks
     @snap(@get('quant'), Math.floor)
-  ).observes('beat_count', 'position')
+  ).observes('beat_count', 'position.x')
 
   absolueSeconds: (->
     @ticksToTime @get 'absoluteTicks'
@@ -51,8 +56,9 @@ Seq25.Note = DS.Model.extend
   nudge: (quant, round, direction)->
     unless @snap(quant, round)
       ticksPerGrid = (1 / (quant || TICKS_PER_BEAT)) * TICKS_PER_BEAT
-      newTicks = @get('absoluteTicks') + (ticksPerGrid * direction)
-      if newTicks >= 0
+      {absoluteTicks, totalTicks} = @getProperties 'absoluteTicks', 'totalTicks'
+      newTicks = absoluteTicks + (ticksPerGrid * direction)
+      if totalTicks >= newTicks >= 0
         @set('absoluteTicks', newTicks)
 
   nudgeLeft: (quant)->
@@ -62,10 +68,10 @@ Seq25.Note = DS.Model.extend
     @nudge(quant, Math.ceil, 1)
 
   moveUp: (num) ->
-    @incrementProperty('pitchNumber', num)
+    @set 'pitchNumber', Seq25.Pitch.highest @get('pitchNumber') + num
 
   moveDown: (num) ->
-    @incrementProperty('pitchNumber', -1 * num)
+    @set 'pitchNumber', Seq25.Pitch.lowest @get('pitchNumber') - num
 
   changeDuration: (editResolution) ->
     if @get('duration') + editResolution > 0

@@ -1,34 +1,48 @@
 Seq25.NoteView = Ember.View.extend
-  attributeBindings: ['style']
+  attributeBindings: 'style'
+
   startPercentage: ->
     beat_count = @get('controller.beat_count')
     {beat, tick} = @get('content').getProperties('beat', 'tick')
     ((beat + (tick / 96)) / beat_count) * 100
 
-  style: (->
-   "left: #{@startPercentage()}%; width: #{@durationPercentage()}%"
-  ).property('content.duration', 'content.beat', 'content.tick', 'controller.totalTicks')
-
   durationPercentage: ->
-    totalTicks = Seq25.Note.TICKS_PER_BEAT * @get('controller.beat_count')
-    (@get('content.duration') / totalTicks) * 100
+    (@get('content.duration') / @get('controller.totalTicks')) * 100
+
+  pitchPercentage: ->
+    (Seq25.Pitch.all.indexOf(this.get('content.pitch')) / Seq25.Pitch.all.length) * 100
+
+  style: (->
+    """
+    left: #{@startPercentage()}%;
+    width: #{@durationPercentage()}%;
+    top: calc(#{@pitchPercentage()}% + 3px);
+    """
+  ).property 'content.duration',
+             'content.absoluteTicks',
+             'content.pitchNumber',
+             'controller.beat_count'
 
 Seq25.NotesView = Ember.CollectionView.extend
   itemViewClass: Seq25.NoteView
   tagName: 'ul'
-  classNames: ['notes']
+  classNames: 'notes'
 
 Seq25.NotesEditView = Seq25.NotesView.extend
   click: (e) ->
-    offsetX = e.pageX - @$().offset().left
-    rowWidth = @$().width()
-    @get('controller').send 'addNote', (offsetX / rowWidth)
+    $el = @$()
+    offset = $el.offset()
+    {pageX, pageY} = e
+    position =
+      x: (pageX - offset.left) / $el.width()
+      y: (pageY - offset.top)  / $el.height()
+    @get('controller').send 'addNote', position
 
   itemViewClass: 'noteEdit'
 
 Seq25.NoteEditView = Seq25.NoteView.extend
-  classNameBindings: ['isSelected:selected']
-  selectedNotes: Em.computed.alias('controller.controllers.part.selectedNotes')
+  classNameBindings: 'isSelected:selected'
+  selectedNotes: Em.computed.alias('controller.selectedNotes')
 
   isSelected: ( ->
     !!@get('selectedNotes').contains(@get('content'))

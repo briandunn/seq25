@@ -11,7 +11,7 @@ test 'add new part', ->
   click('li.empty')
 
   andThen ->
-    equal(find('section#piano-roll #keyboard li').eq(0).text().trim(), 'B7', "fantastic")
+    equal(find('section#piano-roll #keyboard li').eq(0).text().trim(), 'C8', "fantastic")
 
 test 'add new note', ->
   click('li.empty')

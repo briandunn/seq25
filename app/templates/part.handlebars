@@ -2,9 +2,10 @@
   <section id='grid'>
     {{play-bar part=this transport=transport}}
     {{beat-list content=beats}}
+    {{view 'notesEdit' content=notes}}
     <ul>
-      {{#each pitch in pitches}}
-        {{render 'pitch' pitch}}
+      {{#each pitches}}
+        <li {{bind-attr class="isSharp:sharp :row"}} {{bind-attr data-pitch="name"}}></li>
       {{/each}}
     </ul>
   </section>

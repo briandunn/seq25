@@ -13,6 +13,9 @@ Seq25.Part = DS.Model.extend
     {synthesizers, midiInstruments} = @getProperties 'synthesizers', 'midiInstruments'
     synthesizers.toArray().concat midiInstruments.toArray()
 
+  totalTicks: Em.computed 'beat_count', ->
+    Seq25.Note.TICKS_PER_BEAT * @get('beat_count')
+
   duration: Em.computed 'secondsPerBeat', 'beat_count', ->
     @get('secondsPerBeat') * @get('beat_count')
 
@@ -32,12 +35,11 @@ Seq25.Part = DS.Model.extend
   stop: ->
     @get('instruments').invoke 'stop'
 
-  addNoteAtPoint: (position, pitchNumber, quant)->
+  addNoteAtPoint: (position, quant)->
     @get('notes').createRecord
-      pitchNumber: pitchNumber
-      position:    position
-      beat_count:  @get('beat_count')
-      quant:       quant
+      position:   position
+      beat_count: @get('beat_count')
+      quant:      quant
 
   removeNote:(note)->
     @get('notes').removeRecord(note)
