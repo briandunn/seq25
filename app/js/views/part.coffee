@@ -1,6 +1,7 @@
 Seq25.PartView = Ember.View.extend
 
   didInsertElement: ->
+    $("#status-bar").data("top", $("#status-bar").offset().top)
     Seq25.Keystrokes.bind 'c', =>
       @get('controller').send('createNote')
 

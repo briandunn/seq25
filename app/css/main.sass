@@ -303,3 +303,34 @@ section
     height: 25px
   .sharp
     background-color: #E9E8E8
+
+#status-bar
+  width: 100%
+  height: 20px
+  z-index: 5
+  .action-bar
+    width: 50%
+    display: inline
+    float: left
+    height: 20px
+    background: white
+    border: 1px solid black
+    box-sizing: border-box
+  .part-status
+    height: 10px
+    background: white
+    display: inline
+    float: left
+    width: percentage(1/8)
+    text-align: center
+    border: 1px solid white
+    box-sizing: border-box
+    &.is-current-part
+      border-color: cornflowerblue
+      background: cornflowerblue
+    &.is-muted
+      background: black
+      border-color: black
+    &.is-placeholder
+      background: lightgrey
+      border-color: lightgrey

@@ -5,7 +5,7 @@ Seq25.TransportController = Ember.ObjectController.extend
 
   song: Ember.computed.alias 'model'
 
-  currentPart: (-> @get('controllers.part.name')).property('controllers.part')
+  currentPart: (-> @get('controllers.part.name')).property('controllers.part', 'controllers.part.each')
 
   context: Em.computed -> @container.resolve 'audioContext:main'
   currentTime: -> @get('context').currentTime
@@ -13,6 +13,13 @@ Seq25.TransportController = Ember.ObjectController.extend
   progress: 0
   scheduledUntil: 0
   isPlaying: false
+
+  #duplicates method in song-index controller
+  parts: (->
+    song = @get 'song'
+    'Q W E R A S D F'.w().map (name)->
+      song.getPart(name) || name: name, placeholder: true
+  ).property('song.parts.[]')
 
   beat: Em.computed 'progress', 'tempo', ->
     Math.floor (@get('progress') * @get('tempo')) / 60

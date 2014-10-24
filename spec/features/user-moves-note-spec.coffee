@@ -10,26 +10,16 @@ module 'Feature: user moves note',
 
 test 'move note when is quant is 0', ->
 
-  andThen -> #set beats to 20 for nice %s
-    keyTrigger("2")
-    keyTrigger("0")
-    keyTrigger("b")
-
-  andThen ->
-    keyTrigger("c")
-
-  andThen ->
-    keyTrigger("0")
-    keyTrigger("x")
+  press("2, 0, b")
+  press("c")
+  press("0, x")
 
   andThen ->
     equal(find("input#quant").val(), "0")
 
-  andThen ->
-    equal(left(".notes li"), "0%")
+  assertLeft("0%")
 
-  andThen ->
-    keyTrigger("right")
+  press("right")
 
   andThen ->
     value = left(".notes li")

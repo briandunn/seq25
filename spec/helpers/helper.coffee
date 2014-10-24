@@ -71,3 +71,16 @@ Ember.Test.registerHelper 'width', (app, selector) ->
 Ember.Test.registerHelper 'left', (app, selector) ->
   styles = parseStyles(selector)
   styles["left"]
+
+Ember.Test.registerHelper 'assertLeft', (app, l) ->
+  andThen ->
+    equal(left(".notes li"), l)
+
+Ember.Test.registerHelper 'assertWidth', (app, w) ->
+  andThen ->
+    equal(width(".notes li"), w)
+
+Ember.Test.registerHelper 'press', (app, keys) ->
+  andThen ->
+    for k in keys.split(",")
+      keyTrigger(k.trim())
