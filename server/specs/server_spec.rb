@@ -46,18 +46,22 @@ describe Server do
     end
 
     it 'associates the parent with the new child' do
-
       result = server.create JSON.dump tempo: 5, parts:[], remoteId: parent_id
+      child_id = JSON.parse(result)['id']
 
-      connection.exec(<<-EOF, [parent_id]).first['child_id'].must_equal JSON.parse(result)['id']
-        select child_id from songs where id = $1
+      connection.exec(<<-EOF, [child_id]).first['parent_id'].must_equal parent_id
+        select parent_id from songs where id = $1
       EOF
 
     end
 
     it 'only returns the head of each list' do
       server.create JSON.dump tempo: 5, parts:[], remoteId: parent_id
-      JSON.parse(server.index).map {|song| song['id'] }.wont_include parent_id
+      index = JSON.parse(server.index)
+
+      index.map {|song| song['id'] }.wont_include parent_id
+
+      index.size.must_equal 1
 
       count.must_equal 2
     end
@@ -81,7 +85,7 @@ describe Server do
     it 'does not create a child relationship' do
       server.create '{"tempo": 120, "parts":[]}'
       server.create '{"tempo": 120, "parts":[]}'
-      connection.exec('select child_id from songs').first['child_id'].must_equal nil
+      connection.exec('select parent_id from songs').first['parent_id'].must_equal nil
     end
   end
 end
@@ -90,6 +94,6 @@ __END__
 create table if not exists songs (
   id serial primary key not null,
   data json not null,
-  child_id integer references songs(id),
+  parent_id integer references songs(id),
   created_at timestamptz not null default now()
 );

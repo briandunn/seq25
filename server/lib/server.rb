@@ -17,21 +17,18 @@ class Server
     json = JSON.dump json
 
     with_connection do |connection|
+      #FIXME: order agnostic
       id = connection.exec <<-SQL, [json]
         select id from songs where data::text = $1
       SQL
 
       id = id.any? && id.first['id']
 
-      unless id
-        id = connection.exec(<<-SQL, [json]).first['id'] unless id
-          insert into songs (data) values ($1) returning id
-        SQL
+      parent_id = nil unless connection.exec('select true from songs where id = $1', [parent_id]).any?
+      id = connection.exec(<<-SQL, [json, parent_id]).first['id'] unless id
+        insert into songs (data, parent_id) values ($1, $2) returning id
+      SQL
 
-        connection.exec(<<-SQL, [id, parent_id]) if parent_id
-          update songs set child_id = $1 where id = $2
-        SQL
-      end
       JSON.dump id: id
     end
   end
@@ -39,7 +36,9 @@ class Server
   def index
     with_connection do |connection|
       result = connection.exec <<-SQL
-        select id from songs where child_id is null
+        select id from songs where id not in (
+          select distinct parent_id from songs where parent_id is not null
+        )
       SQL
       JSON.dump result.to_a
     end
