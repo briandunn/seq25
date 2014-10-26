@@ -1,10 +1,4 @@
 {{#link-to 'part' . }}
   {{play-bar part=this transport=transport}}
-  <ul>
-    {{#each notes in pitches}}
-      <li>
-        {{view Seq25.NotesView content=notes}}
-      </li>
-    {{/each}}
-  </ul>
+  {{view 'notesSummary' content=notes}}
 {{/link-to}}

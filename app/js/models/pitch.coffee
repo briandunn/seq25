@@ -14,6 +14,9 @@ Seq25.Pitch = Ember.Object.extend
   numberAtScale: (scale)->
     @all[Math.floor(@all.length * scale)].get('number')
 
+  scaleAtPitch: (pitch)->
+    @all.indexOf(pitch) / @all.length
+
   highest: (num)->
     Math.min @all.get('firstObject.number'), num
 

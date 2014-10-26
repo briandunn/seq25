@@ -1,32 +1,55 @@
 Seq25.NoteView = Ember.View.extend
-  attributeBindings: 'style'
+  attributeBindings: ['style', 'class']
 
-  startPercentage: ->
-    beat_count = @get('controller.beat_count')
-    {beat, tick} = @get('content').getProperties('beat', 'tick')
-    ((beat + (tick / 96)) / beat_count) * 100
+  cssAttributes: 'left width top'.w()
 
-  durationPercentage: ->
-    (@get('content.duration') / @get('controller.totalTicks')) * 100
+  left: Em.computed 'content.absoluteTicks', 'controller.totalTicks', ->
+    "#{(@get('content.absoluteTicks') / @get('controller.totalTicks')) * 100}%"
 
-  pitchPercentage: ->
-    (Seq25.Pitch.all.indexOf(this.get('content.pitch')) / Seq25.Pitch.all.length) * 100
+  width: Em.computed 'content.duration', 'controller.totalTicks', ->
+    "#{(@get('content.duration') / @get('controller.totalTicks')) * 100}%"
 
-  style: (->
-    """
-    left: #{@startPercentage()}%;
-    width: #{@durationPercentage()}%;
-    top: calc(#{@pitchPercentage()}% + 3px);
-    """
-  ).property 'content.duration',
-             'content.absoluteTicks',
-             'content.pitchNumber',
-             'controller.beat_count'
+  top: Em.computed 'content.pitch', ->
+    percentage = Seq25.Pitch.scaleAtPitch(@get('content.pitch')) * 100
+    "calc(#{percentage}% + 3px)"
+
+  style: Em.computed 'left', 'width', 'top', 'height', ->
+    @get('cssAttributes')
+    .map (attribute)=>
+      "#{attribute}: #{@get(attribute)};"
+    .join ' '
+
+Seq25.NoteSummaryView = Seq25.NoteView.extend
+  attributeBindings: ['style', 'class']
+
+  cssAttributes: 'left width top height'.w()
+
+  class: Em.computed.alias 'content.part.name'
+
+  heightFraction: ->
+    1 / @get('range')
+
+  height: Em.computed ->
+    "#{@heightFraction() * 100}%"
+
+  top: Em.computed ->
+    adjusted = @get('content.pitchNumber') - @get('min')
+    "#{ ((1 - (adjusted / @get('range'))) - @heightFraction()) * 100 }%"
 
 Seq25.NotesView = Ember.CollectionView.extend
   itemViewClass: Seq25.NoteView
   tagName: 'ul'
   classNames: 'notes'
+
+Seq25.NotesSummaryView = Seq25.NotesView.extend
+  pitchNumbers: Em.computed.mapBy 'content', 'pitchNumber'
+  min: Em.computed.min 'pitchNumbers'
+  max: Em.computed.max 'pitchNumbers'
+  range: Em.computed 'min', 'max', -> (@get('max') - @get('min')) + 1
+  itemViewClass: Seq25.NoteSummaryView
+  createChildView: (viewClass, attrs)->
+    {min, range} = @getProperties 'min', 'range'
+    @_super viewClass, Em.merge(attrs, range: range, min: min)
 
 Seq25.NotesEditView = Seq25.NotesView.extend
   click: (e) ->
