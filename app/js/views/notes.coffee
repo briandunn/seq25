@@ -1,13 +1,15 @@
 Seq25.NoteView = Ember.View.extend
   attributeBindings: ['style', 'class']
 
+  totalTicks: Em.computed.alias 'content.part.totalTicks'
+
   cssAttributes: 'left width top'.w()
 
-  left: Em.computed 'content.absoluteTicks', 'controller.totalTicks', ->
-    "#{(@get('content.absoluteTicks') / @get('controller.totalTicks')) * 100}%"
+  left: Em.computed 'content.absoluteTicks', 'totalTicks', ->
+    "#{(@get('content.absoluteTicks') / @get('totalTicks')) * 100}%"
 
-  width: Em.computed 'content.duration', 'controller.totalTicks', ->
-    "#{(@get('content.duration') / @get('controller.totalTicks')) * 100}%"
+  width: Em.computed 'content.duration', 'totalTicks', ->
+    "#{(@get('content.duration') / @get('totalTicks')) * 100}%"
 
   top: Em.computed 'content.pitch', ->
     percentage = Seq25.Pitch.scaleAtPitch(@get('content.pitch')) * 100

@@ -199,7 +199,7 @@ section
             float: right
             margin: 2.4rem 0 0 0
             padding-right: 3.7rem
-#parts
+#parts, #songs
   width: 90%
   max-width: 1024px
   margin: 0 auto
@@ -215,7 +215,7 @@ section
       margin: 1%
       height: 100px
       cursor: pointer
-      &.part
+      &.part, &.song
         overflow: hidden
         background-color: white
         &:hover
@@ -234,8 +234,34 @@ section
             width: 100%
             li
               position: absolute
-              background: #74C0E8
               border-radius: 2px
+
+.part
+  li
+    background: #1AA8DD
+
+.song
+  position: relative
+  header
+    z-index: 5
+    position: absolute
+    top: 0px
+  .Q
+    background: red
+  .W
+    background: orange
+  .E
+    background: yellow
+  .R
+    background: green
+  .A
+    background: blue
+  .S
+    background: indigo
+  .D
+    background: violet
+  .F
+    background: black
 
 .play-bar
   position: absolute

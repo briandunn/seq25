@@ -2,11 +2,13 @@
   <button {{action 'addSong' }}>+</button>
   <ul>
     {{#each}}
-    <li>
-      <button {{action 'removeSong' this }}>-</button>
-      <button {{action 'sendToServer' this }}>&uparrow;</button>
+    <li class='song'>
+      <header class='actions'>
+        <button {{action 'removeSong' this }}>-</button>
+        <button {{action 'sendToServer' this }}>&uparrow;</button>
+      </header>
       {{#link-to 'song' id }}
-        {{id}}
+        {{view 'notesSummary' content=notes}}
       {{/link-to}}
     </li>
     {{/each}}

@@ -17,6 +17,9 @@ Seq25.Song = DS.Model.extend
     @get('parts').invoke 'destroyRecord'
     @_super()
 
+  notes: Em.computed 'parts.[]', ->
+    _.flatten(this.get('parts').mapBy('notes.content'))
+
 Seq25.Song.load = (store, id)->
   new Ember.RSVP.Promise (resolve, reject)->
     store.find('song', id).then (song)->
