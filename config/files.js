@@ -15,6 +15,13 @@ module.exports = function(lineman) {
         "vendor/js/ember.js",
         "vendor/js/**/*.js"
       ]
+    },
+    coffee: {
+      app: [
+        'app/js/app.coffee',
+        'app/js/views/notes.coffee',
+        'app/js/**/*.coffee'
+      ]
     }
   };
 };
