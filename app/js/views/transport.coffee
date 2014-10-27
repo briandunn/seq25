@@ -13,7 +13,7 @@ Seq25.TransportView = Ember.View.extend
       "shift+o": => @unmuteAll()
       "shift+m": => @muteAll()
 
-    Seq25.Keystrokes.registerKeyPressEvents
+    Seq25.Keystrokes.registerKeyDownEvents
       "shift+n": (n, p) => @bumpVolumeForPart(p, "down", n)
       "space":   (n, p) =>
         @get('controller').send('play')
