@@ -1,5 +1,9 @@
 Seq25.SongIndexController = Ember.ObjectController.extend
-  song: Em.computed.alias 'model'
+  needs: 'song'
+  song: ( ->
+    @get('model') || @get('controllers.song.model')
+  ).property('model', 'controllers.song.model')
+
   parts: (->
     song = @get 'song'
     'Q W E R A S D F'.w().map (name)->
