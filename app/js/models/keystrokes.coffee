@@ -13,9 +13,10 @@ eventChar = (keyCode) ->
     String.fromCharCode(keyCode).toLowerCase()
   return val
 
-eventCombo = (keyCode, isShiftPressed) ->
+eventCombo = (keyCode, isShiftPressed, isCtrlPressed) ->
   char = eventChar(keyCode)
   char = "shift+#{char}" if isShiftPressed
+  char = "ctrl+#{char}" if isCtrlPressed
   char
 
 class Seq25.Keystrokes
@@ -32,7 +33,7 @@ class Seq25.Keystrokes
       @executeKeyDownCallback(key)
 
   @handleKeyPress = (e) =>
-    keyStroke = eventCombo(e.which, e.shiftKey)
+    keyStroke = eventCombo(e.which, e.shiftKey, e.ctrlKey)
     @executeCallback(keyStroke)
 
   @registerKeyPressEvents = (keyPressEvents) ->
@@ -49,7 +50,8 @@ class Seq25.Keystrokes
     @callbacks[keyStroke]?.call(null, Seq25.numStack.drain(), @getPart())
 
   @handleKeyDown = (e) =>
-    result = @executeKeyDownCallback(eventCombo(e.keyCode, e.shiftKey))
+    keyStroke = eventCombo(e.which, e.shiftKey, e.ctrlKey)
+    result = @executeKeyDownCallback(keyStroke)
     e.preventDefault() if result
 
   @executeKeyDownCallback = (keyStroke) =>

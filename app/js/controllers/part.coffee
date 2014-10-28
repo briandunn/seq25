@@ -47,6 +47,11 @@ Seq25.PartController = Ember.ObjectController.extend
     addNote: (position)->
       @get('model').addNoteAtPoint position, @get('quant')
 
+    addNoteRight: (num) ->
+      notes = @get('selectedNotes').map (n) =>
+        @get('model').addNote(n.get('pitchNumber'), n.get('absoluteTicks') + Seq25.Note.TICKS_PER_BEAT, @get('quant'))
+      @set('selectedNotes', notes)
+
     extendNotes: (num) ->
       @changeNoteDuration(1, num)
 
