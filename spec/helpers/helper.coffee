@@ -19,6 +19,27 @@ QUnit.testDone ->
   server.restore()
 
 QUnit.begin ->
+  $('head').append(
+    $ '<link/>',
+      rel:"stylesheet"
+      type:"text/css"
+      href: "http://localhost:8000/css/app.css"
+      media:"all"
+  )
+
+  $('#qunit-fixture').css
+    top: 'calc(100% - 384px)'
+    left: 'calc(100% - 640px)'
+    position: 'absolute'
+    background: 'white'
+    bottom: 0
+    right: 0
+    width: '640px'
+    height: '384px'
+    overflow: 'auto'
+    zIndex: 9999
+    border: '1px solid #ccc'
+
   sinon.expectation.fail = sinon.assert.fail = (msg) -> QUnit.ok false, msg
 
   sinon.assert.pass = (assertion) -> QUnit.ok true, assertion
