@@ -30,7 +30,7 @@ QUnit.begin ->
   $('#qunit-fixture').css
     top: 'calc(100% - 384px)'
     left: 'calc(100% - 640px)'
-    position: 'absolute'
+    position: 'fixed'
     background: 'white'
     bottom: 0
     right: 0
