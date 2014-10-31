@@ -24,30 +24,16 @@ EMPTY_CORNERS =
     {x: 0, y: 0}
   ]
 
-Seq25.Selection = Em.Object.extend
+Seq25.SelectionBoxController = Ember.Controller.extend
+  needs: 'part'
+  notes: Em.computed.alias 'controllers.part.notes'
+  totalTicks: Em.computed.alias 'controllers.part.totalTicks'
+
   init: ->
     @setProperties
-      notes: []
       selected: []
       corners: EMPTY_CORNERS
     @_super()
-
-  toggle: (note)->
-    selected = @get('selected')
-    if !!selected.contains note
-      selected.removeObject note
-    else
-      selected.pushObject note
-
-  closeBox: ->
-    @set 'corners', EMPTY_CORNERS
-
-  only: (note)->
-    selected = @get('selected')
-    if selected.contains(note) && selected.length == 1
-      selected.setObjects []
-    else
-      selected.setObjects [note]
 
   boxClosed: Em.computed  'corners.@each', ->
     @get('corners').reduce(((sum, corner)-> sum + corner.x + corner.y), 0) == 0
@@ -63,3 +49,27 @@ Seq25.Selection = Em.Object.extend
   observeBox: Em.observer 'corners.@each', ->
     unless @get('boxClosed')
       Em.run.debounce this, select, 25
+
+  actions:
+    resize: (corners, isAdditive)->
+      @setProperties
+        corners: corners
+        isAdditive: isAdditive
+
+    resized: ->
+      @set 'corners', EMPTY_CORNERS
+
+    only: (note)->
+      selected = @get('selected')
+      if selected.contains(note) && selected.length == 1
+        selected.setObjects []
+      else
+        selected.setObjects [note]
+
+    toggle: (note)->
+      selected = @get('selected')
+      if !!selected.contains note
+        selected.removeObject note
+      else
+        selected.pushObject note
+

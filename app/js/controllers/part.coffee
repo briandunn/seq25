@@ -1,18 +1,10 @@
 Seq25.PartController = Ember.ObjectController.extend
-  init: ->
-    @set 'selection', Seq25.Selection.create()
-    @_super()
   pitches: (-> Seq25.Pitch.all).property('model')
-  needs: 'transport'
+  needs: ['transport', 'selectionBox']
   transport: Em.computed.alias('controllers.transport')
   quant: 1
 
-  selectedNotes: Em.computed.alias 'selection.selected'
-
-  selectionObserver: Em.observer 'notes', 'totalTicks', ->
-    @get('selection').setProperties
-      notes: @get('notes')
-      totalTicks: @get('totalTicks')
+  selectedNotes: Em.computed.alias 'controllers.selectionBox.selected'
 
   beats: (-> [1..@get('beat_count')] ).property('beat_count')
 
@@ -69,3 +61,18 @@ Seq25.PartController = Ember.ObjectController.extend
 
     moveDown: (num) ->
       @get('selectedNotes').invoke 'moveDown', num
+
+    selectionBoxResize: ({corners, isAdditive})->
+      @get('controllers.selectionBox').send 'resize', corners, isAdditive
+
+    selectionBoxResized: ->
+      @get('controllers.selectionBox').send 'resized'
+
+    selectionBoxToggle: (note)->
+      @get('controllers.selectionBox').send 'toggle', note
+
+    selectionBoxOnly: (note)->
+      @get('controllers.selectionBox').send 'only', note
+
+    selectionBoxResized: ->
+      @get('controllers.selectionBox').send 'resized'

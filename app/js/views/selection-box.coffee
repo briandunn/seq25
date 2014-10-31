@@ -3,8 +3,8 @@ Seq25.SelectionBoxView = Ember.View.extend
 
   attributeBindings: 'style'
 
-  style: Em.computed 'content.corners.@each', ->
-    [startCorner, stopCorner] = @get('content.corners')
+  style: Em.computed 'controller.corners.@each', ->
+    [startCorner, stopCorner] = @get('controller.corners')
     if startCorner && stopCorner
       dimensions =
         height: Math.abs startCorner.y - stopCorner.y
