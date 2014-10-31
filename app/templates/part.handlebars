@@ -2,6 +2,7 @@
   <section id='grid'>
     {{play-bar part=this transport=transport}}
     {{beat-list content=beats}}
+    {{view 'selectionBox' content=selection}}
     {{view 'notesEdit' content=notes}}
     <ul>
       {{#each pitches}}

@@ -1,40 +1,46 @@
+relativePoint = ($el, event)->
+  {pageX, pageY} = event
+  {left, top} = $el.offset()
+  x: (pageX - left) / $el.width()
+  y: (pageY - top) / $el.height()
+
 Seq25.NotesEditView = Seq25.NotesView.extend
-  click: (e) ->
-    $el = @$()
-    offset = $el.offset()
-    {pageX, pageY} = e
-    position =
-      x: (pageX - offset.left) / $el.width()
-      y: (pageY - offset.top)  / $el.height()
-    @get('controller').send 'addNote', position
+  mouseDown: (down)->
+    down.stopPropagation()
+    startCorner = relativePoint(@$(), down)
+    @mouseMove = (move)=>
+      move.stopPropagation()
+      @get('controller.selection').setProperties
+        corners: [startCorner, relativePoint(@$(), move)]
+        isAdditive: move.shiftKey
+
+  mouseUp: (up)->
+    up.stopPropagation()
+    delete this.mouseMove
+    if @get 'controller.selection.boxClosed'
+      @get('controller').send 'addNote', relativePoint(@$(), up)
+
+    @get('controller.selection').closeBox()
 
   itemViewClass: 'noteEdit'
 
 Seq25.NoteEditView = Seq25.NoteView.extend
   classNameBindings: 'isSelected:selected'
-  selectedNotes: Em.computed.alias('controller.selectedNotes')
+  selectedNotes: Em.computed.alias('controller.selection.selected')
 
-  isSelected: ( ->
-    !!@get('selectedNotes').contains(@get('content'))
-  ).property('selectedNotes.@each')
+  isSelected: Em.computed 'selectedNotes.[]', ->
+    @get('selectedNotes').contains @get 'content'
+
+  mouseDown: (down)->
+    down.stopPropagation()
+
+  mouseUp: (up)->
+    up.stopPropagation()
 
   click: (event) ->
+    event.stopPropagation()
+    selection = @get('controller.selection')
     if event.shiftKey
-      @toggleSelected()
+      selection.toggle @get('content')
     else
-      @selectMeOnly()
-    false
-
-  selectMeOnly: ->
-    if @get('isSelected') && @get('selectedNotes.length') == 1
-      @set 'selectedNotes', []
-    else
-      @set 'selectedNotes', [@get('content')]
-
-  toggleSelected: ->
-    note = @get('content')
-    selectedNotes = @get('selectedNotes')
-    if @get('isSelected')
-      selectedNotes.removeObject(note)
-    else
-      selectedNotes.pushObject(note)
+      selection.only @get('content')
