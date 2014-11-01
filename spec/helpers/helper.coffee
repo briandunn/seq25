@@ -89,11 +89,12 @@ Ember.Test.registerHelper 'width', (app, selector) ->
   styles = parseStyles(selector)
   styles["width"]
 
-Ember.Test.registerAsyncHelper 'clickPosition', (app, selector)->
+Ember.Test.registerAsyncHelper 'clickPosition', (app, selector, options={})->
+  {x, y, shift} = options
   el = app.testHelpers.findWithAssert(selector)
   {top, left} = el.offset()
   for eventName in 'mousedown click mouseup'.w()
-    el.trigger Em.$.Event eventName, pageX: left, pageY: top
+    el.trigger Em.$.Event eventName, pageX: left + (x || 0), pageY: top + (y || 0), shiftKey: shift
 
 Ember.Test.registerHelper 'left', (app, selector) ->
   styles = parseStyles(selector)
