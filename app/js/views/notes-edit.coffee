@@ -5,29 +5,32 @@ relativePoint = ($el, event)->
   y: (pageY - top) / $el.height()
 
 Seq25.NotesEditView = Seq25.NotesView.extend
+  target: Em.computed.alias 'controller.controllers.selectionBox'
   isDragging: false
+
   mouseDown: (down)->
     down.stopPropagation()
     startCorner = relativePoint(@$(), down)
     @mouseMove = (move)=>
       move.stopPropagation()
       @set('isDragging', true)
-      @get('controller').send 'selectionBoxResize',
-        corners: [startCorner, relativePoint(@$(), move)]
-        isAdditive: move.shiftKey
+      @send 'resize',
+        [startCorner, relativePoint(@$(), move)]
+        down.shiftKey
 
   mouseUp: (up)->
     up.stopPropagation()
     delete this.mouseMove
     if @get 'isDragging'
-      @get('controller').send 'selectionBoxResized'
+      @send 'resized'
       @set 'isDragging', false
     else
-      @get('controller').send 'addNote', relativePoint(@$(), up)
+      @send 'addNote', relativePoint(@$(), up)
 
   itemViewClass: 'noteEdit'
 
 Seq25.NoteEditView = Seq25.NoteView.extend
+  target: Em.computed.alias 'controller.controllers.selectionBox'
   classNameBindings: 'isSelected:selected'
   selectedNotes: Em.computed.alias('controller.selectedNotes')
 
@@ -44,6 +47,6 @@ Seq25.NoteEditView = Seq25.NoteView.extend
     event.stopPropagation()
     selection = @get('controller.selection')
     if event.shiftKey
-      @get('controller').send 'selectionBoxToggle', @get('content')
+      @send 'toggle', @get('content')
     else
-      @get('controller').send 'selectionBoxOnly', @get('content')
+      @send 'only', @get('content')

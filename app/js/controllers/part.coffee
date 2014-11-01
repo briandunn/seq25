@@ -61,18 +61,3 @@ Seq25.PartController = Ember.ObjectController.extend
 
     moveDown: (num) ->
       @get('selectedNotes').invoke 'moveDown', num
-
-    selectionBoxResize: ({corners, isAdditive})->
-      @get('controllers.selectionBox').send 'resize', corners, isAdditive
-
-    selectionBoxResized: ->
-      @get('controllers.selectionBox').send 'resized'
-
-    selectionBoxToggle: (note)->
-      @get('controllers.selectionBox').send 'toggle', note
-
-    selectionBoxOnly: (note)->
-      @get('controllers.selectionBox').send 'only', note
-
-    selectionBoxResized: ->
-      @get('controllers.selectionBox').send 'resized'
