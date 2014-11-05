@@ -58,8 +58,7 @@ Seq25.SelectionBoxController = Ember.Controller.extend
     @get('corners').reduce(((sum, corner)-> sum + corner.x + corner.y), 0) == 0
 
   observeBox: Em.observer 'corners.@each', ->
-    unless @get('boxClosed')
-      Em.run.debounce this, select, 25
+    select.apply(this) unless @get('boxClosed')
 
   actions:
     resize: (corners, isAdditive)->
