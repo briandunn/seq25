@@ -41,11 +41,6 @@ Seq25.Part = DS.Model.extend
       beat_count: @get('beat_count')
       quant:      quant
 
-  removeNote:(note)->
-    @get('notes').removeRecord(note)
-    @save()
-    note.destroy()
-
   destroyRecord: ->
     for collection in 'synthesizers midiInstruments notes'.w()
       @get(collection).invoke 'destroyRecord'

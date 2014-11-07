@@ -37,8 +37,12 @@ Seq25.PartController = Ember.ObjectController.extend
 
   actions:
     removeNotes: ->
-      @get('selectedNotes').forEach (note) =>
-        @get('model').removeNote(note)
+      selectedNotes = @get 'selectedNotes'
+      removeOne = (note)->
+        if note
+          note.destroyRecord().then ->
+            removeOne(selectedNotes.popObject())
+      removeOne selectedNotes.popObject()
 
     addNote: (position)->
       @get('model').addNoteAtPoint position, @get('quant')
