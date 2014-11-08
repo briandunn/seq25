@@ -37,7 +37,9 @@ Seq25.PartController = Ember.ObjectController.extend
 
   addNoteDirection: (num, addNoteCallback) ->
     context = this
-    notes = @get('selectedNotes').map( (n) -> addNoteCallback(n, num, context))
+    firstLength = @get('selectedNotes')[0].get("duration")
+    firstLength = @get('editResolution') unless (@get('selectedNotes').every (n) -> n.get("duration") == firstLength)
+    notes = @get('selectedNotes').map( (n) -> addNoteCallback(n, num, context, firstLength))
     @get('controllers.selectionBox').replaceSelected(notes)
 
   addNote: (pitch, position, width) ->
@@ -55,15 +57,15 @@ Seq25.PartController = Ember.ObjectController.extend
     width = note.get('duration')
     context.addNote(pitch, position, width)
 
-  addLeft: (note, moveNum, context) ->
+  addLeft: (note, moveNum, context, moveDistance) ->
     pitch    = note.get('pitchNumber')
-    position = note.get('absoluteTicks') - (note.get('duration') * moveNum)
+    position = note.get('absoluteTicks') - ((moveDistance || note.get('duration')) * moveNum)
     width    = note.get('duration')
     context.addNote(pitch, position, width)
 
-  addRight: (note, moveNum, context) ->
+  addRight: (note, moveNum, context, moveDistance) ->
     pitch    = note.get('pitchNumber')
-    position = note.get('absoluteTicks') + (note.get('duration') * moveNum)
+    position = note.get('absoluteTicks') + ((moveDistance || note.get('duration')) * moveNum)
     width    = note.get('duration')
     context.addNote(pitch, position, width)
 

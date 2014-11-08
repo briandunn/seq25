@@ -79,3 +79,18 @@ test 'add new note left from selected note is x * duration in front of note', ->
   assertLeft("0%", 2)
   assertWidth("12.5%", 1)
   assertWidth("12.5%", 2)
+
+test 'if multiple notes selected are different lengths, move by quant', ->
+  click('li.empty')
+  press("c, down, shift+right")
+  press("c")
+  assertNotesLength(2)
+  andThen ->
+    triggerEvent(".notes li:nth-child(1)", 'click', {shiftKey: true})
+  assertSelectedNotesLength(2)
+  press("ctrl+shift+right") #<--- action
+  assertNotesLength(4)
+  assertLeft("0%", 1)
+  assertLeft("0%", 2)
+  assertLeft("6.25%", 3)
+  assertLeft("6.25%", 4)

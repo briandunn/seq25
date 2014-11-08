@@ -117,6 +117,10 @@ Ember.Test.registerHelper 'assertNotesLength', (app, n) ->
   andThen ->
     equal(find(".notes li").length, n)
 
+Ember.Test.registerHelper 'assertSelectedNotesLength', (app, n) ->
+  andThen ->
+    equal(find(".notes li.selected").length, n)
+
 Ember.Test.registerHelper 'press', (app, keys) ->
   andThen ->
     for k in keys.split(",")
