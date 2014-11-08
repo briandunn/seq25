@@ -45,7 +45,6 @@ Seq25.NoteEditView = Seq25.NoteView.extend
 
   click: (event) ->
     event.stopPropagation()
-    selection = @get('controller.selection')
     if event.shiftKey
       @send 'toggle', @get('content')
     else
