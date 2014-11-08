@@ -44,10 +44,11 @@ Seq25.Part = DS.Model.extend
       beat_count: @get('beat_count')
       quant:      quant
 
-  addNote: (pitchNumber, ticks, quant)->
+  addNote: (pitchNumber, ticks, duration, quant)->
     @get('notes').createRecord
       pitchNumber:   pitchNumber
       absoluteTicks: ticks
+      duration:   duration
       quant:      quant
 
   removeNote:(note)->

@@ -35,6 +35,38 @@ Seq25.PartController = Ember.ObjectController.extend
   changeNoteDuration: (direction, num)->
     @get('selectedNotes').invoke 'changeDuration', @get('editResolution') * num * direction
 
+  addNoteDirection: (num, addNoteCallback) ->
+    context = this
+    notes = @get('selectedNotes').map( (n) -> addNoteCallback(n, num, context))
+    @set('selectedNotes', notes)
+
+  addNote: (pitch, position, width) ->
+    @get('model').addNote(pitch, position, width, @get('quant'))
+
+  addDown: (note, moveNum, context) ->
+    pitch = note.get('pitchNumber') - moveNum
+    position = note.get('absoluteTicks')
+    width = note.get('duration')
+    context.addNote(pitch, position, width)
+
+  addUp: (note, moveNum, context) ->
+    pitch = note.get('pitchNumber') + moveNum
+    position = note.get('absoluteTicks')
+    width = note.get('duration')
+    context.addNote(pitch, position, width)
+
+  addLeft: (note, moveNum, context) ->
+    pitch    = note.get('pitchNumber')
+    position = note.get('absoluteTicks') - (note.get('duration') * moveNum)
+    width    = note.get('duration')
+    context.addNote(pitch, position, width)
+
+  addRight: (note, moveNum, context) ->
+    pitch    = note.get('pitchNumber')
+    position = note.get('absoluteTicks') + (note.get('duration') * moveNum)
+    width    = note.get('duration')
+    context.addNote(pitch, position, width)
+
   actions:
     removeNotes: ->
       selectedNotes = @get 'selectedNotes'
@@ -48,24 +80,16 @@ Seq25.PartController = Ember.ObjectController.extend
       @get('model').addNoteAtPoint position, @get('quant')
 
     addNoteLeft: (num) ->
-      notes = @get('selectedNotes').map (n) =>
-        @get('model').addNote(n.get('pitchNumber'), n.get('absoluteTicks') - (Seq25.Note.TICKS_PER_BEAT * num), @get('quant'))
-      @set('selectedNotes', notes)
+      @addNoteDirection(num, @addLeft)
 
     addNoteRight: (num) ->
-      notes = @get('selectedNotes').map (n) =>
-        @get('model').addNote(n.get('pitchNumber'), n.get('absoluteTicks') + (Seq25.Note.TICKS_PER_BEAT * num), @get('quant'))
-      @set('selectedNotes', notes)
+      @addNoteDirection(num, @addRight)
 
     addNoteDown: (num) ->
-      notes = @get('selectedNotes').map (n) =>
-        @get('model').addNote(n.get('pitchNumber') - num, n.get('absoluteTicks'), @get('quant'))
-      @set('selectedNotes', notes)
+      @addNoteDirection(num, @addDown)
 
     addNoteUp: (num) ->
-      notes = @get('selectedNotes').map (n) =>
-        @get('model').addNote(n.get('pitchNumber') + num, n.get('absoluteTicks'), @get('quant'))
-      @set('selectedNotes', notes)
+      @addNoteDirection(num, @addUp)
 
     extendNotes: (num) ->
       @changeNoteDuration(1, num)
