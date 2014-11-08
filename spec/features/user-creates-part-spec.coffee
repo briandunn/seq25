@@ -31,7 +31,3 @@ test 'extend note', ->
   assertWidth("6.25%")
   press("shift+right")
   assertWidth("12.5%")
-
-assertNotesLength = (n) ->
-  andThen ->
-    equal(find(".notes li").length, n)

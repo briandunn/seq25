@@ -90,6 +90,10 @@ Ember.Test.registerHelper 'width', (app, selector) ->
   styles = parseStyles(selector)
   styles["width"]
 
+Ember.Test.registerHelper 'topStyle', (app, selector) ->
+  styles = parseStyles(selector)
+  styles["top"]
+
 Ember.Test.registerAsyncHelper 'clickPosition', (app, selector, options={})->
   {x, y, shift} = options
   el = app.testHelpers.findWithAssert(selector)
@@ -101,15 +105,25 @@ Ember.Test.registerHelper 'left', (app, selector) ->
   styles = parseStyles(selector)
   styles["left"]
 
-Ember.Test.registerHelper 'assertLeft', (app, l) ->
+Ember.Test.registerHelper 'assertLeft', (app, l, noteIndex=1) ->
   andThen ->
-    equal(left(".notes li"), l)
+    equal(left(".notes li:nth-child(#{noteIndex})"), l)
 
-Ember.Test.registerHelper 'assertWidth', (app, w) ->
+Ember.Test.registerHelper 'assertWidth', (app, w, noteIndex=1) ->
   andThen ->
-    equal(width(".notes li"), w)
+    equal(width(".notes li:nth-child(#{noteIndex})"), w)
+
+Ember.Test.registerHelper 'assertNotesLength', (app, n) ->
+  andThen ->
+    equal(find(".notes li").length, n)
 
 Ember.Test.registerHelper 'press', (app, keys) ->
   andThen ->
     for k in keys.split(",")
       keyTrigger(k.trim())
+
+Ember.Test.registerHelper 'notesAreOnDifferentPitches', (app, firstNote, secondNote) ->
+  andThen ->
+    topA = topStyle(firstNote)
+    topB = topStyle(secondNote)
+    notEqual(topA, topB)
