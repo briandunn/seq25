@@ -11,9 +11,10 @@ Seq25.SongsIndexController = Ember.ArrayController.extend
       @transitionToRoute('song', song)
 
     removeSong: (song)->
-      Seq25.Song.load(@store, song.get('id')).then (song)->
-        if confirm '!'
+      Seq25.Song.load(@store, song.get('id')).then (song)=>
+        if Ember.testing || confirm '!'
           song.destroyRecord()
+          @removeObject(song)
 
     sendToServer: (song)->
       Seq25.Song.load(@store, song.get('id')).then (song)=>

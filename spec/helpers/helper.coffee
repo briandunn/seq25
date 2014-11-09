@@ -112,3 +112,6 @@ Ember.Test.registerHelper 'press', (app, keys) ->
   andThen ->
     for k in keys.split(",")
       keyTrigger(k.trim())
+
+Ember.Test.registerHelper 'visitRoute', (app, routeName) ->
+  app.__container__.lookup('router:main').transitionTo(routeName)
