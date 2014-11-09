@@ -7,7 +7,11 @@ Seq25.NoteView = Ember.View.extend
   attributeBindings: ['style', 'class']
 
   didInsertElement: ->
-    @scrollNote()
+    @scrollNote() unless @noteOnScreen()
+
+  noteOnScreen: ->
+    $(this.element).offset().top > document.documentElement.scrollTop and
+      $(this.element).offset().top  < (document.documentElement.scrollTop + screen.height)
 
   totalTicks: Em.computed.alias 'content.part.totalTicks'
 
