@@ -5,7 +5,7 @@ Seq25.Synthesizer = DS.Model.extend
   release:    DS.attr 'number', defaultValue: 0
   filterFreq: DS.attr 'number', defaultValue: 1
   filterQ:    DS.attr 'number', defaultValue: 0
-  volume:     Em.computed.alias 'part.volume'
+  volume:     DS.attr 'number', defaultValue: 0.75
   isMuted:    Em.computed.alias 'part.isMuted'
   context:    Em.computed -> @container.resolve 'audioContext:main'
 
