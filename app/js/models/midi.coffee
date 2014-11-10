@@ -1,21 +1,20 @@
-VELOCITY = 0x7f
 class Seq25.Midi
   constructor: (@output)->
 
-  play: (pitch, channel, start, duration)->
+  play: (pitch, velocity, channel, start, duration)->
     now = performance.now()
     noteOnTime = now + (start * 1e3)
-    @sendOnAt(pitch, channel, noteOnTime)
+    @sendOnAt(pitch, velocity, channel, noteOnTime)
     noteOffTime = now + ((start + duration) * 1e3)
     @sendOffAt(pitch, channel, noteOffTime) if duration
 
-  sendOnAt: (pitch, channel, timeFromNow)->
+  sendOnAt: (pitch, velocity, channel, timeFromNow)->
     ON = 0x90 ^ channel
-    @output.send [ON, pitch, VELOCITY], timeFromNow
+    @output.send [ON, pitch, Math.floor(velocity * 127)], timeFromNow
 
   sendOffAt: (pitch, channel, timeFromNow)->
     OFF = 0x80 ^ channel
-    @output.send [ OFF, pitch, VELOCITY], timeFromNow
+    @output.send [OFF, pitch, 0x7f], timeFromNow
 
 connectionPromise = null
 Seq25.Midi.connect = ->
