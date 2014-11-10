@@ -44,7 +44,7 @@ test 'loads songs with parts', ->
     equal song.get('parts.firstObject.id'), 'p'
 
 test 'loads song with instruments', ->
-  expect(1)
+  expect(2)
   localStorage.setItem 'seq25test', JSON.stringify
     song:
       records:
@@ -71,7 +71,8 @@ test 'loads song with instruments', ->
 
   Seq25.Song.load(@store, 's')
   .then (song)->
-    deepEqual song.get('parts.firstObject.instruments').mapProperty('id'), ['syn', 'midi']
+    deepEqual song.get('parts.firstObject.midiInstruments').mapProperty('id'), ['midi']
+    deepEqual song.get('parts.firstObject.synthesizers').mapProperty('id'), ['syn']
 
 test 'deletes parts when deleted', ->
   expect(2)

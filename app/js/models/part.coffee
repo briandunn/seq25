@@ -1,4 +1,7 @@
-calls = 0
+eachInstrument = ->
+  for _, value of @getProperties 'midiInstruments', 'synthesizers'
+    value.invoke.apply value, arguments
+
 Seq25.Part = DS.Model.extend
   notes:           DS.hasMany 'note'
   synthesizers:    DS.hasMany 'synthesizer'
@@ -9,9 +12,6 @@ Seq25.Part = DS.Model.extend
   beat_count:      DS.attr 'number', defaultValue: 16
   isMuted:         DS.attr 'boolean', defaultValue: false
   secondsPerBeat: Em.computed.alias 'song.secondsPerBeat'
-  instruments:    Em.computed 'synthesizers.[]', 'midiInstruments.[]', ->
-    {synthesizers, midiInstruments} = @getProperties 'synthesizers', 'midiInstruments'
-    synthesizers.toArray().concat midiInstruments.toArray()
 
   totalTicks: Em.computed 'beat_count', ->
     Seq25.Note.TICKS_PER_BEAT * @get('beat_count')
@@ -23,17 +23,20 @@ Seq25.Part = DS.Model.extend
     @set('isMuted', !@get('isMuted'))
 
   schedule: (now, from, to)->
-    {duration, notes, instruments} = @getProperties 'duration', 'notes', 'instruments'
+    {duration, notes} = @getProperties 'duration', 'notes'
     loopOffset = Math.floor(from / duration) * duration
-    notes.forEach (note)->
+    notes.forEach (note)=>
       start = loopOffset + note.get 'absolueSeconds'
       while start < to
         if start >= from
-          instruments.invoke 'play', note, start - now
+          eachInstrument.call this, 'play', note, start - now
         start += duration
 
-  stop: ->
-    @get('instruments').invoke 'stop'
+  stop: (pitch)->
+    eachInstrument.call this, 'stop', pitch
+
+  play: (pitch)->
+    eachInstrument.call this, 'play', pitch
 
   addNoteAtPoint: (position, quant)->
     @get('notes').createRecord

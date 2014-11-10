@@ -17,7 +17,7 @@ test 'schedule: schedules all notes again when the loop repeats', ->
     equal(part.get('duration'), 8)
 
     note = part.addNoteAtPoint({x: 0, y: 0}, 1)
-    instruments = part.get 'instruments'
+    instruments = part.get 'synthesizers'
     stub = sinon.stub instruments, 'invoke', -> this
 
     part.schedule(0, 0, 0.5)
@@ -35,7 +35,7 @@ test 'schedule: schedules notes once', ->
     equal(part.get('duration'), 8)
 
     note = part.addNoteAtPoint({x: 0, y: 0}, 1)
-    instruments = part.get 'instruments'
+    instruments = part.get 'synthesizers'
     stub = sinon.stub instruments, 'invoke', -> this
 
     part.schedule(0, 0, 0.5)
@@ -56,7 +56,7 @@ test 'schedule: schedules notes in parts with duration < BUFFER_TIME', ->
     equal part.get('duration'), 0.3
 
     note = part.addNoteAtPoint({x: 0, y: 0}, 1)
-    instruments = part.get 'instruments'
+    instruments = part.get 'synthesizers'
     stub = sinon.stub instruments, 'invoke', -> this
 
     part.schedule 0, 0, 0.5

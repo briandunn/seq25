@@ -14,7 +14,6 @@ Seq25.Synthesizer = DS.Model.extend
     context = @get 'context'
     @set('output', context.createGain())
     @get('output').connect context.destination
-    @set 'lastVolume', @get('volume')
     @_super()
 
   adjustVolume: (->
