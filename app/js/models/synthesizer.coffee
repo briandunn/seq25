@@ -38,5 +38,9 @@ Seq25.Synthesizer = DS.Model.extend
     {pitch, durationSeconds} = note.getProperties 'pitch', 'durationSeconds'
     @findOrCreateOscillator(pitch).play(secondsFromNow, durationSeconds)
 
-  stop: ->
-    value.stop() for _, value of @get 'oscillators'
+  stop: (pitch)->
+    oscillators = @get 'oscillators'
+    if pitch
+      oscillators[pitch.get('number')]?.stop()
+    else
+      value.stop() for _, value of oscillators
