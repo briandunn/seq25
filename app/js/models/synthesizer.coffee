@@ -1,4 +1,5 @@
-Seq25.Synthesizer = Seq25.Instrument.extend
+Seq25.Synthesizer = DS.Model.extend
+  part:       DS.belongsTo 'part'
   shape:      DS.attr 'string', defaultValue: 'sine'
   attack:     DS.attr 'number', defaultValue: 0
   release:    DS.attr 'number', defaultValue: 0

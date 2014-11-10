@@ -1,4 +1,5 @@
-Seq25.MidiInstrument = Seq25.Instrument.extend
+Seq25.MidiInstrument = DS.Model.extend
+  part:    DS.belongsTo 'part'
   channel: DS.attr 'number', default: 1
   isMuted: Em.computed.alias 'part.isMuted'
   play: (note, start)->
