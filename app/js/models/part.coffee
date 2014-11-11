@@ -19,8 +19,8 @@ Seq25.Part = DS.Model.extend
   duration: Em.computed 'secondsPerBeat', 'beat_count', ->
     @get('secondsPerBeat') * @get('beat_count')
 
-  toggle: (progress)->
-    @set('isMuted', !@get('isMuted'))
+  toggle: ->
+    @toggleProperty 'isMuted'
 
   schedule: (now, from, to)->
     {duration, notes} = @getProperties 'duration', 'notes'

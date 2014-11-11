@@ -73,6 +73,7 @@ Ember.Test.registerHelper 'stubAudio', (app, container) ->
   stubContext =
     createGain: ->
       connect: ->
+      disconnect: ->
       gain: {}
   container.register 'audioContext:main', stubContext
 

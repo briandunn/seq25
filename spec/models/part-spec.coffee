@@ -64,3 +64,35 @@ test 'schedule: schedules notes in parts with duration < BUFFER_TIME', ->
     if stub.callCount == 2
       equal stub.firstCall.args[2], 0
       equal stub.secondCall.args[2], 0.3
+
+moduleFor 'model:part', 'Part reload', needs: [
+  'model:note'
+  'model:song'
+  'model:synthesizer'
+  'model:midiInstrument'
+],
+setup: (container)->
+  stubAudio container
+  store = configureTestStore container
+
+test 'when loaded from local storage muting mutes its synthesizers', ->
+  localStorage.setItem 'seq25test', JSON.stringify
+    part:
+      records:
+        p:
+          id: 'p'
+          synthesizers: ['syn']
+    synthesizer:
+      records:
+        syn:
+          id: 'syn'
+          volume: 0.1
+          part: 'p'
+
+  store.find('part', 'p')
+  .then (part)->
+    output = part.get('synthesizers.firstObject.output')
+    stub = sinon.stub output, 'disconnect'
+    part.toggle()
+    equal output.gain.value, 0.1
+    equal stub.callCount, 1

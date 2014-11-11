@@ -10,16 +10,16 @@ Seq25.Synthesizer = DS.Model.extend
   context:    Em.computed -> @container.resolve 'audioContext:main'
 
   init: ->
+    @_super()
     @set 'oscillators', {}
     context = @get 'context'
     @set('output', context.createGain())
     @get('output').connect context.destination
-    @_super()
 
   adjustVolume: (->
     {output, volume} = @getProperties 'output', 'volume'
     output.gain.value = volume
-  ).observes('volume')
+  ).observes('volume').on 'init'
 
   mute: (->
     {output, isMuted} = @getProperties 'output', 'isMuted'
@@ -27,7 +27,7 @@ Seq25.Synthesizer = DS.Model.extend
       output.disconnect()
     else
       output.connect @get('context').destination
-  ).observes('isMuted')
+  ).observes('isMuted').on 'init'
 
   findOrCreateOscillator: (pitch)->
     @get('oscillators')[pitch.get('number')] ||= Seq25.Osc.create
