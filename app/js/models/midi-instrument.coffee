@@ -6,7 +6,16 @@ Seq25.MidiInstrument = DS.Model.extend
 
   play: (note, start)->
     return if @get 'isMuted'
-    {pitchNumber, durationSeconds} = note.getProperties 'pitchNumber', 'durationSeconds'
+    durationSeconds = note.get 'durationSeconds'
     {volume, channel} = @getProperties 'volume', 'channel'
     Seq25.Midi.connect().then (midi)=>
-      midi.play pitchNumber, volume, channel, start, durationSeconds
+      midi.play note.get('pitch.number'), volume, channel, start, durationSeconds
+
+  stop: (note)->
+    Seq25.Midi.connect().then (midi)=>
+      channel = @get 'channel'
+      if note
+        midi.stop note.get('pitch.number'), channel
+      else
+        for pitch in Seq25.Pitch.all
+          midi.stop pitch, channel

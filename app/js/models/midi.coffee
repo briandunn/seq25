@@ -1,12 +1,15 @@
 class Seq25.Midi
   constructor: (@output)->
 
-  play: (pitch, velocity, channel, start, duration)->
+  play: (pitch, velocity, channel, start=0, duration)->
     now = performance.now()
     noteOnTime = now + (start * 1e3)
     @sendOnAt(pitch, velocity, channel, noteOnTime)
     noteOffTime = now + ((start + duration) * 1e3)
     @sendOffAt(pitch, channel, noteOffTime) if duration
+
+  stop: (pitch, channel)->
+    @sendOffAt(pitch, channel, 0)
 
   sendOnAt: (pitch, velocity, channel, timeFromNow)->
     ON = 0x90 ^ channel
