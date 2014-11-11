@@ -54,6 +54,9 @@ Seq25.SelectionBoxController = Ember.Controller.extend
       selected.setObjects boxed
     selected
 
+  replaceSelected: (notes) ->
+    @set('_selected', notes)
+
   boxClosed: Em.computed  'corners.@each', ->
     @get('corners').reduce(((sum, corner)-> sum + corner.x + corner.y), 0) == 0
 

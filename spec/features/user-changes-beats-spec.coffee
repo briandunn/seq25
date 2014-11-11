@@ -10,29 +10,17 @@ module 'Feature: user note actions must be constrained',
 
 test 'change beats with keyboard', ->
 
-  andThen ->
-    equal(width(".measure"), "6.25%")
-
-  andThen ->
-    keyTrigger("2")
-    keyTrigger("0")
-    keyTrigger("b")
-
-  andThen ->
-    equal(width(".measure"), "5%")
+  assertMeasureWidth("6.25%")
+  press("2, 0, b")
+  assertMeasureWidth("5%")
 
 test 'change beats with keyboard should change note width', ->
 
-  andThen ->
-    keyTrigger("c")
+  press("c")
+  assertWidth("6.25%")
+  press("2, 0, b")
+  assertMeasureWidth("5%")
 
+assertMeasureWidth = (w) ->
   andThen ->
-    equal(width(".notes li"), "6.25%")
-
-  andThen ->
-    keyTrigger("2")
-    keyTrigger("0")
-    keyTrigger("b")
-
-  andThen ->
-    equal(width(".notes li"), "5%")
+    equal(width(".measure"), w)

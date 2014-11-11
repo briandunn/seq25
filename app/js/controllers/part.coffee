@@ -35,6 +35,40 @@ Seq25.PartController = Ember.ObjectController.extend
   changeNoteDuration: (direction, num)->
     @get('selectedNotes').invoke 'changeDuration', @get('editResolution') * num * direction
 
+  addNoteDirection: (num, addNoteCallback) ->
+    context = this
+    firstLength = @get('selectedNotes')[0].get("duration")
+    firstLength = @get('editResolution') unless (@get('selectedNotes').every (n) -> n.get("duration") == firstLength)
+    notes = @get('selectedNotes').map( (n) -> addNoteCallback(n, num, context, firstLength))
+    @get('controllers.selectionBox').replaceSelected(notes)
+
+  addNote: (pitch, position, width) ->
+    @get('model').addNote(pitch, position, width, @get('quant'))
+
+  addDown: (note, moveNum, context) ->
+    pitch = note.get('pitchNumber') - moveNum
+    position = note.get('absoluteTicks')
+    width = note.get('duration')
+    context.addNote(pitch, position, width)
+
+  addUp: (note, moveNum, context) ->
+    pitch = note.get('pitchNumber') + moveNum
+    position = note.get('absoluteTicks')
+    width = note.get('duration')
+    context.addNote(pitch, position, width)
+
+  addLeft: (note, moveNum, context, moveDistance) ->
+    pitch    = note.get('pitchNumber')
+    position = note.get('absoluteTicks') - ((moveDistance || note.get('duration')) * moveNum)
+    width    = note.get('duration')
+    context.addNote(pitch, position, width)
+
+  addRight: (note, moveNum, context, moveDistance) ->
+    pitch    = note.get('pitchNumber')
+    position = note.get('absoluteTicks') + ((moveDistance || note.get('duration')) * moveNum)
+    width    = note.get('duration')
+    context.addNote(pitch, position, width)
+
   actions:
     removeNotes: ->
       selectedNotes = @get 'selectedNotes'
@@ -46,6 +80,18 @@ Seq25.PartController = Ember.ObjectController.extend
 
     addNote: (position)->
       @get('model').addNoteAtPoint position, @get('quant')
+
+    addNoteLeft: (num) ->
+      @addNoteDirection(num, @addLeft)
+
+    addNoteRight: (num) ->
+      @addNoteDirection(num, @addRight)
+
+    addNoteDown: (num) ->
+      @addNoteDirection(num, @addDown)
+
+    addNoteUp: (num) ->
+      @addNoteDirection(num, @addUp)
 
     extendNotes: (num) ->
       @changeNoteDuration(1, num)
@@ -61,7 +107,7 @@ Seq25.PartController = Ember.ObjectController.extend
 
     createNote: ->
       note = @get('model').addNoteAtPoint({x: 0, y: 0}, @get('quant'))
-      @set('selectedNotes', [note])
+      @get('controllers.selectionBox').replaceSelected([note])
 
     moveUp: (num) ->
       @get('selectedNotes').invoke 'moveUp', num
