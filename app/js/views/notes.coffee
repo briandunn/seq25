@@ -1,5 +1,8 @@
+#
+# Abstract base classes for viewing lists of notes.
+# Check out concrete implementations in notes-edit and notes-summary.
+#
 Seq25.NotesView = Ember.CollectionView.extend
-  itemViewClass: 'note'
   tagName: 'ul'
   classNames: 'notes'
 
