@@ -4,12 +4,13 @@ module 'Feature: user deletes note',
     Seq25.ApplicationAdapter = DS.LSAdapter.extend namespace: 'seq25test'
 
 test 'delete selected note', ->
-  visit('/')
-  click('button')
-  click('li.empty')
+  visit '/'
+  click 'button'
+  click 'li.empty'
   clickPosition '.notes'
-  clickPosition '.notes li'
-  keyTrigger("backspace")
+  andThen ->
+    equal $('li.selected').length, 1
+  keyTrigger "backspace"
   andThen ->
     equal find('.notes').find('li').length, 0
   andThen ->

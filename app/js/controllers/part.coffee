@@ -82,7 +82,8 @@ Seq25.PartController = Ember.ObjectController.extend
       removeOne selectedNotes.popObject()
 
     addNote: (position)->
-      @get('model').addNoteAtPoint position, @get('quant')
+      note = @get('model').addNoteAtPoint position, @get('quant')
+      @get('controllers.selectionBox').send 'only', note
 
     addNoteLeft: (num) ->
       @addNoteDirection(num, @addLeft)
@@ -109,8 +110,7 @@ Seq25.PartController = Ember.ObjectController.extend
       _.times(num, => @get('selectedNotes').invoke 'nudgeRight', @get('quant'))
 
     createNote: ->
-      note = @get('model').addNoteAtPoint({x: 0, y: 0}, @get('quant'))
-      @get('controllers.selectionBox').send 'only', note
+      @send 'addNote', x: 0, y: 0
 
     moveUp: (num) ->
       @get('selectedNotes').invoke 'moveUp', num

@@ -1,12 +1,11 @@
 module 'Feature: selects notes'
 
 test 'selected note changest color', ->
-  expect(3)
+  expect(4)
   visit '/'
   click 'button'
   click 'li.empty'
   clickPosition '.notes'
-  clickPosition '.notes li'
   andThen ->
     equal find('.notes li.selected').length, 1
   clickPosition '.notes li'
@@ -14,6 +13,9 @@ test 'selected note changest color', ->
     notes = find('.notes')
     equal notes.length, 1
     equal notes.filter('.selected').length, 0
+  clickPosition '.notes li'
+  andThen ->
+    equal find('.notes li.selected').length, 1
 
 test 'clicking the next note selects it only', ->
   visit '/'
