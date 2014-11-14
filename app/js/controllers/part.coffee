@@ -37,10 +37,13 @@ Seq25.PartController = Ember.ObjectController.extend
 
   addNoteDirection: (num, addNoteCallback) ->
     context = this
-    firstLength = @get('selectedNotes')[0].get("duration")
-    firstLength = @get('editResolution') unless (@get('selectedNotes').every (n) -> n.get("duration") == firstLength)
-    notes = @get('selectedNotes').map( (n) -> addNoteCallback(n, num, context, firstLength))
-    @get('controllers.selectionBox').replaceSelected(notes)
+    {selectedNotes, editResolution} = @getProperties 'selectedNotes', 'editResolution'
+    selectionBox =  @get 'controllers.selectionBox'
+    firstLength = selectedNotes.get 'firstObject.duration'
+    firstLength = editResolution unless selectedNotes.every((n) -> n.get("duration") == firstLength)
+    selectedNotes
+    .map( (n) -> addNoteCallback(n, num, context, firstLength))
+    .forEach( (n)-> selectionBox.send 'toggle', n )
 
   addNote: (pitch, position, width) ->
     @get('model').addNote(pitch, position, width, @get('quant'))
@@ -107,7 +110,7 @@ Seq25.PartController = Ember.ObjectController.extend
 
     createNote: ->
       note = @get('model').addNoteAtPoint({x: 0, y: 0}, @get('quant'))
-      @get('controllers.selectionBox').replaceSelected([note])
+      @get('controllers.selectionBox').send 'only', note
 
     moveUp: (num) ->
       @get('selectedNotes').invoke 'moveUp', num
