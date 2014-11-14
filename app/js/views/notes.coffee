@@ -6,13 +6,6 @@ Seq25.NotesView = Ember.CollectionView.extend
 Seq25.NoteView = Ember.View.extend
   attributeBindings: ['style', 'class']
 
-  didInsertElement: ->
-    @scrollNote() unless @noteOnScreen()
-
-  noteOnScreen: ->
-    $(this.element).offset().top > document.documentElement.scrollTop and
-      $(this.element).offset().top  < (document.documentElement.scrollTop + screen.height)
-
   totalTicks: Em.computed.alias 'content.part.totalTicks'
 
   cssAttributes: 'left width top'.w()
@@ -26,11 +19,6 @@ Seq25.NoteView = Ember.View.extend
   top: Em.computed 'content.pitch', ->
     percentage = Seq25.Pitch.scaleAtPitch(@get('content.pitch')) * 100
     "calc(#{percentage}% + 3px)"
-
-  scrollNote: (->
-    Ember.run.scheduleOnce 'afterRender', this, ->
-      window.scrollTo(10, this.element.offsetTop)
-  ).observes("top")
 
   style: Em.computed 'left', 'width', 'top', 'height', ->
     @get('cssAttributes')

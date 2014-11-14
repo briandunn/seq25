@@ -37,6 +37,16 @@ Seq25.NoteEditView = Seq25.NoteView.extend
   isSelected: Em.computed 'selectedNotes.[]', ->
     @get('selectedNotes').contains @get 'content'
 
+  noteOnScreen: ->
+    top = @$().offset().top
+    top > document.documentElement.scrollTop and
+    top < (document.documentElement.scrollTop + screen.height)
+
+  scrollNote: (->
+    Ember.run.scheduleOnce 'afterRender', this, ->
+      window.scrollTo(10, @element.offsetTop) unless @noteOnScreen()
+  ).observes("top").on 'init'
+
   mouseDown: (down)->
     down.stopPropagation()
 
