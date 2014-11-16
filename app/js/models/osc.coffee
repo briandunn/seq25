@@ -8,25 +8,39 @@ Seq25.Osc = Ember.Object.extend
   shape:      Em.computed.alias 'synthesizer.shape'
 
   init: ->
-    {context, output, pitch} = @getProperties 'context', 'output', 'pitch'
-    @oscillator = context.createOscillator()
-    @filter     = context.createBiquadFilter()
-    gain        = context.createGain()
+    {context, output} = @getProperties 'context', 'output'
+    @filter = context.createBiquadFilter()
+    gain    = context.createGain()
     gain.gain.value = 0
-    @oscillator.connect @filter
     @filter.connect gain
     gain.connect output
-    @oscillator.frequency.value = pitch.get('freq')
-    @oscillator.start 0
     @gain = gain.gain
+
+    @oscillator = context.createOscillator()
+    @oscillator.frequency.value = @get 'pitch.freq'
+    @oscillator.start 0
+
+    @noise = context.createScriptProcessor(1 << 14)
+    @noise.onaudioprocess = (event)->
+      for channel in [0, 1]
+        out = event.outputBuffer.getChannelData channel
+        out[i] = Math.random() for i in [0..event.outputBuffer.length]
+
     @_super()
 
   setShape: (->
-    @oscillator.type = @get 'shape'
+    {shape, context} = @getProperties 'shape', 'context'
+    if shape == 'noise'
+      @oscillator.disconnect()
+      @noise.connect @filter
+    else
+      @noise.disconnect()
+      @oscillator.type = @get 'shape'
+      @oscillator.connect @filter
   ).observes('shape').on 'init'
 
   setFilterQ: (->
-    @filter.Q.value = @get('filterQ') * 1000
+    @filter.Q.value = @get('filterQ') * 100
   ).observes('filterQ').on 'init'
 
   setFilterFreq: (->

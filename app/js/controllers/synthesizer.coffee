@@ -1,5 +1,5 @@
 Seq25.SynthesizerController = Ember.ObjectController.extend
-  shapes: 'sine square sawtooth triangle'.w()
+  shapes: 'sine square sawtooth triangle noise'.w()
 
   saver: (->
     @get('model').save()
