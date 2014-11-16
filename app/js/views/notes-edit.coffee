@@ -55,7 +55,4 @@ Seq25.NoteEditView = Seq25.NoteView.extend
 
   click: (event) ->
     event.stopPropagation()
-    if event.shiftKey
-      @send 'toggle', @get('content')
-    else
-      @send 'only', @get('content')
+    @send 'toggle', [@get('content')], isAdditive: event.shiftKey

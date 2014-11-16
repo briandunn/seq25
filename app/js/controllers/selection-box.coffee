@@ -25,12 +25,19 @@ EMPTY_CORNERS =
     {x: 0, y: 0}
   ]
 
-toggle = (list, item)->
-  if list.contains item
-    list.removeObject item
+toggle = (selected, boxed, isAdditive)->
+  toggleOne = (item)->
+    if selected.contains item
+      selected.removeObject item
+    else
+      selected.pushObject item
+    selected
+
+  if isAdditive
+    toggleOne note for note in boxed
   else
-    list.pushObject item
-  list
+    selected.setObjects boxed
+  selected
 
 Seq25.SelectionBoxController = Ember.Controller.extend
   needs: 'part'
@@ -48,11 +55,7 @@ Seq25.SelectionBoxController = Ember.Controller.extend
     {_selected, boxed, isAdditive} = @getProperties '_selected', 'boxed', 'isAdditive'
     return _selected unless boxed.length
     selected = _selected.concat []
-    if isAdditive
-      toggle selected, note for note in boxed
-    else
-      selected.setObjects boxed
-    selected
+    toggle selected, boxed, isAdditive
 
   boxClosed: Em.computed  'corners.@each', ->
     @get('corners').reduce(((sum, corner)-> sum + corner.x + corner.y), 0) == 0
@@ -72,12 +75,5 @@ Seq25.SelectionBoxController = Ember.Controller.extend
       boxed.clear()
       @set 'corners', EMPTY_CORNERS
 
-    only: (note)->
-      _selected = @get('_selected')
-      if _selected.contains(note) && _selected.length == 1
-        _selected.setObjects []
-      else
-        _selected.setObjects [note]
-
-    toggle: (note)->
-      toggle @get('_selected'), note
+    toggle: (notes, {isAdditive}={})->
+      toggle @get('_selected'), notes, isAdditive

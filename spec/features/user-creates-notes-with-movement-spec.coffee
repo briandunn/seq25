@@ -94,3 +94,8 @@ test 'if multiple notes selected are different lengths, move by quant', ->
   assertLeft("0%", 2)
   assertLeft("6.25%", 3)
   assertLeft("6.25%", 4)
+
+test 'two moves makes two more notes', ->
+  click('li.empty')
+  press("c, ctrl+shift+right, ctrl+shift+right")
+  assertNotesLength(3)

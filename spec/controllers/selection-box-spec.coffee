@@ -34,3 +34,15 @@ test 'when additive the boxed notes are toggled durring box resizing', ->
   controller.get('boxed').setObjects [0]
   controller.send 'resized'
   deepEqual controller.get('selected'), [1,0]
+
+test 'toggle selects only a group', ->
+  controller = @subject()
+  controller.send 'toggle', [1]
+  controller.send 'toggle', [2, 3]
+  deepEqual controller.get('selected'), [2, 3]
+
+test 'additive toggle adds a group', ->
+  controller = @subject()
+  controller.send 'toggle', [1]
+  controller.send 'toggle', [2, 3], isAdditive: true
+  deepEqual controller.get('selected'), [1, 2, 3]
