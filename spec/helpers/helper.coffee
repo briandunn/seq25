@@ -131,3 +131,7 @@ Ember.Test.registerHelper 'notesAreOnDifferentPitches', (app, firstNote, secondN
     topA = topStyle(firstNote)
     topB = topStyle(secondNote)
     notEqual(topA, topB)
+
+Ember.Test.registerHelper 'visitRoute', (app, routeName) ->
+  andThen ->
+    app.__container__.lookup('router:main').transitionTo(routeName)
