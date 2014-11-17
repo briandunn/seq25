@@ -44,7 +44,8 @@ Seq25.NoteEditView = Seq25.NoteView.extend
 
   scrollNote: (->
     Ember.run.scheduleOnce 'afterRender', this, ->
-      window.scrollTo(10, @element.offsetTop) unless @noteOnScreen()
+      unless @isDestroying or @noteOnScreen()
+        scrollTo 10, @element.offsetTop
   ).observes("top").on 'init'
 
   mouseDown: (down)->
