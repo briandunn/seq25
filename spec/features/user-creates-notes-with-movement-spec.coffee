@@ -1,14 +1,6 @@
-module 'Feature: user creates part with movement',
-  setup: ->
-    Seq25.ApplicationAdapter = DS.LSAdapter.extend namespace: 'seq25test'
-    visit('/')
-    click('button')
-
-  teardown: ->
-    delete localStorage.seq25test
+feature 'Feature: user creates part with movement'
 
 test 'add new note left from selected note has same length and is placed at end', ->
-  click('li.empty')
   press("c, right, right, shift+right")
   assertNotesLength(1)
   assertLeft("12.5%", 1)
@@ -20,7 +12,6 @@ test 'add new note left from selected note has same length and is placed at end'
   assertWidth("12.5%", 2)
 
 test 'add new note up', ->
-  click('li.empty')
   press("c, down, shift+right")
   assertNotesLength(1)
   assertLeft("0%", 1)
@@ -34,7 +25,6 @@ test 'add new note up', ->
   assertWidth("12.5%", 2)
 
 test 'add new note down', ->
-  click('li.empty')
   press("c, shift+right")
   assertNotesLength(1)
   assertLeft("0%", 1)
@@ -47,7 +37,6 @@ test 'add new note down', ->
   assertWidth("12.5%", 2)
 
 test 'new note right from selected note has same length and is placed at end', ->
-  click('li.empty')
   press("c, shift+right")
   assertNotesLength(1)
   press("ctrl+shift+right") #<--- action
@@ -58,7 +47,6 @@ test 'new note right from selected note has same length and is placed at end', -
   assertWidth("12.5%", 2)
 
 test 'new note right from selected note is x * duration away from note', ->
-  click('li.empty')
   press("c, shift+right")
   assertNotesLength(1)
   press("2, ctrl+shift+right") #<--- action
@@ -69,7 +57,6 @@ test 'new note right from selected note is x * duration away from note', ->
   assertWidth("12.5%", 2)
 
 test 'add new note left from selected note is x * duration in front of note', ->
-  click('li.empty')
   press("c, 4, right, shift+right")
   assertNotesLength(1)
   assertLeft("25%", 1)
@@ -81,7 +68,6 @@ test 'add new note left from selected note is x * duration in front of note', ->
   assertWidth("12.5%", 2)
 
 test 'if multiple notes selected are different lengths, move by quant', ->
-  click('li.empty')
   press("c, down, shift+right")
   press("c")
   assertNotesLength(2)
@@ -96,6 +82,5 @@ test 'if multiple notes selected are different lengths, move by quant', ->
   assertLeft("6.25%", 4)
 
 test 'two moves makes two more notes', ->
-  click('li.empty')
   press("c, ctrl+shift+right, ctrl+shift+right")
   assertNotesLength(3)

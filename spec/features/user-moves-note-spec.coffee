@@ -1,12 +1,4 @@
-module 'Feature: user moves note',
-  setup: ->
-    Seq25.ApplicationAdapter = DS.LSAdapter.extend namespace: 'seq25test'
-    visit('/')
-    click('button')
-    click('li.empty')
-
-  teardown: ->
-    delete localStorage.seq25test
+feature 'Feature: user moves note'
 
 test 'move note when is quant is 0', ->
 

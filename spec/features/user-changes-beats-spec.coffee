@@ -1,12 +1,4 @@
-module 'Feature: user note actions must be constrained',
-  setup: ->
-    Seq25.ApplicationAdapter = DS.LSAdapter.extend namespace: 'seq25test'
-    visit('/')
-    click('button')
-    click('li.empty')
-
-  teardown: ->
-    delete localStorage.seq25test
+feature 'Feature: user note actions must be constrained'
 
 test 'change beats with keyboard', ->
 
