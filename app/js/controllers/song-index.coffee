@@ -8,6 +8,8 @@ Seq25.SongIndexController = Ember.ObjectController.extend
 
   actions:
     addPart: (name)->
-      @get('song.parts').createRecord(name: name).save()
+      @get('song.parts').createRecord(name: name).save().then (part) ->
+        part.get('synthesizers').createRecord().save()
+
       @get('song').save()
       @transitionToRoute('part', name)
