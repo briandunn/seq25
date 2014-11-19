@@ -128,33 +128,27 @@ Ember.Test.registerHelper 'left', (app, selector) ->
   styles = parseStyles(selector)
   styles["left"]
 
-Ember.Test.registerHelper 'assertLeft', (app, l, noteIndex=1) ->
-  andThen ->
-    equal(left(".notes li:nth-child(#{noteIndex})"), l)
+Ember.Test.registerAsyncHelper 'assertLeft', (app, l, noteIndex=1) ->
+  equal(left(".notes li:nth-child(#{noteIndex})"), l)
 
-Ember.Test.registerHelper 'assertWidth', (app, w, noteIndex=1) ->
-  andThen ->
-    equal(width(".notes li:nth-child(#{noteIndex})"), w)
+Ember.Test.registerAsyncHelper 'assertWidth', (app, w, noteIndex=1) ->
+  equal(width(".notes li:nth-child(#{noteIndex})"), w)
 
-Ember.Test.registerHelper 'assertNotesLength', (app, n) ->
-  andThen ->
-    equal(find(".notes li").length, n)
+Ember.Test.registerAsyncHelper 'assertNotesLength', (app, n) ->
+  equal(find(".notes li").length, n)
 
-Ember.Test.registerHelper 'assertSelectedNotesLength', (app, n) ->
-  andThen ->
-    equal(find(".notes li.selected").length, n)
+Ember.Test.registerAsyncHelper 'assertSelectedNotesLength', (app, n) ->
+  equal(find(".notes li.selected").length, n)
 
-Ember.Test.registerHelper 'press', (app, keys) ->
+Ember.Test.registerHelper 'press', (app, keys)->
   andThen ->
     for k in keys.split(",")
       keyTrigger(k.trim())
 
-Ember.Test.registerHelper 'notesAreOnDifferentPitches', (app, firstNote, secondNote) ->
-  andThen ->
-    topA = topStyle(firstNote)
-    topB = topStyle(secondNote)
-    notEqual(topA, topB)
+Ember.Test.registerAsyncHelper 'notesAreOnDifferentPitches', (app, firstNote, secondNote) ->
+  topA = topStyle(firstNote)
+  topB = topStyle(secondNote)
+  notEqual(topA, topB)
 
 Ember.Test.registerHelper 'visitRoute', (app, routeName) ->
-  andThen ->
-    app.__container__.lookup('router:main').transitionTo(routeName)
+  app.__container__.lookup('router:main').transitionTo(routeName)
