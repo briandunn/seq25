@@ -40,7 +40,7 @@ Seq25.NoteEditView = Seq25.NoteView.extend
   noteOnScreen: ->
     top = @$().offset().top
     top > document.documentElement.scrollTop and
-    top < (document.documentElement.scrollTop + screen.height)
+    top < (document.documentElement.scrollTop + window.innerHeight)
 
   scrollNote: (->
     Ember.run.scheduleOnce 'afterRender', this, ->
