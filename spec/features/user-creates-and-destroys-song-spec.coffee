@@ -1,14 +1,6 @@
-module 'Feature: user creates and destroys song spec',
-  setup: ->
-    Seq25.ApplicationAdapter = DS.LSAdapter.extend namespace: 'seq25test'
-    visit('/')
-    click('button')
-
-  teardown: ->
-    delete localStorage.seq25test
+feature 'Feature: user creates and destroys song spec'
 
 test 'create song and then delete song', ->
-  click('li.empty')
   press('c')
   visitRoute("songs")
   andThen ->

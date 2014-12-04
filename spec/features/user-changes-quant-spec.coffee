@@ -1,12 +1,4 @@
-module 'Feature: User changes quant',
-  setup: ->
-    Seq25.ApplicationAdapter = DS.LSAdapter.extend namespace: 'seq25test'
-    visit('/')
-    click('button')
-    click('li.empty')
-
-  teardown: ->
-    delete localStorage.seq25test
+feature 'Feature: User changes quant'
 
 test 'change quant with keyboard', ->
 

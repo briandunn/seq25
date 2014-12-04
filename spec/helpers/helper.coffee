@@ -69,6 +69,29 @@ parseStyles = (selector) ->
   )
   styles
 
+window.feature = (title) ->
+  module title,
+    setup: ->
+      stubAudio(Seq25.__container__)
+      Seq25.ApplicationAdapter = DS.LSAdapter.extend namespace: 'seq25test'
+      visit('/')
+      click('button')
+      click('li.empty')
+
+    teardown: ->
+      delete localStorage.seq25test
+
+window.songFeature = (title) ->
+  module title,
+    setup: ->
+      Seq25.ApplicationAdapter = DS.LSAdapter.extend namespace: 'seq25test'
+      visit('/')
+      click('button')
+      stubAudio(Seq25.__container__)
+
+    teardown: ->
+      delete localStorage.seq25test
+
 Ember.Test.registerHelper 'stubAudio', (app, container) ->
   stubContext =
     createGain: ->

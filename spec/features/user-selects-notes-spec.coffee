@@ -1,6 +1,6 @@
-module 'Feature: selects notes'
+feature 'Feature: selects notes'
 
-test 'selected note changest color', ->
+test 'selected note changes color', ->
   expect(4)
   visit '/'
   click 'button'

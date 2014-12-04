@@ -1,7 +1,4 @@
-module 'Feature: user deletes note',
-  setup: ->
-    delete localStorage.seq25test
-    Seq25.ApplicationAdapter = DS.LSAdapter.extend namespace: 'seq25test'
+feature 'Feature: user deletes note'
 
 test 'delete selected note', ->
   visit '/'

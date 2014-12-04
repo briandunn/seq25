@@ -1,11 +1,4 @@
-module 'Feature: user switches between part and song',
-  setup: ->
-    Seq25.ApplicationAdapter = DS.LSAdapter.extend namespace: 'seq25test'
-    visit('/')
-    click('button')
-
-  teardown: ->
-    delete localStorage.seq25test
+songFeature 'Feature: user switches between part and song'
 
 test 'user switches between part and song', ->
 
