@@ -11,7 +11,7 @@ Seq25.NotesSummaryView = Seq25.NotesView.extend
 Seq25.NoteSummaryView = Seq25.NoteView.extend
   attributeBindings: ['style', 'class']
 
-  cssAttributes: 'left width top height'.w()
+  cssAttributes: 'left width top height opacity'.w()
 
   class: Em.computed.alias 'content.part.name'
 

@@ -99,3 +99,6 @@ Seq25.PartController = Ember.ObjectController.extend
 
     moveDown: (num) ->
       @get('selectedNotes').invoke 'moveDown', num
+
+    setVelocity: (num) ->
+      @get('selectedNotes').invoke 'set', 'velocity', Math.min (num / 10), 1.0

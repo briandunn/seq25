@@ -48,11 +48,11 @@ Seq25.Osc = Ember.Object.extend
     @filter.frequency.value = filterFreq * (context.sampleRate / 2)
   ).observes('filterFreq').on 'init'
 
-  play: (secondsFromNow, duration=null)->
+  play: (secondsFromNow, rampTo=1, duration=null)->
     {context, attack} = @getProperties 'context', 'attack'
     contextTime = context.currentTime + secondsFromNow
     @gain.setValueAtTime 0, contextTime
-    @gain.linearRampToValueAtTime(1, contextTime + attack)
+    @gain.linearRampToValueAtTime(rampTo, contextTime + attack)
     @stop(secondsFromNow + duration) if duration
 
   stop: (secondsFromNow=0)->

@@ -35,8 +35,8 @@ Seq25.Synthesizer = DS.Model.extend
       synthesizer: this
 
   play: (note, secondsFromNow=0)->
-    {pitch, durationSeconds} = note.getProperties 'pitch', 'durationSeconds'
-    @findOrCreateOscillator(pitch).play(secondsFromNow, durationSeconds)
+    {pitch, durationSeconds, velocity} = note.getProperties 'pitch', 'durationSeconds', 'velocity'
+    @findOrCreateOscillator(pitch).play(secondsFromNow, velocity, durationSeconds)
 
   stop: (pitch)->
     oscillators = @get 'oscillators'

@@ -3,6 +3,7 @@ Seq25.Note = DS.Model.extend
   pitchNumber: DS.attr 'number'
   beat:        DS.attr 'number'
   tick:        DS.attr 'number'
+  velocity:    DS.attr 'number', defaultValue: 0.75
   part:        DS.belongsTo 'part'
   duration:    DS.attr 'number', defaultValue: TICKS_PER_BEAT
   secondsPerBeat: Em.computed.alias 'part.secondsPerBeat'

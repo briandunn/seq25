@@ -17,3 +17,4 @@ Seq25.PartView = Ember.View.extend
       'ctrl+shift+left': (num) => @send('addNoteLeft', num)
       'ctrl+shift+up': (num) => @send('addNoteUp', num)
       'ctrl+shift+down': (num) => @send('addNoteDown', num)
+      'v': (num) => @send 'setVelocity', num
