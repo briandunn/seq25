@@ -24,7 +24,7 @@ Seq25.Midi.connect = ->
   connectionPromise ||= new Em.RSVP.Promise (resolve, reject) ->
     navigator.requestMIDIAccess()
     .then (access)->
-      if output = access.outputs()[0]
+      if output = access.outputs.values().next().value
         resolve(new Seq25.Midi(output))
       else
         console.log 'connected, but no outputs'
