@@ -1,0 +1,333 @@
+
+@import 'reset'
+
+$body: 'Open Sans'
+$header: 'Permanent Marker'
+$subheader: 'Permanent Marker'
+$num: 'Open Sans'
+
+=clearfix
+  &:before
+    content: " "
+  &:after
+    display: table
+    content: " "
+    clear: both
+
+html
+  font-size: 100%
+
+body
+  font-family: $body
+  background: #F6F6F6
+
+a
+  color: #CC0000
+  &:hover
+    color: #008BCC
+    transition: .2s
+
+.modal
+  position: relative
+  margin: 74px auto 0 auto
+  width: 400px
+  background-color: #fff
+  padding: 1em
+
+.overlay
+  height: 100%
+  width: 100%
+  position: fixed
+  top: 0
+  left: 0
+  background-color: rgba(0, 0, 0, 0.2)
+  z-index: 100
+
+input[type="text"], input[type="number"], textarea, select
+  font: .75rem $num
+  color: #474747
+  padding: .5rem .7rem
+  background: #FAFAFA
+  border: 1px solid #E5E5E5
+  border-radius: 1rem
+  display: inline-block
+  &:focus
+    border-color: darken(#E5E5E5, 40%)
+    outline: none
+
+input[type="range"]
+  -webkit-appearance: none
+  display: inline-block
+  vertical-align: middle
+  background: #e0e0e0
+  border: 1px solid #cbcbcb
+  border-radius: 1rem
+  height: .3rem
+  margin-top: .0625rem
+  &:focus
+    outline: none
+    &::-webkit-slider-thumb
+      border-color: darken(#E5E5E5, 40%)
+
+::-webkit-slider-thumb
+  -webkit-appearance: none
+  background: #ffffff
+  border: 1px solid #bbbbbb
+  border-radius: 1rem
+  height: 1rem
+  width: 1rem
+
+header
+  font-size: 1em
+  background: #fff
+  > h1
+    font: 2rem $header
+    color: #CC0000
+    text-align: center
+    padding: .8rem 0
+  dl
+    float: left
+    width: 18%
+    margin: 0
+    dd
+      margin: 0
+
+section
+  &.controls
+    font-size: 1em
+    width: 90%
+    max-width: 1000px
+    margin: 0 auto
+    padding: 1rem 0
+    h2
+      font: 1.5rem $subheader
+      color: #363636
+      float: left
+      margin: 0 0 0 1rem
+    h3
+      font: .75rem $body
+      font-weight: 600
+      color: #363636
+    > a
+      font: .75rem/2rem $body
+      text-transform: uppercase
+      float: right
+      margin: .4rem .8rem 0 0
+    article
+      +clearfix
+      font-size: 1em
+      background: #fff
+      border: 1px solid #DADADA
+      border-radius: 3rem
+      padding: .8rem 1rem
+      position: relative
+      margin: 3.3rem 0 1rem
+      dl
+        dt, dd
+          display: inline
+          position: relative
+        dt
+          margin-right: .5rem
+          margin-left: 1rem
+          &:first-child
+            margin-left: 0
+          label
+            font-size: .75rem
+            color: #565656
+            text-transform: uppercase
+            display: inline-block
+            margin-bottom: .3rem
+          a.active
+            display: none
+          a.active + a
+            display: inline
+      &.instrument
+        dl
+          float: left
+          width: calc(100% - 25px)
+        button
+          float: left
+          width: 25px
+        label
+          width: 12px
+          &[for='volume']
+            text-indent: -9999px
+            height: 1.05rem
+            background: url("../img/icon_sound@2x.png") center left no-repeat
+            background-size: 12px 12px
+          &[for='shape']
+            width: auto
+          &[for='channel']
+            width: auto
+      > section
+        position: absolute
+        top: -.9rem
+        right: 4rem
+        width: 4.5rem
+        #transport
+          width: 11rem
+          button
+            font-size: 2rem
+            color: #fff
+            background: #363636
+            border: .5rem solid #fff
+            border-radius: 3.5rem
+            padding: 1rem 3rem 1rem 1.5rem
+            display: inline-block
+            margin: 0 .5rem 0 0
+            width: 4.875rem
+            position: relative
+            z-index: 50
+            &:focus
+              outline: none
+            &:before
+              content: ""
+              border: 1px solid #D0CECE
+              border-radius: 3.5rem
+              position: absolute
+              padding: 1rem 1rem 1rem 1.5rem
+              width: 2.875rem
+              height: 3.3rem
+              top: -.5rem
+              left: -.5rem
+              z-index: 2
+            &:hover
+              cursor: pointer
+              background: darken(#363636, 8%)
+              transition: .8s
+          h3
+            display: inline-block
+            float: right
+            margin: 2.4rem 0 0 0
+            padding-right: 3.7rem
+#parts, #songs
+  width: 90%
+  max-width: 1024px
+  margin: 0 auto
+  overflow: auto
+  > ul
+    +clearfix
+    > li
+      box-sizing: border-box
+      display: block
+      float: left
+      border: 1px solid #E5E5E5
+      width: 23%
+      margin: 1%
+      height: 100px
+      cursor: pointer
+      &.part, &.song
+        overflow: hidden
+        background-color: white
+        &:hover
+          border: 1px solid darken(#E5E5E5, 10%)
+        &.mute
+          background-color: black
+        a
+          height: 100px
+          position: relative
+          display: block
+          width: 100%
+          > ul
+            position: relative
+            overflow: hidden
+            height: 100%
+            width: 100%
+            li
+              position: absolute
+              border-radius: 2px
+
+.part
+  li
+    background: #1AA8DD
+
+.song
+  position: relative
+  header
+    z-index: 5
+    position: absolute
+    top: 0px
+  .Q
+    background: red
+  .W
+    background: orange
+  .E
+    background: yellow
+  .R
+    background: green
+  .A
+    background: blue
+  .S
+    background: indigo
+  .D
+    background: violet
+  .F
+    background: black
+
+.play-bar
+  position: absolute
+  height: 100%
+  transition-timing-function: linear
+  transition-property: left
+  width: 4px
+  background: #CC0000
+  z-index: 3
+  box-shadow: 1px 0 white
+  opacity: 0.5
+
+#piano-roll
+  #grid
+    overflow: hidden
+    float: right
+    background: #ffffff
+    width: 90%
+    position: relative
+    .measures
+      position: absolute
+      height: 100%
+      width: 100%
+      z-index: 1
+      .measure
+        box-sizing: border-box
+        height: 100%
+        float: right
+        border-left: 1px dashed #b2b2b2
+    ul.notes
+      position: absolute
+      cursor: pointer
+      width: 100%
+      height: 100%
+      z-index: 2
+      li
+        height: 20px
+        position: absolute
+        left: 0%
+        top: 11%
+        background: #1AA8DD
+        border-radius: .625rem
+        &.selected
+          background: #18BF3B
+  #keyboard
+    font: .875rem/1.625rem $num
+    background: #fff
+    width: 10%
+    li
+      color: #363636
+      padding: 0 0 0 .3rem
+      &.sharp
+        color: #fff
+        background: #363636
+  ul
+    list-style-type: none
+    margin: 0
+    padding: 0
+  .row
+    border-top: 1px solid #D4D4D4
+    height: 25px
+  .sharp
+    background-color: #E9E8E8
+
+  #selection-box
+    border: 1px dashed black
+    background-color: rgba(0,0,0,0.1)
+    position: absolute

@@ -1,12 +1,12 @@
 <section id='piano-roll'>
   <section id='grid'>
     {{play-bar part=this transport=transport}}
-    {{beat-list content=beats}}
+    {{view 'beatList' content=beats}}
     {{render 'selectionBox' }}
     {{view 'notesEdit' content=notes}}
     <ul>
-      {{#each pitches}}
-        <li {{bind-attr class="isSharp:sharp :row"}} {{bind-attr data-pitch="name"}}></li>
+      {{#each pitch in pitches}}
+        <li {{bind-attr class="pitch.isSharp:sharp :row"}} {{bind-attr data-pitch=pitch.name}}></li>
       {{/each}}
     </ul>
   </section>

@@ -8,11 +8,11 @@
       <dd>
         {{view 'number' min=1 max=480 value=tempo}}
       </dd>
-      {{outlet part-controls}}
+      {{outlet "part-controls"}}
     </dl>
 
     {{render 'transport' }}
   </article>
-  {{outlet instruments }}
+  {{outlet "instruments" }}
 </section>
 {{outlet}}

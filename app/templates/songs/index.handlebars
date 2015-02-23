@@ -1,21 +1,21 @@
 <section id='songs'>
   <button {{action 'addSong' }}>+</button>
   <ul>
-    {{#each}}
+    {{#each song in controller}}
     <li class='song'>
       <header class='actions'>
-        <button {{action 'removeSong' this }}>-</button>
-        <button {{action 'sendToServer' this }}>&uparrow;</button>
+        <button {{action 'removeSong' song }}>-</button>
+        <button {{action 'sendToServer' song }}>&uparrow;</button>
       </header>
-      {{#link-to 'song' id }}
-        {{view 'notesSummary' content=notes}}
+      {{#link-to 'song' song.id }}
+        {{view 'notesSummary' content=song.notes}}
       {{/link-to}}
     </li>
     {{/each}}
-    {{#each remoteSongs}}
+    {{#each remoteSong in remoteSongs}}
     <li>
-      {{#link-to 'loadSong' id }}
-        {{id}}
+      {{#link-to 'loadSong' remoteSong.id }}
+        {{remoteSong.id}}
       {{/link-to}}
     </li>
     {{/each}}

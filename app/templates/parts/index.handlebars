@@ -1,11 +1,11 @@
 <section id='parts'>
   <ul>
-    {{#each parts}}
-      {{#if placeholder }}
-        <li {{action 'addPart' name }} class='empty'></li>
+    {{#each part in parts}}
+      {{#if part.placeholder }}
+        <li {{action 'addPart' part.name }} class='empty'></li>
       {{else}}
-        <li {{bind-attr class="isMuted:mute :part"}}>
-          {{render 'parts/summary' this }}
+        <li {{bind-attr class="part.isMuted:mute :part"}}>
+          {{render 'parts/summary' part }}
         </li>
       {{/if}}
     {{/each}}
