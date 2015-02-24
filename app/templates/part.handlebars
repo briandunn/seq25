@@ -6,7 +6,7 @@
     {{view 'notesEdit' content=notes}}
     <ul>
       {{#each pitch in pitches}}
-        <li {{bind-attr class="pitch.isSharp:sharp :row"}} {{bind-attr data-pitch=pitch.name}}></li>
+        <li {{bind-attr class="pitch.isSharp:sharp :row"}}></li>
       {{/each}}
     </ul>
   </section>
