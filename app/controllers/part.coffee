@@ -19,23 +19,6 @@ PartController = Ember.ObjectController.extend
 
   beats: (-> [1..@get('beat_count')] ).property('beat_count')
 
-  partSaver: ( ->
-    @get('model').save()
-  ).observes('beat_count', 'volume', 'isMuted', 'notes.[]')
-
-  noteSaver: ( ->
-    @get('notes').invoke 'save'
-  ).observes('notes.[]')
-
-  positionSaver: ( ->
-    Ember.run.cancel @_positionSaver
-    @_positionSaver = Ember.run.later(this, (->
-      @get('selectedNotes').invoke('save')
-    ), 250)
-  ).observes('notes.@each.duration',
-             'notes.@each.tick',
-             'notes.@each.beat',
-             'notes.@each.pitchNumber')
 
   editResolution: (->
     q = parseInt(@get('quant')) || @TICKS_PER_BEAT

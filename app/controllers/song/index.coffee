@@ -8,10 +8,9 @@ SongIndexController = Ember.ObjectController.extend
 
   actions:
     addPart: (name)->
-      @get('song.parts').createRecord(name: name).save().then (part) ->
-        part.get('synthesizers').createRecord().save()
+      part = @get('song.parts').createRecord(name: name)
+      part.get('synthesizers').createRecord()
 
-      @get('song').save()
       @transitionToRoute('part', name)
 
 `export default SongIndexController`
