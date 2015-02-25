@@ -17,8 +17,10 @@ Song = DS.Model.extend
     @get('parts').invoke 'destroyRecord'
     @_super()
 
-  notes: Em.computed 'parts.[]', ->
-    _.flatten(this.get('parts').mapBy('notes.content'))
+  notes: Em.computed 'parts.@each.notes', ->
+    @get('parts')
+    .map (part)-> part.get('notes').toArray()
+    .reduce (all, some)-> all.concat some
 
 Song.load = (store, id)->
   new Ember.RSVP.Promise (resolve, reject)->
