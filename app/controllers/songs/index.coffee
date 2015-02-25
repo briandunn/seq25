@@ -1,7 +1,9 @@
+`import Song from "seq25/models/song"`
+`import RemoteSong from "seq25/models/remote-song"`
 SongsIndexController = Ember.ArrayController.extend
   refreshRemoteSongs: (->
-    # RemoteSong.all().then (songs)=>
-    #   @set 'remoteSongs', songs
+    RemoteSong.all().then (songs)=>
+      @set 'remoteSongs', songs
   ).observes('@each.remoteId').on 'init'
 
   actions:
@@ -10,14 +12,14 @@ SongsIndexController = Ember.ArrayController.extend
       @transitionToRoute('song', song)
 
     removeSong: (song)->
-      Seq25.Song.load(@store, song.get('id')).then (song)=>
+      Song.load(@store, song.get('id')).then (song)=>
         if Ember.testing || confirm '!'
           song.destroyRecord()
           @removeObject(song)
 
     sendToServer: (song)->
-      Seq25.Song.load(@store, song.get('id')).then (song)=>
+      Song.load(@store, song.get('id')).then (song)=>
         serializer = @container.lookup('serializer:remote')
-        Seq25.RemoteSong.send(serializer, song)
+        RemoteSong.send(serializer, song)
 
 `export default SongsIndexController`

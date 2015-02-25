@@ -1,4 +1,4 @@
-class Seq25.Midi
+class Midi
   constructor: (@output)->
 
   play: (pitch, velocity, channel, start=0, duration)->
@@ -20,15 +20,17 @@ class Seq25.Midi
     @output.send [OFF, pitch, 0x7f], timeFromNow
 
 connectionPromise = null
-Seq25.Midi.connect = ->
+Midi.connect = ->
   connectionPromise ||= new Em.RSVP.Promise (resolve, reject) ->
     navigator.requestMIDIAccess()
     .then (access)->
       if output = access.outputs.values().next().value
-        resolve(new Seq25.Midi(output))
+        resolve(new Midi(output))
       else
         console.log 'connected, but no outputs'
         reject()
     .catch ->
       console.log "midi connection failure"
       reject()
+
+`export default Midi`

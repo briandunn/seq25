@@ -19,7 +19,7 @@ extract = (store, model, payload)->
   flattenHasManys model, payload
   creations
 
-Seq25.RemoteSong =
+RemoteSong =
   saveInto: (store, id)->
     new Em.RSVP.Promise (resolve, reject)=>
       Em.$.get("#{URL}/#{id}").then (data)=>
@@ -44,3 +44,4 @@ Seq25.RemoteSong =
   all: ->
     Em.$.get URL
 
+`export default RemoteSong`

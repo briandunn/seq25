@@ -1,4 +1,4 @@
-Seq25.PartInstrumentsRoute = Ember.Route.extend
+PartInstrumentsRoute = Ember.Route.extend
   controllerName: 'instruments'
 
   model: ->
@@ -6,3 +6,5 @@ Seq25.PartInstrumentsRoute = Ember.Route.extend
 
   renderTemplate: ->
     @render outlet: 'instruments', into: 'song'
+
+`export default PartInstrumentsRoute`
