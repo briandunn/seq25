@@ -10,21 +10,21 @@
   },
   "app/models/*.coffee": {
     "type":      "model",
-    "alternate": "spec/models/{}-spec.coffee"
+    "alternate": "tests/unit/models/{}-test.coffee"
   },
   "app/serializers/*.coffee": {
     "type":      "serializer",
-    "alternate": "spec/serializers/{}-spec.coffee"
+    "alternate": "tests/unit/serializers/{}-test.coffee"
   },
   "app/controllers/*.coffee": {
     "type":      "controller",
-    "alternate": "spec/controllers/{}-spec.coffee",
+    "alternate": "tests/unit/controllers/{}-test.coffee",
     "template":  [
       "{camelcase}Controller = Ember.Controller.extend",
       "`export default {camelcase}Controller`"]
   },
-  "spec/*-spec.coffee": {
-    "type":      "spec",
+  "tests/unit/*-test.coffee": {
+    "type":      "test",
     "alternate": "app/{}.coffee"
   }
 }
