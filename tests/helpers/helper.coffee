@@ -64,7 +64,8 @@ helpers = do ->
 
   Ember.Test.registerAsyncHelper 'clickPosition', (app, selector, options={})->
     {x, y, shift} = options
-    el = app.testHelpers.findWithAssert(selector)
+    el = find selector
+    throw "#{selector} is ambiguous. matched #{el.length} elements." unless el.length == 1
     {top, left} = el.offset()
     for eventName in 'mousedown click mouseup'.w()
       el.trigger Em.$.Event eventName, pageX: left + (x || 0), pageY: top + (y || 0), shiftKey: shift

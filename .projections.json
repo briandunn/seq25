@@ -26,5 +26,8 @@
   "tests/unit/*-test.coffee": {
     "type":      "test",
     "alternate": "app/{}.coffee"
-  }
+  },
+  "tests/acceptance/*-test.coffee": {
+    "type":      "acceptance"
+  },
 }
