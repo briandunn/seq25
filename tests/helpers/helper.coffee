@@ -1,4 +1,6 @@
 `import Keystrokes from "seq25/models/keystrokes"`
+`import startApp from '../helpers/start-app'`
+`import {stubAudio} from '../helpers/unit'`
 server = null
 
 QUnit.testStart ->
@@ -32,6 +34,21 @@ parseStyles = (selector) ->
       styles[k] = v
       styles
     ),{})
+
+feature = (title) ->
+  application = null
+  module "Acceptance: #{title}",
+    beforeEach: ->
+      application = startApp()
+      stubAudio(application)
+      visit('/')
+      click('button')
+      click('li.empty')
+      return
+
+    afterEach: ->
+      window.localStorage.removeItem 'seq25'
+      Ember.run application, 'destroy'
 
 helpers = do ->
   Ember.Test.registerAsyncHelper 'keyTrigger', (app, key) ->
@@ -81,4 +98,4 @@ helpers = do ->
   Ember.Test.registerHelper 'visitRoute', (app, routeName) ->
     app.__container__.lookup('router:main').transitionTo(routeName)
 
-`export {helpers}`
+`export {helpers, feature}`

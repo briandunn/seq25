@@ -1,23 +1,8 @@
 `import Ember from 'ember'`
-`import { module, test } from 'qunit'`
-`import startApp from '../helpers/start-app'`
-`import {stubAudio} from '../helpers/unit'`
-`import {helpers} from '../helpers/helper'`
+`import {test} from 'qunit'`
+`import {helpers, feature} from '../helpers/helper'`
 
-application = null
-
-module 'Acceptance: user creates part',
-  beforeEach: ->
-    window.localStorage.removeItem 'seq25'
-    application = startApp()
-    stubAudio(application)
-    visit('/')
-    click('button')
-    click('li.empty')
-    return
-
-  afterEach: ->
-    Ember.run application, 'destroy'
+feature 'Acceptance: user creates part'
 
 test 'add new part', ->
   andThen ->
