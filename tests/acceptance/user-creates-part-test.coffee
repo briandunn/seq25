@@ -1,4 +1,3 @@
-`import Ember from 'ember'`
 `import {test} from 'qunit'`
 `import {helpers, feature} from '../helpers/helper'`
 
