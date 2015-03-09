@@ -15,16 +15,12 @@ App = Ember.Application.extend
   ApplicationSerializer: DS.LSSerializer
   Resolver: Resolver
 
-Em.Application.initializer
-  name: 'register-stuff'
-  initialize: (container, application)->
-
-    audioContext = do ->
-      contextClass = 'AudioContext webkitAudioContext'.w().find (klass)->
-        window[klass]
-      new window[contextClass]
-
-    application.register 'audioContext:main', audioContext
+unless config.skipAudioContext
+  Em.Application.initializer
+    name: 'register-stuff'
+    initialize: (container, application)->
+      contextClass = 'AudioContext webkitAudioContext'.w().find (klass)-> window[klass]
+      application.register 'audioContext:main', new window[contextClass]
 
 loadInitializers(App, config.modulePrefix)
 
