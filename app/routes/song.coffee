@@ -13,7 +13,7 @@ SongRoute = Ember.Route.extend
 
   saveBeforeClose: (->
     Em.$(window).bind 'beforeunload', =>
-      @modelFor(@routeName).save()
+      @store.all('song').invoke 'save'
       return
   ).on 'init'
 
