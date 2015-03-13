@@ -18,4 +18,7 @@ Song = DS.Model.extend
     .map (part)-> part.get('notes').toArray()
     .reduce ((all, some)-> all.concat(some)), []
 
+  didDelete: ->
+    @get('parts').invoke 'destroyRecord'
+
 `export default Song`

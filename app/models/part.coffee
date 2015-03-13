@@ -58,4 +58,10 @@ Part = DS.Model.extend
     amount = amount * -1 if direction == "down"
     @incrementProperty('volume', amount)
 
+  destroyRecord: ->
+    for collection in 'notes synthesizers midiInstruments'.w()
+      @get(collection).forEach (item)=>
+        @store.unloadRecord item
+    @_super()
+
 `export default Part`
