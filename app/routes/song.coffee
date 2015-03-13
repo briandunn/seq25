@@ -2,10 +2,19 @@
 
 SongRoute = Ember.Route.extend
   model: (param)->
-    Song.load @store, param.song_id
+    new Em.RSVP.Promise (resolve, reject)=>
+      @store.find 'song'
+      .then (songs)->
+        resolve(songs.findBy('id', param.song_id))
 
   setupController: (controller, song)->
     @controllerFor('transport').set('model', song)
     controller.set('model', song)
+
+  saveBeforeClose: (->
+    Em.$(window).bind 'beforeunload', =>
+      @modelFor(@routeName).save()
+      return
+  ).on 'init'
 
 `export default SongRoute`

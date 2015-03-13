@@ -12,14 +12,11 @@ SongsIndexController = Ember.ArrayController.extend
       @transitionToRoute('song', song)
 
     removeSong: (song)->
-      Song.load(@store, song.get('id')).then (song)=>
-        if Ember.testing || confirm '!'
-          song.destroyRecord()
-          @removeObject(song)
+      if Ember.testing || confirm '!'
+        song.destroyRecord()
 
     sendToServer: (song)->
-      Song.load(@store, song.get('id')).then (song)=>
-        serializer = @container.lookup('serializer:remote')
-        RemoteSong.send(serializer, song)
+      serializer = @container.lookup('serializer:remote')
+      RemoteSong.send(serializer, song)
 
 `export default SongsIndexController`

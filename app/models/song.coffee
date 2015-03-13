@@ -13,22 +13,9 @@ Song = DS.Model.extend
   stop: ->
     @get('parts').invoke 'stop'
 
-  destroyRecord: ->
-    @get('parts').invoke 'destroyRecord'
-    @_super()
-
   notes: Em.computed 'parts.@each.notes', ->
     @get('parts')
     .map (part)-> part.get('notes').toArray()
-    .reduce (all, some)-> all.concat some
-
-Song.load = (store, id)->
-  new Ember.RSVP.Promise (resolve, reject)->
-    store.find('song', id).then (song)->
-      store.find('part', song: song.get('id')).then (parts)->
-        promises = parts.map (part)->
-          store.find 'note', part: part.get('id')
-        Ember.RSVP.Promise.all(promises).then ->
-          resolve(song)
+    .reduce ((all, some)-> all.concat(some)), []
 
 `export default Song`
