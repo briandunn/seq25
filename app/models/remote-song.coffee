@@ -1,4 +1,5 @@
-URL = if window.location.hostname == 'seq25.com' then 'http://seq25.herokuapp.com/songs' else '/songs'
+`import ENV from './../config/environment'`
+URL = ENV.serverURL
 
 extract = (store, model, payload)->
   creations = []

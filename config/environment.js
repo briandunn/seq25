@@ -32,6 +32,7 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
+    ENV.serverURL = '/songs';
   }
 
   if (environment === 'test') {
@@ -48,7 +49,7 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-
+    ENV.serverURL = 'http://seq25.herokuapp.com/songs';
   }
 
   return ENV;
