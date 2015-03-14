@@ -20,7 +20,8 @@ module.exports = function(environment) {
     contentSecurityPolicy: {
       'default-src': "'none'",
       'img-src': "'self'",
-      'style-src': "'self' 'unsafe-inline'",
+      'font-src': "'self' http://fonts.gstatic.com",
+      'style-src': "'self' 'unsafe-inline' http://fonts.googleapis.com",
       'media-src': "'self'"
     }
   };
