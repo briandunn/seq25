@@ -21,7 +21,7 @@ extract = (store, model, payload)->
   creations
 
 RemoteSong =
-  saveInto: (store, id)->
+  find: (store, id)->
     new Em.RSVP.Promise (resolve, reject)=>
       Em.$.get("#{URL}/#{id}").then (data)=>
         models = extract(store, store.modelFor('song'), data)
@@ -33,7 +33,7 @@ RemoteSong =
   send: (serializer, song)->
     data = serializer.serialize new DS.Snapshot(song)
     Em.$.ajax
-      data:         JSON.stringify data
+      data:        JSON.stringify data
       dataType:    'json'
       contentType: 'application/json; charset=utf-8'
       type:        'POST'

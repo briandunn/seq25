@@ -1,11 +1,19 @@
-`import Song from 'seq25/models/song'`
+`import RemoteSong from "seq25/models/remote-song"`
 
 SongRoute = Ember.Route.extend
   model: (param)->
     new Em.RSVP.Promise (resolve, reject)=>
       @store.find 'song'
-      .then (songs)->
-        resolve(songs.findBy('id', param.song_id))
+      .then (songs)=>
+        song = songs.findBy('id', param.song_id)
+        if song
+          resolve(song)
+        else
+          RemoteSong.find(@store, param.song_id)
+          .then (song)->
+            resolve(song)
+          .catch ->
+            reject('not found')
 
   setupController: (controller, song)->
     @controllerFor('transport').set('model', song)
