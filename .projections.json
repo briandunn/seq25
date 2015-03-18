@@ -1,8 +1,10 @@
 {
-  "app/routes/*.coffee":     {"type": "route"},
+  "app/routes/*.coffee": {"type": "route"},
   "app/templates/*.handlebars": {"type": "template"},
-  "app/css/*.sass":             {"type": "stylesheet"},
-  "app/views/*.coffee":      {
+  "app/templates/*.hbars": {"type": "template"},
+  "app/templates/*.haml": {"type": "template"},
+  "app/css/*.sass": {"type": "stylesheet"},
+  "app/views/*.coffee": {
     "type": "view",
     "template":  [
       "{camelcase}View = Ember.View.extend",

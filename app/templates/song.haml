@@ -1,0 +1,23 @@
+%section.controls
+  %h2 Sequence
+  - link-to 'song' this class="parts"
+    Parts
+  - link-to 'songs' class='songs'
+    Songs
+  %button{action 'sendToServer' model}
+    &uparrow;
+  - if remoteURL
+    %dl
+      %dt
+        %label(for='permalink') Permalink
+      %dd
+        %input#permalink(readonly value=remoteURL)
+  %article
+    %dl
+      %dt
+        %label(for='tempo') Tempo
+      %dd=view 'number' min=1 max=480 value=tempo
+      =outlet "part-controls"
+    =render 'transport'
+  =outlet 'instruments'
+=outlet

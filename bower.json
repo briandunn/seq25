@@ -13,6 +13,7 @@
     "ember-qunit-notifications": "0.0.7",
     "qunit": "~1.17.1",
     "ember-localstorage-adapter": "~0.5.1",
-    "sinon": "http://sinonjs.org/releases/sinon-1.12.2.js"
+    "sinon": "http://sinonjs.org/releases/sinon-1.12.2.js",
+    "handlebars": "~2.0.0"
   }
 }
