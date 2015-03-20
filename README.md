@@ -6,23 +6,21 @@ A sequencer inspired by [SEQ24][s].
 
 ## Setup
 
-If you already have [lineman][l] installed, then just clone the app and run:
+If you already have [ember-cli][l] installed, then just clone the app and run:
 
-[l]: http://linemanjs.com
+[l]: http://ember-cli.com
 
 ```
 $ npm install
-$ lineman run
+$ ember serve
 ```
 
-Now go to http://localhost:8000 and you should see the app running.
+Now go to http://localhost:4200 and you should see the app running.
 
 ## Running the tests
 
-Lineman must be running to run the spec.
-
 ```
-lineman spec
+ember test
 ```
 
 ## Keyboard actions
