@@ -1,0 +1,8 @@
+%article.instrument
+  %dl
+    %dt
+      %label(for='channel') channel
+    %dd= view 'number' min=1 max=16 value=channel
+    %dt
+      %label(for='volume') v
+    %dd= view 'range' min=0 max=01 step=0.01 value=volume
