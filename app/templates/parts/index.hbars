@@ -1,0 +1,8 @@
+%section#parts
+  %ul
+    - each part in parts
+      - if part.placeholder
+        %li.empty {action 'addPart' part.name }
+      - unless part.placeholder
+        %li {bind-attr class="part.isMuted:mute :part"}
+          = render 'parts/summary' part
