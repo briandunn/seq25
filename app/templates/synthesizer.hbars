@@ -1,0 +1,20 @@
+%dl
+  %dt
+    %label v
+  %dd= view 'range' min='0' max='1' step='0.01' value=volume
+  %dt
+    %label a
+  %dd= view 'range' min='0' max='1' step='0.01' value=attack
+  %dt
+    %label r
+  %dd= view 'range' min='0' max='1' step='0.01' value=release
+%dl
+  %dt
+    %label q
+  %dd= view 'range' min='0' max='1' step='0.01' value=filterQ
+  %dt
+    %label f
+  %dd= view 'range' min='0' max='1' step='0.01' value=filterFreq
+  %dt
+    %label(for='shape') shape
+  %dd= view 'select' content=shapes value=shape
