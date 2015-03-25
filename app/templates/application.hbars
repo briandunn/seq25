@@ -1,0 +1,6 @@
+%header
+  %h1
+    - link-to 'songs'
+     Seq25
+= outlet "help"
+= outlet
