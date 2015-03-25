@@ -3,7 +3,7 @@
   "app/templates/*.handlebars": {"type": "template"},
   "app/templates/*.hbars": {"type": "template"},
   "app/templates/*.haml": {"type": "template"},
-  "app/css/*.sass": {"type": "stylesheet"},
+  "app/styles/*.sass": {"type": "stylesheet"},
   "app/views/*.coffee": {
     "type": "view",
     "template":  [
