@@ -35,6 +35,15 @@ NoteEditView = NoteView.extend
     event.stopPropagation()
     @send 'toggle', [@get('content')], isAdditive: event.shiftKey
 
+lastPoint = null
+seemsIntentional = (e)->
+  lastPoint ||= x: e.clientX, y: e.clientY
+  dist = Math.sqrt Math.pow(lastPoint.x - e.clientX, 2), Math.pow(lastPoint.y - e.clientY, 2)
+  console.log dist
+  if dist > 100
+    lastPoint = x: e.clientX, y: e.clientY
+    true
+
 NotesEditView = NotesView.extend
   target: Em.computed.alias 'controller.controllers.selectionBox'
   isDragging: false
@@ -42,8 +51,10 @@ NotesEditView = NotesView.extend
   mouseDown: (down)->
     down.stopPropagation()
     startCorner = relativePoint(@$(), down)
+    lastPoint = null
     @mouseMove = (move)=>
       move.stopPropagation()
+      return unless @get('isDragging') or seemsIntentional(move)
       @set('isDragging', true)
       @send 'resize',
         [startCorner, relativePoint(@$(), move)]
