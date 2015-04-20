@@ -4,24 +4,51 @@ A sequencer inspired by [SEQ24][s].
 
 [s]: http://www.filter24.org/seq24/
 
-## Setup
+## Prerequisites
 
-If you already have [ember-cli][l] installed, then just clone the app and run:
+You will need the following things properly installed on your computer.
 
-[l]: http://ember-cli.com
+* [Git](http://git-scm.com/)
+* [Node.js](http://nodejs.org/) (with NPM)
+* [Bower](http://bower.io/)
+* [Ember CLI](http://www.ember-cli.com/)
+* [PhantomJS](http://phantomjs.org/)
 
-```
-$ npm install
-$ ember serve
-```
+## Installation
 
-Now go to http://localhost:4200 and you should see the app running.
+* `git clone https://github.com/briandunn/seq25.git` this repository
+* change into the new directory
+* `npm install`
+* `bower install`
 
-## Running the tests
+## Running / Development
 
-```
-ember test
-```
+* `ember server`
+* Visit your app at [http://localhost:4200](http://localhost:4200).
+
+### Code Generators
+
+Make use of the many generators for code, try `ember help generate` for more details
+
+### Running Tests
+
+* `ember test`
+* `ember test --server`
+
+### Building
+
+* `ember build` (development)
+* `ember build --environment production` (production)
+
+### Deploying
+
+The Ember app
+
+`deploy-frontend.sh`
+
+The Rack API
+
+`deploy-server.sh`
 
 ## Keyboard actions
 
@@ -52,3 +79,12 @@ shift+right - extends a note
 [] note velocity adjustment
 [] performance issue on note add
 [] handle localStorage quota exceeded event
+
+## Further Reading / Useful Links
+
+* [ember.js](http://emberjs.com/)
+* [ember-cli](http://www.ember-cli.com/)
+* Development Browser Extensions
+  * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
+  * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
+
