@@ -13,4 +13,7 @@ SongIndexController = Ember.ObjectController.extend
 
       @transitionToRoute('part', name)
 
+    removePart: (part)->
+      part.destroyRecord()
+
 `export default SongIndexController`

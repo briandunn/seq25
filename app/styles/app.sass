@@ -243,16 +243,26 @@ section
     float: right;
     margin: 1%
 
+.part, .song
+  position: relative
+  header
+    background: none
+    z-index: 5
+    position: absolute
+    top: 0px
+    display: none
+    button
+      margin: 2px 0 0 2px
+
+.part:hover, .song:hover
+  header
+    display: block
+
 .part
   li
     background: #1AA8DD
 
 .song
-  position: relative
-  header
-    z-index: 5
-    position: absolute
-    top: 0px
   .Q
     background: red
   .W
