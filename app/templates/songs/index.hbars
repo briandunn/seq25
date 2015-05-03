@@ -1,0 +1,14 @@
+%section#songs
+  %button{action 'addSong'}+
+  %ul
+    - each song in controller
+      %li.song
+        %header.actions
+          %button{action 'removeSong' song} &minus;
+          %button{action 'sendToServer' song} &uparrow;
+        - link-to 'song' song
+          = view 'notesSummary' content=song.notes
+    - each remoteSong in remoteSongs
+      %li
+        - link-to 'song' remoteSong.id
+          = remoteSong.id
