@@ -1,4 +1,4 @@
-PartSerializer = DS.LSSerializer.extend DS.EmbeddedRecordsMixin,
+PartSerializer = DS.JSONSerializer.extend DS.EmbeddedRecordsMixin,
   attrs:
     notes:
       embedded: 'always'

@@ -15,6 +15,10 @@ PartController = Ember.ObjectController.extend
   transport: Em.computed.alias('controllers.transport')
   quant: 1
 
+  beat_count: Em.computed.alias 'model.beat_count'
+  notes: Em.computed.alias 'model.notes'
+  secondsPerBeat: Em.computed.alias 'model.secondsPerBeat'
+
   selectedNotes: Em.computed.alias 'controllers.selectionBox.selected'
 
   beats: (-> [1..@get('beat_count')] ).property('beat_count')

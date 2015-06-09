@@ -30,6 +30,6 @@ PlayBarComponent = Ember.Component.extend
       [(progress + 1/beatCount), secondsPerBeat]
     else
       [-0.02, 0]
-    "transition-duration: #{duration}s; left: #{left * 100}%"
+    "transition-duration: #{duration}s; left: #{left * 100}%".htmlSafe()
 
 `export default PlayBarComponent`

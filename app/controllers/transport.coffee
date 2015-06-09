@@ -1,6 +1,6 @@
 BUFFER_TIME = 0.5
 PROGRESS_INTERVAL = 50
-TransportController = Ember.ObjectController.extend
+TransportController = Ember.Controller.extend
   needs: ['part', 'song/index']
 
   song: Ember.computed.alias 'model'

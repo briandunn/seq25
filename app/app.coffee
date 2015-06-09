@@ -9,10 +9,6 @@ Ember.MODEL_FACTORY_INJECTIONS = true
 App = Ember.Application.extend
   modulePrefix: config.modulePrefix
   podModulePrefix: config.podModulePrefix
-  ApplicationAdapter: DS.LSAdapter.extend
-    namespace: 'seq25'
-    defaultSerializer: 'local'
-  ApplicationSerializer: DS.LSSerializer
   Resolver: Resolver
 
 unless config.skipAudioContext
