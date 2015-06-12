@@ -31,6 +31,6 @@ NoteView = Ember.View.extend
     @get('cssAttributes')
     .map (attribute)=>
       "#{attribute}: #{@get(attribute)};"
-    .join ' '
+    .join(' ').htmlSafe()
 
 `export {NotesView, NoteView}`

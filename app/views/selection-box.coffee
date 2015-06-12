@@ -14,6 +14,6 @@ SelectionBoxView = Ember.View.extend
 
       (for key, value of dimensions
         "#{key}: #{value * 100}%"
-      ).join(';')
+      ).join(';').htmlSafe()
 
 `export default SelectionBoxView`
