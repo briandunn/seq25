@@ -43,6 +43,6 @@ RemoteSong =
         song.save()
 
   all: ->
-    Em.$.get URL
+    Em.$.get(URL)
 
 `export default RemoteSong`
