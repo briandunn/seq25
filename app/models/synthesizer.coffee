@@ -21,7 +21,11 @@ Synthesizer = DS.Model.extend
   adjustVolume: (->
     {output, volume} = @getProperties 'output', 'volume'
     output.gain.value = volume
-  ).observes('volume').on 'init'
+  ).observes('volume')
+
+  ready: ->
+    @adjustVolume()
+    @mute()
 
   mute: (->
     {output, isMuted} = @getProperties 'output', 'isMuted'
@@ -29,7 +33,7 @@ Synthesizer = DS.Model.extend
       output.disconnect()
     else
       output.connect @get('context').destination
-  ).observes('isMuted').on 'init'
+  ).observes('isMuted')
 
   findOrCreateOscillator: (pitch)->
     @get('oscillators')[pitch.get('number')] ||= Osc.create
