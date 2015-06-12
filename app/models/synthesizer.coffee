@@ -9,7 +9,7 @@ Synthesizer = DS.Model.extend
   filterQ:    DS.attr 'number', defaultValue: 0
   volume:     DS.attr 'number', defaultValue: 0.75
   isMuted:    Em.computed.alias 'part.isMuted'
-  context:    Em.computed -> @container.resolve 'audioContext:main'
+  context:    Em.computed -> @container._registry.resolve 'audioContext:main'
 
   init: ->
     @_super()

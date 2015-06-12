@@ -7,7 +7,7 @@ TransportController = Ember.Controller.extend
 
   currentPart: (-> @get('controllers.part.name')).property('controllers.part')
 
-  context: Em.computed -> @container.resolve 'audioContext:main'
+  context: Em.computed -> @container._registry.resolve 'audioContext:main'
   currentTime: -> @get('context').currentTime
   startedAt: 0
   progress: 0
