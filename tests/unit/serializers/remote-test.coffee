@@ -23,7 +23,6 @@ test 'creates a nested document', ->
     part.get('midiInstruments').createRecord(channel: 2)
     part.get('synthesizers').createRecord(attack: 0.5)
 
-    #song must be a DS.Snapshot. wtf?
-    payload = @subject().serialize(new DS.Snapshot(song))
+    payload = @subject().serialize(new DS.Snapshot(song._internalModel))
     {parts:[{notes:[{pitchNumber: pitch}]}]} = payload
     equal pitch, 74
