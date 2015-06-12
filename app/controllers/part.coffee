@@ -7,13 +7,19 @@ times = (count, fn)->
     fn()
     i++
 
-PartController = Ember.ObjectController.extend
+PartController = Ember.Controller.extend
   TICKS_PER_BEAT: Note.TICKS_PER_BEAT
 
   pitches: (-> Pitch.all).property()
   needs: ['transport', 'selectionBox']
   transport: Em.computed.alias('controllers.transport')
   quant: 1
+
+  totalTicks: Em.computed.alias 'model.totalTicks'
+  beat_count: Em.computed.alias 'model.beat_count'
+  notes: Em.computed.alias 'model.notes'
+  secondsPerBeat: Em.computed.alias 'model.secondsPerBeat'
+  name: Em.computed.alias 'model.name'
 
   selectedNotes: Em.computed.alias 'controllers.selectionBox.selected'
 

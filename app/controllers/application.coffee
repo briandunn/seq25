@@ -1,4 +1,4 @@
-ApplicationController = Ember.ObjectController.extend
+ApplicationController = Ember.Controller.extend
 
   showHelp: false
 

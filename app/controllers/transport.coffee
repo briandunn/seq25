@@ -1,6 +1,6 @@
 BUFFER_TIME = 0.5
 PROGRESS_INTERVAL = 50
-TransportController = Ember.ObjectController.extend
+TransportController = Ember.Controller.extend
   needs: ['part', 'song/index']
 
   song: Ember.computed.alias 'model'
@@ -13,6 +13,8 @@ TransportController = Ember.ObjectController.extend
   progress: 0
   scheduledUntil: 0
   isPlaying: false
+
+  tempo: Em.computed.alias 'song.tempo'
 
   beat: Em.computed 'progress', 'tempo', ->
     Math.floor (@get('progress') * @get('tempo')) / 60

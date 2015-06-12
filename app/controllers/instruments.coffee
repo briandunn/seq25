@@ -1,4 +1,6 @@
-InstrumentsController = Ember.ObjectController.extend
+InstrumentsController = Ember.Controller.extend
+  midiInstruments: Em.computed.alias 'model.midiInstruments'
+  synthesizers: Em.computed.alias 'model.synthesizers'
   actions:
     addInstrument: (collectionName)->
       @get(collectionName).createRecord()

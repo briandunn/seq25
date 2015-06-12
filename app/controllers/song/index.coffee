@@ -1,4 +1,4 @@
-SongIndexController = Ember.ObjectController.extend
+SongIndexController = Ember.Controller.extend
   song: Em.computed.alias 'model'
   parts: (->
     song = @get 'song'
