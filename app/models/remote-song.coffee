@@ -11,7 +11,7 @@ extract = (store, model, payload)->
       if (relationship.kind == 'hasMany') and related
         relations[name.camelize()] = related.map (payload)->
           flattenHasManys(relationship.type, payload)
-    record = store.createRecord model.typeKey, payload
+    record = store.createRecord model.modelName, payload
     for name, records of relations
       record.get(name).pushObjects records
     creations.push(record)

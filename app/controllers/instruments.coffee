@@ -6,7 +6,7 @@ InstrumentsController = Ember.Controller.extend
       @get(collectionName).createRecord()
 
     removeInstrument: (instrument)->
-      collection = @get "#{instrument.constructor.typeKey}s"
+      collection = @get "#{instrument.constructor.modelName}s"
       instrument.destroyRecord()
 
 `export default InstrumentsController`
