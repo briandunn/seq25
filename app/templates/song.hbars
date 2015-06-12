@@ -1,6 +1,6 @@
 %section.controls
   %h2 Sequence
-  - link-to 'song' this class="parts"
+  - link-to 'song' model class="parts"
     Parts
   - link-to 'songs' class='songs'
     Songs
