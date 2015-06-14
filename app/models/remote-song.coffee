@@ -31,7 +31,7 @@ RemoteSong =
             resolve(song)
 
   send: (serializer, song)->
-    data = serializer.serialize new DS.Snapshot(song)
+    data = serializer.serialize new DS.Snapshot(song._internalModel)
     Em.$.ajax
       data:        JSON.stringify data
       dataType:    'json'

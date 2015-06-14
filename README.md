@@ -26,9 +26,12 @@ You will need the following things properly installed on your computer.
 * `ember server`
 * Visit your app at [http://localhost:4200](http://localhost:4200).
 
-### Code Generators
+To integrate over the ruby API bit:
 
-Make use of the many generators for code, try `ember help generate` for more details
+* `ember server --proxy http://127.0.0.1:3000`
+
+* create a database and load the schema from the spec file
+* `CORS_ORIGIN='http://localhost:4200' DATABASE_URL='/seq25' bundle exec thin start`
 
 ### Running Tests
 

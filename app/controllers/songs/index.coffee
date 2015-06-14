@@ -6,8 +6,8 @@ SongsIndexController = Ember.ArrayController.extend
     @set('remoteSongs', [])
 
   refreshRemoteSongs: (->
-    RemoteSong.all().then (response)=>
-      @set 'remoteSongs', response.songs
+    RemoteSong.all().then (songs)=>
+      @set 'remoteSongs', songs
   ).observes('@each.remoteId').on 'init'
 
   actions:
@@ -18,9 +18,5 @@ SongsIndexController = Ember.ArrayController.extend
     removeSong: (song)->
       if Ember.testing || confirm '!'
         song.destroyRecord()
-
-    sendToServer: (song)->
-      serializer = @container.lookup('serializer:remote')
-      RemoteSong.send(serializer, song)
 
 `export default SongsIndexController`
