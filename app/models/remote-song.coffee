@@ -3,21 +3,21 @@ URL = ENV.serverURL
 
 extract = (store, model, payload)->
   creations = []
-  flattenHasManys = (model, payload)->
+  flattenHasManys = (modelName, payload)->
     relations = {}
-    model.eachRelationship (name, relationship)->
+    store.modelFor(modelName).eachRelationship (name, relationship)->
       related = payload[name]
       delete payload[name]
       if (relationship.kind == 'hasMany') and related
         relations[name.camelize()] = related.map (payload)->
           flattenHasManys(relationship.type, payload)
-    record = store.createRecord model.modelName, payload
+    record = store.createRecord modelName, payload
     for name, records of relations
       record.get(name).pushObjects records
     creations.push(record)
     record
 
-  flattenHasManys model, payload
+  flattenHasManys model.modelName, payload
   creations
 
 RemoteSong =
