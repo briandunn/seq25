@@ -12,9 +12,7 @@
   </section>
   <ul id='keyboard'>
     {{#each pitch in pitches}}
-      {{#render 'piano-key' pitch}}
-        {{name}}
-      {{/render}}
+      {{piano-key part=this.model pitch=pitch}}
     {{/each}}
   </ul>
 </section>
