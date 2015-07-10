@@ -1,6 +1,9 @@
 PartRoute = Ember.Route.extend
-  model: (params)->
-    @modelFor('song').get('parts').findBy('name', params.name)
+  model: ({name})->
+    song = @modelFor('song')
+    part = song.getPart(name)
+    @transitionTo('song', song) unless part
+    part
 
   renderTemplate: ->
     @render 'part-controls', outlet: 'part-controls'

@@ -5,7 +5,7 @@ Song = DS.Model.extend
   secondsPerBeat: (-> 60 / @get('tempo') ).property('tempo')
 
   getPart: (name)->
-    @get('parts').findBy 'name', name
+    @get('parts').findBy('name', name)
 
   schedule: (now, from, to)->
     @get('parts').invoke 'schedule', now, from, to
