@@ -1,6 +1,7 @@
 {
   "app/routes/*.coffee": {"type": "route"},
   "app/templates/*.handlebars": {"type": "template"},
+  "app/templates/*.hbs": {"type": "template"},
   "app/templates/*.hbars": {"type": "template"},
   "app/templates/*.haml": {"type": "template"},
   "app/styles/*.sass": {"type": "stylesheet"},
@@ -17,6 +18,10 @@
   "app/serializers/*.coffee": {
     "type":      "serializer",
     "alternate": "tests/unit/serializers/{}-test.coffee"
+  },
+  "app/components/*.coffee": {
+    "type": "component",
+    "alternate": "tests/unit/components/{}-test.coffee"
   },
   "app/controllers/*.coffee": {
     "type":      "controller",
