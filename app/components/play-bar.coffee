@@ -1,7 +1,7 @@
 PlayBarComponent = Ember.Component.extend
   beat: Em.computed.alias 'transport.beat'
   isPlaying: Em.computed.alias 'transport.isPlaying'
-  beatCount: Em.computed.alias 'part.beat_count'
+  beatCount: Em.computed.alias 'part.beatCount'
   secondsPerBeat: Em.computed.alias 'part.secondsPerBeat'
 
   loopCount: (->

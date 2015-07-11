@@ -16,7 +16,7 @@
     %dl
       %dt
         %label(for='tempo') Tempo
-      %dd=view 'number' min=1 max=480 value=tempo
+      %dd=view 'number' min=1 max=480 value=tempo id='tempo'
       =outlet "part-controls"
     =render 'transport'
   =outlet 'instruments'

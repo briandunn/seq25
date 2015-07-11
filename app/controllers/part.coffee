@@ -16,15 +16,13 @@ PartController = Ember.Controller.extend
   quant: 1
 
   totalTicks: Em.computed.alias 'model.totalTicks'
-  beat_count: Em.computed.alias 'model.beat_count'
+  beatCount: Em.computed.alias 'model.beat_count'
+  beats: (-> [1..@get('beatCount')] ).property('beatCount')
   notes: Em.computed.alias 'model.notes'
   secondsPerBeat: Em.computed.alias 'model.secondsPerBeat'
   name: Em.computed.alias 'model.name'
 
   selectedNotes: Em.computed.alias 'controllers.selectionBox.selected'
-
-  beats: (-> [1..@get('beat_count')] ).property('beat_count')
-
 
   editResolution: (->
     q = parseInt(@get('quant')) || @TICKS_PER_BEAT

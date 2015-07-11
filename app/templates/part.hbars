@@ -1,0 +1,14 @@
+%section#piano-roll
+  %section#grid
+    = play-bar part=this transport=transport
+    %ul.measures
+      - each beat in beats
+        {{seq-measure beatCount=beatCount}}
+    = render 'selectionBox'
+    = view 'notesEdit' content=notes
+    %ul
+      - each pitch in pitches
+        %li{bind-attr class="pitch.isSharp:sharp :row"}
+  %ul#keyboard
+    - each pitch in pitches
+      = piano-key part=this.model pitch=pitch
