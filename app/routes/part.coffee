@@ -12,11 +12,19 @@ PartRoute = Ember.Route.extend
   setupController: (controller, model) ->
     #turning on observers if they've been turned off
     controller.isDestroyed = false
+    @controllerFor('transport').set('currentPart', model)
     controller.set('model', model)
 
   deactivate: ->
     Ember.run.cancel(@controller._positionSaver)
     #turning off observers to enable desctruction of loaded parts
     @controller.isDestroyed = true
+
+  actions:
+    incrementQuant: ->
+      @get('controller').incrementProperty('quant', 1)
+
+    setQuant: (q)->
+      @get('controller').set('quant', q)
 
 `export default PartRoute`

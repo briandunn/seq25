@@ -25,4 +25,8 @@ SongRoute = Ember.Route.extend
       return
   ).on 'init'
 
+  actions:
+    addAndGotoPart: (name)->
+      @controllerFor('song/index').send('addPart', name)
+
 `export default SongRoute`

@@ -1,11 +1,7 @@
 BUFFER_TIME = 0.5
 PROGRESS_INTERVAL = 50
 TransportController = Ember.Controller.extend
-  needs: ['part', 'song/index']
-
   song: Ember.computed.alias 'model'
-
-  currentPart: (-> @get('controllers.part.name')).property('controllers.part')
 
   context: Em.computed -> @container._registry.resolve 'audioContext:main'
   currentTime: -> @get('context').currentTime
@@ -65,5 +61,8 @@ TransportController = Ember.Controller.extend
   actions:
     play: ->
       if @get('isPlaying') then @stop() else @play()
+
+    gotoPart: (part)->
+      @transitionToRoute('part', part)
 
 `export default TransportController`

@@ -1,6 +1,7 @@
 `import Keystrokes from "seq25/models/keystrokes"`
 
 TransportView = Ember.View.extend
+  target: Em.computed.alias 'controller'
   didInsertElement: ->
     Keystrokes.partfn = (n) => @partForKey.call(@, n)
 
@@ -18,22 +19,22 @@ TransportView = Ember.View.extend
     Keystrokes.registerKeyDownEvents
       "shift+n": (n, p) => @bumpVolumeForPart(p, "down", n)
       "space":   (n, p) =>
-        @get('controller').send('play')
+        @send('play')
         return true
 
   tagName: 'section'
 
   partForKey: (name) ->
     if name
-      @get('controller').get("song").getPart(name) || name
+      @get('controller.song').getPart(name)
     else
-      @get('controller').get("song").getPart(@currentPart())
+      @currentPart()
 
-  gotoPart: (part) ->
-    if /[QWERASDF]/i.test(part)
-      @get('controller.controllers.songIndex').send('addPart', part)
+  gotoPart: (nameOrPart) ->
+    if /^[QWERASDF]$/i.test(nameOrPart)
+      @send('addAndGotoPart', nameOrPart.capitalize())
     else
-      @get('controller').transitionToRoute('part', part)
+      @send('gotoPart', nameOrPart)
 
   bumpVolumeForPart: (part, direction="up", num) ->
     part.bumpVolume?(direction, num)
@@ -44,11 +45,11 @@ TransportView = Ember.View.extend
     else
       part.set("beatCount", num)
 
-  changeQuantForPart: (partKey, num) ->
+  changeQuantForPart: (part, num) ->
     if num is 1
-      @get('controller.controllers.part').incrementProperty("quant", num)
+      @send('incrementQuant')
     else
-      @get('controller.controllers.part').set("quant", num)
+      @send('setQuant', num)
 
   gotoSummary: ->
     this.get('controller').transitionToRoute('song')
