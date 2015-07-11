@@ -11,15 +11,15 @@ Part = DS.Model.extend
   song:            DS.belongsTo 'song'
   name:            DS.attr 'string'
   volume:          DS.attr 'number', defaultValue: 0.75
-  beat_count:      DS.attr 'number', defaultValue: 16
+  beatCount:       DS.attr 'number', defaultValue: 16
   isMuted:         DS.attr 'boolean', defaultValue: false
   secondsPerBeat: Em.computed.alias 'song.secondsPerBeat'
 
-  totalTicks: Em.computed 'beat_count', ->
-    Note.TICKS_PER_BEAT * @get('beat_count')
+  totalTicks: Em.computed 'beatCount', ->
+    Note.TICKS_PER_BEAT * @get('beatCount')
 
-  duration: Em.computed 'secondsPerBeat', 'beat_count', ->
-    @get('secondsPerBeat') * @get('beat_count')
+  duration: Em.computed 'secondsPerBeat', 'beatCount', ->
+    @get('secondsPerBeat') * @get('beatCount')
 
   toggle: ->
     @toggleProperty 'isMuted'
@@ -43,7 +43,7 @@ Part = DS.Model.extend
   addNoteAtPoint: (position, quant)->
     @get('notes').createRecord
       position:   position
-      beat_count: @get('beat_count')
+      beatCount: @get('beatCount')
       quant:      quant
 
   addNote: (pitchNumber, ticks, duration, quant)->

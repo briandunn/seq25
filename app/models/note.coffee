@@ -19,10 +19,10 @@ Note = DS.Model.extend
   ).observes('position.y')
 
   setBeatAndTick: (->
-    ticks = Math.round @get('beat_count') * TICKS_PER_BEAT * @get('position.x')
+    ticks = Math.round @get('beatCount') * TICKS_PER_BEAT * @get('position.x')
     @set 'absoluteTicks', ticks
     @snap(@get('quant'), Math.floor)
-  ).observes('beat_count', 'position.x')
+  ).observes('beatCount', 'position.x')
 
   absolueSeconds: (->
     @ticksToTime @get 'absoluteTicks'

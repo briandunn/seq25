@@ -40,9 +40,9 @@ TransportView = Ember.View.extend
 
   changeBeatsForPart: (part, direction="up", num) ->
     if num is 1
-      part.incrementProperty?("beat_count", num)
+      part.incrementProperty("beatCount", num)
     else
-      part.set?("beat_count", num)
+      part.set("beatCount", num)
 
   changeQuantForPart: (partKey, num) ->
     if num is 1

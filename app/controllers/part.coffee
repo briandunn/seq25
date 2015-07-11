@@ -16,7 +16,7 @@ PartController = Ember.Controller.extend
   quant: 1
 
   totalTicks: Em.computed.alias 'model.totalTicks'
-  beatCount: Em.computed.alias 'model.beat_count'
+  beatCount: Em.computed.alias 'model.beatCount'
   beats: (-> [1..@get('beatCount')] ).property('beatCount')
   notes: Em.computed.alias 'model.notes'
   secondsPerBeat: Em.computed.alias 'model.secondsPerBeat'

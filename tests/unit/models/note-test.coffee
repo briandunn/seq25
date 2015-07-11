@@ -9,13 +9,13 @@ needs: [
   'model:synthesizer'
 ]
 
-test 'create record with position and beat_count', ->
-  note = @subject beat_count: 16, position: {x: 0.5, y: 0}
+test 'create record with position and beatCount', ->
+  note = @subject beatCount: 16, position: {x: 0.5, y: 0}
   equal note.get('beat'), 8
   equal note.get('tick'), 0
 
-test 'create record with position, beat_count, and quant', ->
-  note = @subject beat_count: 1, position: {x: 0.75, y: 0}, quant: 2
+test 'create record with position, beatCount, and quant', ->
+  note = @subject beatCount: 1, position: {x: 0.75, y: 0}, quant: 2
   equal note.get('beat'), 0
   equal note.get('tick'), 48
 
