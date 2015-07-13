@@ -4,7 +4,7 @@
     %ul.measures
       - each beat in beats
         {{seq-measure beatCount=beatCount}}
-    = render 'selectionBox'
+    = render 'selectionBox' model
     = view 'notesEdit' content=notes
     %ul
       - each pitch in pitches

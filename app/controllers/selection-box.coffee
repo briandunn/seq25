@@ -42,16 +42,16 @@ toggle = (selected, boxed, isAdditive)->
   selected
 
 SelectionBoxController = Ember.Controller.extend
-  needs: 'part'
-  notes: Em.computed.alias 'controllers.part.notes'
-  totalTicks: Em.computed.alias 'controllers.part.totalTicks'
+  notes: Em.computed.alias 'model.notes'
+  totalTicks: Em.computed.alias 'model.totalTicks'
 
   init: ->
     @setProperties
       _selected: []
       corners: EMPTY_CORNERS
       boxed: []
-    @_super()
+
+    @_super(arguments...)
 
   selected: Em.computed '_selected.[]', 'boxed.[]', ->
     {_selected, boxed, isAdditive} = @getProperties '_selected', 'boxed', 'isAdditive'
@@ -63,6 +63,7 @@ SelectionBoxController = Ember.Controller.extend
     @get('corners').reduce(((sum, corner)-> sum + corner.x + corner.y), 0) == 0
 
   observeBox: Em.observer 'corners.@each', ->
+    debugger
     select.apply(this) unless @get('boxClosed')
 
   actions:
