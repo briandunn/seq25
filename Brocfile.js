@@ -2,7 +2,11 @@
 
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
-var app = new EmberApp();
+var app = new EmberApp({
+  // The decaffeinated code uses Array.from and array destructuring, which
+  // need Symbol and Array.from; PhantomJS 2.1 has neither.
+  babel: { includePolyfill: true }
+});
 
 // Use `app.import` to add additional libraries to the generated
 // output files.

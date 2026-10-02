@@ -1,40 +1,41 @@
 {
-  "app/routes/*.coffee": {"type": "route"},
-  "app/templates/*.handlebars": {"type": "template"},
+  "app/routes/*.js": {"type": "route"},
   "app/templates/*.hbs": {"type": "template"},
-  "app/templates/*.hbars": {"type": "template"},
-  "app/templates/*.haml": {"type": "template"},
   "app/styles/*.sass": {"type": "stylesheet"},
-  "app/views/*.coffee": {
+  "app/views/*.js": {
     "type": "view",
     "template":  [
-      "{camelcase}View = Ember.View.extend",
-      "`export default {camelcase}View`"]
+      "const {camelcase}View = Ember.View.extend({",
+      "});",
+      "",
+      "export default {camelcase}View;"]
   },
-  "app/models/*.coffee": {
+  "app/models/*.js": {
     "type":      "model",
-    "alternate": "tests/unit/models/{}-test.coffee"
+    "alternate": "tests/unit/models/{}-test.js"
   },
-  "app/serializers/*.coffee": {
+  "app/serializers/*.js": {
     "type":      "serializer",
-    "alternate": "tests/unit/serializers/{}-test.coffee"
+    "alternate": "tests/unit/serializers/{}-test.js"
   },
-  "app/components/*.coffee": {
+  "app/components/*.js": {
     "type": "component",
-    "alternate": "tests/unit/components/{}-test.coffee"
+    "alternate": "tests/unit/components/{}-test.js"
   },
-  "app/controllers/*.coffee": {
+  "app/controllers/*.js": {
     "type":      "controller",
-    "alternate": "tests/unit/controllers/{}-test.coffee",
+    "alternate": "tests/unit/controllers/{}-test.js",
     "template":  [
-      "{camelcase}Controller = Ember.Controller.extend",
-      "`export default {camelcase}Controller`"]
+      "const {camelcase}Controller = Ember.Controller.extend({",
+      "});",
+      "",
+      "export default {camelcase}Controller;"]
   },
-  "tests/unit/*-test.coffee": {
+  "tests/unit/*-test.js": {
     "type":      "test",
-    "alternate": "app/{}.coffee"
+    "alternate": "app/{}.js"
   },
-  "tests/acceptance/*-test.coffee": {
+  "tests/acceptance/*-test.js": {
     "type":      "acceptance"
-  },
+  }
 }
