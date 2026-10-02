@@ -32,8 +32,8 @@ describe Server do
         {"tempo": 5, "parts":[], "remoteId": 7}
       JSON
 
-      id.must_match /\d+/
-      count.must_equal 1
+      _(id).must_match(/\d+/)
+      _(count).must_equal 1
     end
   end
 
@@ -49,7 +49,7 @@ describe Server do
       result = server.create JSON.dump tempo: 5, parts:[], remoteId: parent_id
       child_id = JSON.parse(result)['id']
 
-      connection.exec(<<-EOF, [child_id]).first['parent_id'].must_equal parent_id
+      _(connection.exec(<<-EOF, [child_id]).first['parent_id']).must_equal parent_id
         select parent_id from songs where id = $1
       EOF
 
@@ -59,11 +59,11 @@ describe Server do
       server.create JSON.dump tempo: 5, parts:[], remoteId: parent_id
       index = JSON.parse(server.index)
 
-      index.map {|song| song['id'] }.wont_include parent_id
+      _(index.map {|song| song['id'] }).wont_include parent_id
 
-      index.size.must_equal 1
+      _(index.size).must_equal 1
 
-      count.must_equal 2
+      _(count).must_equal 2
     end
   end
 
@@ -72,20 +72,20 @@ describe Server do
       first_id  = JSON.parse(server.create('{"tempo": 120, "parts":[]}'))['id']
       second_id = JSON.parse(server.create('{"tempo": 120, "parts":[]}'))['id']
 
-      second_id.must_equal first_id
+      _(second_id).must_equal first_id
     end
 
     it 'does not add a new song' do
       JSON.parse(server.create('{"tempo": 120, "parts":[]}'))['id']
       JSON.parse(server.create('{"tempo": 120, "parts":[]}'))['id']
 
-      count.must_equal 1
+      _(count).must_equal 1
     end
 
     it 'does not create a child relationship' do
       server.create '{"tempo": 120, "parts":[]}'
       server.create '{"tempo": 120, "parts":[]}'
-      connection.exec('select parent_id from songs').first['parent_id'].must_equal nil
+      _(connection.exec('select parent_id from songs').first['parent_id']).must_be_nil
     end
   end
 end

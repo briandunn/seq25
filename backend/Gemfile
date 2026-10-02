@@ -1,11 +1,12 @@
 source 'https://rubygems.org'
 
-ruby '2.2.2'
+ruby '4.0.7'
 
 gem 'pg'
+gem 'puma'
 gem 'rack'
-gem 'thin'
 
 group :development, :test do
+  gem 'minitest'
   gem 'pry'
 end

@@ -1,5 +1,4 @@
-require 'pathname'
-require Pathname(__FILE__).dirname.join 'lib/server'
+require_relative 'lib/server'
 
 not_found = [404, {}, JSON.dump(error: 'not found')]
 
@@ -12,8 +11,8 @@ map '/songs' do
       [
         200,
         {
-          'Access-Control-Allow-Methods' => 'POST',
-          'Access-Control-Allow-Headers' => 'Content-Type'
+          'access-control-allow-methods' => 'POST',
+          'access-control-allow-headers' => 'Content-Type'
         },
         ''
       ]
@@ -31,8 +30,8 @@ map '/songs' do
     [
       code,
       headers.merge(
-        'Content-Type'                => 'application/json',
-        'Access-Control-Allow-Origin' => 'http://seq25.com'
+        'content-type'                => 'application/json',
+        'access-control-allow-origin' => 'http://seq25.com'
       ),
       [body]
     ]
