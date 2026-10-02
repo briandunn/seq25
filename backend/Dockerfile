@@ -7,6 +7,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
+# compose.prod.yaml sets this to "development:test".
+ARG BUNDLE_WITHOUT=""
+ENV BUNDLE_WITHOUT=${BUNDLE_WITHOUT}
+
 COPY Gemfile Gemfile.lock ./
 RUN bundle install
 
