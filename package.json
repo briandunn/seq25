@@ -38,6 +38,7 @@
     "ember-localstorage-adapter": "0.5.3",
     "express": "^4.12.4",
     "glob": "^4.5.3",
-    "morgan": "^1.5.3"
+    "morgan": "^1.5.3",
+    "quick-temp": "0.1.8"
   }
 }

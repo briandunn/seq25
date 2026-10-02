@@ -1,0 +1,49 @@
+FROM node:10
+
+RUN npm install -g bower@1.8.8 ember-cli@0.2.7
+
+# debian stretch is EOL and gone from the live mirrors; repoint at the archive.
+RUN sed -i \
+      -e 's|deb.debian.org|archive.debian.org|g' \
+      -e 's|security.debian.org/debian-security|archive.debian.org/debian-security|g' \
+      /etc/apt/sources.list \
+    && sed -i '/stretch-updates/d' /etc/apt/sources.list \
+    && echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid
+
+# PhantomJS for `ember test` (testem launches it in CI mode).
+RUN apt-get update && apt-get install -y --no-install-recommends bzip2 libfontconfig1 \
+    && rm -rf /var/lib/apt/lists/* \
+    && npm install -g --unsafe-perm phantomjs-prebuilt@2.1.16
+
+WORKDIR /app
+
+# The lockfile pins the tree that produced the Phase 0 test baseline; without
+# it, loose ranges resolve to modern releases that no longer run on Node 10
+# (e.g. quick-temp 0.1.9 -> mktemp 2.x).
+COPY package.json package-lock.json ./
+RUN npm ci
+
+# Some deeply nested, ancient graceful-fs copies re-evaluate Node core's own
+# fs.js source via vm.runInThisContext to patch it, which needs access to
+# Node internals no longer reachable from userland require(). Replace those
+# vendored copies with a plain re-export of the real fs module.
+RUN grep -rl 'eeeeeevvvvviiiiiiillllll' node_modules \
+      | xargs -r -I{} sh -c "printf 'module.exports = require(\"fs\")\n' > {}"
+
+# ember-cli-ic-ajax 0.1.1 reads ic-ajax from its own nested node_modules,
+# which npm >= 3 hoists to the top level.
+RUN mkdir -p node_modules/ember-cli-ic-ajax/node_modules \
+    && cp -r node_modules/ic-ajax node_modules/ember-cli-ic-ajax/node_modules/
+
+# Copied separately so bower.json edits don't invalidate the slow npm layer
+# (node-sass compiles libsass from source). devDependencies include sinon,
+# which the test build imports.
+COPY bower.json .bowerrc ./
+RUN bower install --allow-root --config.interactive=false
+
+COPY . .
+
+EXPOSE 4200
+EXPOSE 49152
+
+CMD ["node_modules/.bin/ember", "server", "--host", "0.0.0.0", "--proxy", "http://backend:3000"]
