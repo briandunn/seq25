@@ -18,6 +18,9 @@ module.exports = function (environment) {
     // production, and tests stub it.
     serverURL: '/songs',
 
+    // localStorage key the songs live under (the old app's adapter namespace).
+    storageKey: 'seq25',
+
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created

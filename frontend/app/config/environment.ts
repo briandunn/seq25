@@ -30,6 +30,7 @@ export default config as {
   locationType: string;
   rootURL: string;
   serverURL: string;
+  storageKey: string;
   skipAudioContext?: boolean;
   APP: Record<string, unknown>;
 } & Record<string, unknown>;

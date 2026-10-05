@@ -1,8 +1,12 @@
 import { pageTitle } from 'ember-page-title';
+import { LinkTo } from '@ember/routing';
+import HelpOverlay from 'seq25/components/help-overlay';
 
 <template>
-  {{pageTitle "Seq25"}}
-  <h2 id="title">Welcome to Ember</h2>
-
+  {{pageTitle "SEQ25"}}
+  <header>
+    <h1><LinkTo @route="index">Seq25</LinkTo></h1>
+  </header>
+  <HelpOverlay />
   {{outlet}}
 </template>
