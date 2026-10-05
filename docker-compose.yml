@@ -1,3 +1,4 @@
+# Dev stack. Production is compose.prod.yaml.
 services:
   postgres:
     image: postgres:13-alpine
@@ -20,14 +21,30 @@ services:
     ports:
       - "3001:3000"
 
+  # The new Ember app (Vite dev server).
   frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    environment:
+      BACKEND_URL: http://backend:3000
+    depends_on:
+      - backend
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules
+
+  # The pre-upgrade Ember 1.11 app, kept as a reference until cutover.
+  legacy:
     build:
       context: .
       dockerfile: Dockerfile.frontend
     depends_on:
       - backend
     ports:
-      - "4200:4200"
+      - "4201:4200"
       - "49152:49152"
       - "35729:35729"
     volumes:

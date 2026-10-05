@@ -4,3 +4,6 @@ bower_components
 tmp
 dist
 backend
+**/node_modules
+frontend/dist
+frontend/tmp
