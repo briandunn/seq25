@@ -1,9 +1,5 @@
 .git
-node_modules
-bower_components
-tmp
-dist
-backend
 **/node_modules
 frontend/dist
 frontend/tmp
+backend

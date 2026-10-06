@@ -4,90 +4,94 @@ A sequencer inspired by [SEQ24][s].
 
 [s]: http://www.filter24.org/seq24/
 
-## Prerequisites
+- `frontend/`: the Ember app (Ember 7, TypeScript, Vite). Songs live in
+  the browser's localStorage. See [frontend/README.md](frontend/README.md).
+- `backend/`: a small Rack API (Ruby 4, Postgres) for sharing songs: `POST
+  /songs`, `GET /songs`, `GET /songs/:id`.
 
-You will need the following things properly installed on your computer.
+## Development
 
-* [Git](http://git-scm.com/)
-* [Node.js](http://nodejs.org/) (with NPM)
-* [Bower](http://bower.io/)
-* [Ember CLI](http://www.ember-cli.com/)
-* [PhantomJS](http://phantomjs.org/)
+Everything runs in Docker:
 
-## Installation
+```sh
+docker compose up
+```
 
-* `git clone https://github.com/briandunn/seq25.git` this repository
-* change into the new directory
-* `npm install`
-* `bower install`
+- <http://localhost:4200>: the app, hot-reloading from `./frontend`, with
+  `/songs` proxied to the backend.
+- `docker compose exec frontend aube test` runs the frontend tests.
+- `docker compose exec frontend aube run lint` runs the linters.
 
-## Running / Development
+To run the backend spec:
 
-* `ember server`
-* Visit your app at [http://localhost:4200](http://localhost:4200).
+```sh
+docker compose exec -T postgres createdb -U seq25 seq25test   # once
+docker compose run --rm -T \
+  -e PGHOST=postgres -e PGUSER=seq25 -e PGPASSWORD=seq25 \
+  backend bundle exec ruby specs/server_spec.rb
+```
 
-To integrate over the ruby API bit:
+To work on the frontend outside Docker, `mise install` gets the pinned node and
+aube (see `mise.toml`).
 
-* `ember server --proxy http://127.0.0.1:3000`
+## Deploying
 
-* create a database and load the schema from the spec file
-* `CORS_ORIGIN='http://localhost:4200' DATABASE_URL='/seq25' bundle exec thin start`
+Production runs on a single Docker host:
 
-### Running Tests
+- The backend runs as the `seq25-prod` compose stack (`compose.prod.yaml`),
+  listening only on `127.0.0.1:3025`.
+- The host's nginx serves the built frontend from `/var/www/seq25` and
+  proxies `/songs` to the backend (`deploy/nginx/seq25.conf`).
 
-* `ember test`
-* `ember test --server`
+```sh
+./deploy.sh
+```
 
-### Building
+This builds and starts the backend, builds the frontend, and publishes it. It
+deploys only committed code, unless you set `ALLOW_DIRTY=1`.
 
-* `ember build` (development)
-* `ember build --environment production` (production)
+One-time setup, as root. First set `server_name` in
+`deploy/nginx/seq25.conf` to your domain:
 
-### Deploying
+```sh
+install -d -o "$SUDO_USER" /var/www/seq25
+cp deploy/nginx/seq25.conf /etc/nginx/sites-available/seq25.conf
+ln -s ../sites-available/seq25.conf /etc/nginx/sites-enabled/
+nginx -t && systemctl reload nginx
+certbot --nginx -d seq25.example.com
+```
 
-The Ember app
+## Keyboard
 
-`deploy-frontend.sh`
+Press `?` in the app for the full list.
 
-The Rack API
+Most commands take a count typed first (`2 0 b` sets 20 beats). Part commands
+take a part letter first (`q w e r a s d f`) and otherwise apply to the part
+you're editing.
 
-`deploy-server.sh`
+### Anywhere in a song
 
-## Keyboard actions
+| Key | Action |
+|---|---|
+| space | play / stop |
+| `t` | go to the song's parts |
+| `g` | go to a part (creating it if needed) |
+| `b` | set beats for a part (bare `b` adds one) |
+| `x` | set quant (bare `x` adds one) |
+| `n` / shift+`n` | raise / lower a part's volume |
+| `m` | toggle mute for a part |
+| `o` | solo a part |
+| shift+`m` / shift+`o` | mute / unmute all |
 
-### While viewing summary or part
+### Editing a part
 
-g q - goes to part q, where q can be one of the part names, q w e r a s d f
-m q - mutes part q, where q can be any part name
-n q - bumps volume of part q
-shift+n - lowers volume of part q
-
-### While viewing a part
-
-c - creates note in upper corner
-click a note to select it
-shift+click a note to select multiple notes
-
-### Once a note or notes are selected
-
-left - moves a note left
-right - moves a note right
-shift+left - shortens a note
-shift+right - extends a note
-
-## TODO
-
-[] piano keys trigger midi
-[] clear part
-[] note velocity adjustment
-[] performance issue on note add
-[] handle localStorage quota exceeded event
-
-## Further Reading / Useful Links
-
-* [ember.js](http://emberjs.com/)
-* [ember-cli](http://www.ember-cli.com/)
-* Development Browser Extensions
-  * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
-  * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
-
+| Key | Action |
+|---|---|
+| `c` | create a note |
+| click / shift+click / drag | select notes / add to the selection / box-select |
+| left, right | move selected notes |
+| up, down | change their pitch |
+| shift+left, shift+right | shorten / extend them |
+| ctrl+shift+arrows | copy them in that direction |
+| `v` | set velocity (`1 0 v` is full) |
+| backspace | delete them |

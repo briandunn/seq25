@@ -21,7 +21,7 @@ services:
     ports:
       - "3001:3000"
 
-  # The new Ember app (Vite dev server).
+  # The Ember app (Vite dev server).
   frontend:
     build:
       context: .
@@ -35,23 +35,6 @@ services:
     volumes:
       - ./frontend:/app/frontend
       - /app/frontend/node_modules
-
-  # The pre-upgrade Ember 1.11 app, kept as a reference until cutover.
-  legacy:
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
-    depends_on:
-      - backend
-    ports:
-      - "4201:4200"
-      - "49152:49152"
-      - "35729:35729"
-    volumes:
-      - ./app:/app/app
-      - ./config:/app/config
-      - ./public:/app/public
-      - ./tests:/app/tests
 
 volumes:
   pgdata:
