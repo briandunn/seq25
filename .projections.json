@@ -1,40 +1,25 @@
 {
-  "app/routes/*.coffee": {"type": "route"},
-  "app/templates/*.handlebars": {"type": "template"},
-  "app/templates/*.hbs": {"type": "template"},
-  "app/templates/*.hbars": {"type": "template"},
-  "app/templates/*.haml": {"type": "template"},
-  "app/styles/*.sass": {"type": "stylesheet"},
-  "app/views/*.coffee": {
-    "type": "view",
-    "template":  [
-      "{camelcase}View = Ember.View.extend",
-      "`export default {camelcase}View`"]
-  },
-  "app/models/*.coffee": {
-    "type":      "model",
-    "alternate": "tests/unit/models/{}-test.coffee"
-  },
-  "app/serializers/*.coffee": {
-    "type":      "serializer",
-    "alternate": "tests/unit/serializers/{}-test.coffee"
-  },
-  "app/components/*.coffee": {
+  "frontend/app/components/*.gts": {
     "type": "component",
-    "alternate": "tests/unit/components/{}-test.coffee"
+    "alternate": "frontend/tests/integration/components/{}-test.gts"
   },
-  "app/controllers/*.coffee": {
-    "type":      "controller",
-    "alternate": "tests/unit/controllers/{}-test.coffee",
-    "template":  [
-      "{camelcase}Controller = Ember.Controller.extend",
-      "`export default {camelcase}Controller`"]
+  "frontend/app/models/*.ts": {
+    "type": "model",
+    "alternate": "frontend/tests/unit/models/{}-test.ts"
   },
-  "tests/unit/*-test.coffee": {
-    "type":      "test",
-    "alternate": "app/{}.coffee"
+  "frontend/app/lib/*.ts": {
+    "type": "lib",
+    "alternate": "frontend/tests/unit/lib/{}-test.ts"
   },
-  "tests/acceptance/*-test.coffee": {
-    "type":      "acceptance"
+  "frontend/app/services/*.ts": {
+    "type": "service",
+    "alternate": "frontend/tests/unit/services/{}-test.ts"
   },
+  "frontend/app/routes/*.ts": { "type": "route" },
+  "frontend/app/templates/*.gts": { "type": "template" },
+  "frontend/app/styles/*.sass": { "type": "stylesheet" },
+  "frontend/tests/acceptance/*-test.ts": { "type": "acceptance" },
+  "frontend/tests/unit/*-test.ts": { "type": "test", "alternate": "frontend/app/{}.ts" },
+  "backend/lib/*.rb": { "type": "lib", "alternate": "backend/specs/{}_spec.rb" },
+  "backend/specs/*_spec.rb": { "type": "spec", "alternate": "backend/lib/{}.rb" }
 }

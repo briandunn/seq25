@@ -1,0 +1,40 @@
+# Dev stack. Production is compose.prod.yaml.
+services:
+  postgres:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_DB: seq25
+      POSTGRES_USER: seq25
+      POSTGRES_PASSWORD: seq25
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      DATABASE_URL: postgres://seq25:seq25@postgres:5432/seq25
+      PORT: 3000
+    depends_on:
+      - postgres
+    ports:
+      - "3001:3000"
+
+  # The Ember app (Vite dev server).
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    environment:
+      BACKEND_URL: http://backend:3000
+    depends_on:
+      - backend
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules
+
+volumes:
+  pgdata:

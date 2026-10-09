@@ -1,0 +1,43 @@
+# Production stack: Postgres and the backend only. The host's nginx serves
+# the built frontend and proxies /songs to the backend (deploy/nginx/).
+#
+#   docker compose -f compose.prod.yaml up -d --build
+#
+# The separate project name keeps these containers and the data volume apart
+# from the dev stack in docker-compose.yml on the same machine.
+name: seq25-prod
+
+services:
+  postgres:
+    image: postgres:13-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: seq25
+      POSTGRES_USER: seq25
+      POSTGRES_PASSWORD: seq25
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-h", "127.0.0.1", "-U", "seq25", "-d", "seq25"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+      args:
+        BUNDLE_WITHOUT: development:test
+    restart: unless-stopped
+    command: ["sh", "-c", "bundle exec puma --environment production --bind tcp://0.0.0.0:3000"]
+    environment:
+      DATABASE_URL: postgres://seq25:seq25@postgres:5432/seq25
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:3025:3000"
+
+volumes:
+  pgdata:

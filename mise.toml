@@ -1,0 +1,4 @@
+# Toolchain for the frontend, shared by your shell, frontend/Dockerfile and CI.
+[tools]
+node = "24.21.0"
+aube = "2.6.1"

@@ -1,0 +1,47 @@
+name: CI
+
+# Jobs run in the same Docker images as local dev, so the toolchain comes from
+# mise.toml and the Dockerfiles rather than from setup actions.
+
+on:
+  push:
+    branches:
+      - master
+  pull_request: {}
+
+concurrency:
+  group: ci-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  frontend:
+    name: Frontend
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - name: Build image
+        run: docker build -f frontend/Dockerfile -t seq25-frontend .
+      - name: Lint
+        run: docker run --rm seq25-frontend aube run lint
+      - name: Test
+        run: docker run --rm seq25-frontend aube test
+
+  backend:
+    name: Backend
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - name: Start Postgres
+        run: |
+          docker compose up -d postgres
+          until docker compose exec -T postgres pg_isready -h 127.0.0.1 -U seq25; do sleep 1; done
+          docker compose exec -T postgres createdb -U seq25 seq25test
+      - name: Spec
+        run: |
+          docker compose run --rm -T --build \
+            -e PGHOST=postgres -e PGUSER=seq25 -e PGPASSWORD=seq25 \
+            backend bundle exec ruby specs/server_spec.rb
